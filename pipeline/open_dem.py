@@ -21,6 +21,7 @@ import rasterio
 from pyproj import Transformer
 
 from common.moon import MOON_GEOGRAPHIC, MOON_RADIUS_M
+from common.pds import read_height_scale
 
 # Para arquivos grandes, as estatísticas são calculadas numa versão reduzida
 # (no máximo este número de pixels de largura). Ler 1 GB inteiro só para ver o
@@ -56,7 +57,17 @@ def main() -> int:
         # Alguns produtos guardam números inteiros que precisam ser convertidos:
         # altura_real = valor * escala + deslocamento. O GDAL lê isso do arquivo
         # quando disponível; se aparecer 1.0 e 0.0, o valor já está pronto.
-        print(f"Escala / deslocamento: {ds.scales[0]} / {ds.offsets[0]}")
+        # Nos .JP2 do LOLA essa informação NÃO vem no arquivo: fica no rótulo .LBL
+        # ao lado (ver common/pds.py). Por isso tentamos o rótulo primeiro.
+        scale, offset = ds.scales[0], ds.offsets[0]
+        label_scale = read_height_scale(args.dem)
+        if label_scale is not None:
+            scale, offset = label_scale, 0.0
+            print(f"Escala lida do rótulo .LBL: altura (m) = valor * {scale}")
+        else:
+            print(f"Escala / deslocamento do arquivo: {scale} / {offset}")
+            if scale == 1.0:
+                print("ATENÇÃO: sem rótulo .LBL ao lado do arquivo; as alturas podem precisar de um fator.")
 
         print("\n=== Projeção ===")
         print(f"CRS: {ds.crs.to_proj4() if ds.crs else 'SEM PROJEÇÃO (problema!)'}")
@@ -78,7 +89,7 @@ def main() -> int:
         factor = max(1, int(np.ceil(max(ds.width, ds.height) / MAX_PREVIEW_PX)))
         out_shape = (ds.height // factor, ds.width // factor)
         data = ds.read(1, out_shape=out_shape, masked=True).astype("float64")
-        data = data * ds.scales[0] + ds.offsets[0]
+        data = data * scale + offset
 
         print(f"\n=== Valores (amostra reduzida {factor}x) ===")
         valid = data.compressed()
@@ -87,8 +98,7 @@ def main() -> int:
         else:
             print(f"Mínimo: {valid.min():.1f}   Máximo: {valid.max():.1f}   Média: {valid.mean():.1f}")
             print(f"Pixels sem dado na amostra: {100 * data.mask.mean():.1f}%")
-            print("Unidade: confira a documentação do produto (geralmente metros em relação")
-            print(f"à esfera de {MOON_RADIUS_M / 1000:.1f} km; alguns produtos PDS usam km).")
+            print(f"Unidade: metros em relação à esfera de referência de {MOON_RADIUS_M / 1000:.1f} km.")
 
         # --- Altura num ponto específico ---
         # 1) converte latitude/longitude para metros na projeção do arquivo
@@ -106,7 +116,7 @@ def main() -> int:
             if np.ma.is_masked(raw):
                 print("Altura: sem dado nesse pixel")
             else:
-                print(f"Altura: {float(raw) * ds.scales[0] + ds.offsets[0]:.1f}")
+                print(f"Altura: {float(raw) * scale + offset:.1f} m")
         else:
             print("O ponto está fora da área coberta por este arquivo.")
 

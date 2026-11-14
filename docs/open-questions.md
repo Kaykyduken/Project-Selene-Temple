@@ -11,4 +11,5 @@ Things not verified yet. Remove an item once it is confirmed, and record the ans
 - [ ] Pages that did not open in automated reading: USGS Astrogeology search and LPI Lunar Surface
 - [ ] Time and format of the local judging in Sorocaba
 - [ ] Official deadline time with the Local Lead
-- [ ] Check the real WAC and DEM files' projection and height units with `pipeline/open_dem.py` (M1 was tested only with a synthetic raster)
+- [x] LOLA DEM checked with the real `LDEM_875S_20M.JP2`: south polar stereographic, R = 1737.4 km, 20 m/pixel, 16-bit integers; height in metres = value × 0.5 (SCALING_FACTOR from the `.LBL` label, not stored in the JP2)
+- [ ] Run `pipeline/prepare_basemap.py` with the real WAC polar mosaic

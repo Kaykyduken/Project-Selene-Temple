@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lunar Landing Site Navigator</title>
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Lunar Landing Site Navigator</h1>
+      <span id="api-status" class="badge badge-unknown">API: checking…</span>
+    </header>
+    <main>
+      <div id="map" aria-label="Lunar south pole map, polar stereographic projection"></div>
+      <aside id="info" class="info-panel">
+        <p>Click anywhere on the map to see its coordinates.</p>
+        <p id="basemap-status"></p>
+      </aside>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,49 @@
+/* Lunar Landing Site Navigator
+   AI-assisted: first draft written by Claude (Anthropic), reviewed by the team.
+   Estilo provisório da M1: tema escuro, mapa ocupando a tela. */
+
+:root {
+  --bg: #0b0f17;
+  --panel: #151b27;
+  --text: #e6ebf2;
+  --muted: #9aa6b8;
+  --ok: #4da3ff;   /* azul e laranja em vez de verde e vermelho (daltonismo) */
+  --off: #ff9f40;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 16px;
+  color: var(--text);
+  background: var(--bg);
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; height: 100vh; display: flex; flex-direction: column; }
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  background: var(--panel);
+}
+.topbar h1 { font-size: 1.1rem; margin: 0; }
+
+.badge { font-size: 0.85rem; padding: 0.2rem 0.6rem; border-radius: 999px; border: 1px solid currentColor; }
+.badge-ok { color: var(--ok); }
+.badge-off { color: var(--off); }
+.badge-unknown { color: var(--muted); }
+
+main { flex: 1; display: flex; min-height: 0; }
+#map { flex: 1; background: #000; }
+
+.info-panel {
+  width: 280px;
+  padding: 1rem;
+  background: var(--panel);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 700px) {
+  main { flex-direction: column; }
+  .info-panel { width: auto; }
+}

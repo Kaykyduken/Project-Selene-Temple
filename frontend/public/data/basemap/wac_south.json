@@ -1,13 +1,13 @@
 {
   "image": "wac_south.png",
   "bounds_m": [
-    -931069.854,
-    -931069.854,
-    931069.854,
-    931069.854
+    -931100.0,
+    -931100.0,
+    931100.0,
+    931100.0
   ],
   "crs": "+proj=stere +lat_0=-90 +lon_0=0 +k=1 +x_0=0 +y_0=0 +R=1737400 +units=m +no_defs",
-  "source": "Moon color map: NASA's Scientific Visualization Studio (CGI Moon Kit, LRO/LROC data)",
-  "input_file": "lroc_color_2k.jpg",
+  "source": "LROC WAC mosaic: NASA/GSFC/Arizona State University",
+  "input_file": "WAC_GLOBAL_P900S0000_100M.TIF",
   "fictitious": false
 }

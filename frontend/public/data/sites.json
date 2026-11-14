@@ -1,0 +1,16 @@
+{
+  "contract_version": "0.1",
+  "note": "Region names: NASA news release, 2024-10-28. Coordinates are APPROXIMATE placeholders taken from nearby named features and are NOT verified against the original source yet.",
+  "sites": [
+    {"id": "peak-near-cabeus-b", "name": "Peak near Cabeus B", "lat_deg": -82.3, "lon_deg": -54.0},
+    {"id": "haworth", "name": "Haworth", "lat_deg": -87.5, "lon_deg": -5.0},
+    {"id": "malapert-massif", "name": "Malapert Massif", "lat_deg": -85.9, "lon_deg": 0.0},
+    {"id": "mons-mouton-plateau", "name": "Mons Mouton Plateau", "lat_deg": -85.0, "lon_deg": 27.0},
+    {"id": "mons-mouton", "name": "Mons Mouton", "lat_deg": -84.6, "lon_deg": 31.5},
+    {"id": "nobile-rim-1", "name": "Nobile Rim 1", "lat_deg": -85.4, "lon_deg": 37.0},
+    {"id": "nobile-rim-2", "name": "Nobile Rim 2", "lat_deg": -83.9, "lon_deg": 58.0},
+    {"id": "de-gerlache-rim-2", "name": "de Gerlache Rim 2", "lat_deg": -88.2, "lon_deg": -64.0},
+    {"id": "slater-plain", "name": "Slater Plain", "lat_deg": -87.9, "lon_deg": 105.0}
+  ],
+  "coordinate_origin": {"source": "Approximate placeholder, pending verification (track F3)", "class": "hypothesis", "verified": false}
+}

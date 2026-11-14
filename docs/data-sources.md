@@ -44,6 +44,6 @@ Every value shown carries one label and its source:
 
 Credit NASA as the data source, never suggest endorsement, and do not use the NASA insignia or logotype.
 
-## Horizons body codes (to confirm)
+## Horizons body codes
 
-From memory, not verified: Moon `301`, Sun `10`, Earth `399`.
+Confirmed against the API on 2026-11-14: Moon `301`, Sun `10`, Earth `399`.

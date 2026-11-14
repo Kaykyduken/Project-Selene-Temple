@@ -4,8 +4,9 @@ Milestones in sequence, without fixed hours: only the order matters. Kayky is th
 
 ## Progress (2026-11-14)
 
-- M1: code done and tested with a synthetic raster; still needs a run with the real WAC and DEM files
-- M2: done with fictitious data (9 regions on the map, list and marker selection, click → lat/lon, site panel, `/sites` and `/visibility`)
+- M1: done with the real WAC mosaic and LOLA DEM
+- M2: done; region positions are real (USGS grids), visibility numbers still fictitious
+- M3: Horizons client written (`pipeline/horizons.py`); pending a run against the API and Felipe's table
 
 ## Anchors (relative to the deadline, Sunday 2026-11-15, 22:00 Brasília)
 

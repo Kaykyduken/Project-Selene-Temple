@@ -92,7 +92,7 @@ export class SitePanel {
       (Date.parse(data.period.end_utc) - Date.parse(data.period.start_utc)) / 86_400_000,
     );
     nodes.push(
-      el('p', 'muted', `Period: ${data.period.start_utc.slice(0, 10)} to ${data.period.end_utc.slice(0, 10)} UTC (${days} days, ${data.period.step_min} min step). Observer height: ${data.site.observer_height_m} m.`),
+      el('p', 'muted', `Period: ${data.period.start_utc.slice(0, 10)} to ${data.period.end_utc.slice(0, 10)} UTC (${days} days, ${data.period.step_min} min step). Observer height: ${data.site.observer_height_m} m${data.site.ground_height_m !== undefined ? ` above ground at ${data.site.ground_height_m} m` : ''}.`),
     );
 
     nodes.push(el('h3', '', 'Visibility over the local horizon'));

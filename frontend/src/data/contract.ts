@@ -41,6 +41,7 @@ export interface Metric {
 export interface BodyPosition {
   az_deg: number; // azimute: direção na bússola (0 = norte, 90 = leste)
   el_deg: number; // elevação: ângulo acima do horizonte "plano"
+  horizon_deg?: number; // altura do relevo nessa mesma direção (só nos dados reais)
   visible: boolean; // true se está acima do horizonte REAL (relevo) naquele azimute
 }
 
@@ -53,13 +54,19 @@ export interface SeriesPoint {
 /** Arquivo completo de um local (frontend/public/data/sites/<id>.json). */
 export interface SiteData {
   contract_version: string;
-  site: SiteSummary & { observer_height_m: number; coordinate_origin: CoordinateOrigin };
+  site: SiteSummary & {
+    observer_height_m: number;
+    ground_height_m?: number; // altura do chão em relação à esfera de 1737,4 km
+    coordinate_origin: CoordinateOrigin;
+  };
   period: { start_utc: string; end_utc: string; step_min: number };
   horizon: {
     azimuth_step_deg: number;
     elevation_deg: number[]; // 360 valores: altura do relevo em cada direção
     dem: { product: string | null; version: string | null; resolution_m: number | null };
+    blocker_distance_km?: number[]; // a que distância está o relevo que define o horizonte
     max_radius_km: number | null;
+    min_data_reach_km?: number; // menor alcance do DEM entre as direções
     visibility_criterion: 'disc_center' | 'any_part_of_disc';
   };
   series: SeriesPoint[];
@@ -69,6 +76,7 @@ export interface SiteData {
     longest_no_sun_h: Metric;
     mean_slope_deg: Metric;
   };
+  queries?: { sun: string; earth: string }; // consultas exatas feitas ao Horizons
   sources: { id: string; name: string; url: string | null; version: string | null; license: string | null }[];
   /** true = dado inventado para teste. A interface É OBRIGADA a mostrar a faixa de aviso. */
   fictitious: boolean;

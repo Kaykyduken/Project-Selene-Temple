@@ -21,3 +21,20 @@ Pending: run the script on a machine with access to the API and compare; Felipe'
 Note: elevation is measured from the plane perpendicular to the local zenith, not from the terrain.
 A body slightly below 0° can still be visible from a mountain top, because the real horizon there dips below 0°.
 That is decided by the horizon mask (M4), not by Horizons.
+
+## V2 / V5: horizon mask
+
+Analytic checks of `pipeline/horizon.py` (2026-11-14):
+
+| Case | Computed | Expected |
+|---|---|---|
+| Smooth sphere, observer 2 m above ground | -0.08694° | -acos(R/(R+2)) = -0.08694° |
+| Smooth sphere, observer 5000 m above ground | -4.34163° | -acos(R/(R+5000)) = -4.34163° |
+| 1000 m wall 10 km to the north, observer at 0 m | 5.536° at azimuth 0°, -0.0003° at 180° | 5.544° (10.00 km), sampled at 10.01 km |
+
+Real DEM (`LDEM_85S_20M`), Malapert Massif region centre: ground at 4802 m, horizon between -4.13° and 4.99°.
+The centre lies on a slope: the terrain 100 m to the north rises to 3.6°, which hides the Earth (azimuth ~7°).
+A region centre is not necessarily the best point of the region.
+
+Known limits: nearest-pixel sampling; far terrain read at ~100 m; the 80°S DEM ends 30 to 150 km away
+depending on site and direction (`horizon.min_data_reach_km` records it); "visible" uses the disc centre.

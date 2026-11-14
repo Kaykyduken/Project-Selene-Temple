@@ -26,6 +26,9 @@ Last updated: 2026-11-14.
 | Data format | Pre-computed JSON and COG |
 | Hosting | Static hosting |
 | 3D globe | Three.js + CGI Moon Kit, lighting from the subsolar point, marker for the Earth direction. Only after milestone M5. Cesium dropped for now |
+| Folder names | English: `frontend/`, `backend/`, `pipeline/`, `data/` (confirmed 2026-11-14) |
+| Code comments | Portuguese, so the team can follow the logic; identifiers and UI text in English (confirmed 2026-11-14) |
+| Map projection | Lunar south polar stereographic, sphere R = 1737.4 km, longitude 0° pointing up. Defined once in `frontend/src/config.ts` and `pipeline/common/moon.py`; both must match |
 | Secrets | api.nasa.gov key only in `.env`, back end only, outside the repository |
 
 ## Delivery

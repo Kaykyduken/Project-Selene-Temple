@@ -57,11 +57,39 @@ Full list, licenses and verification status in [`docs/data-sources.md`](docs/dat
 In line with the Space Apps rules, this team uses AI as a tool, not as the author of the idea. The solution concept was created by the team.
 
 - **Claude (Anthropic)** helps with planning documents, code drafts on request, code review and explanations.
-- Every source file with AI-generated code carries a header comment saying so, and this section will list those files.
+- Every source file with AI-generated code carries a header comment saying so (`AI-assisted: first draft written by Claude (Anthropic), reviewed by the team.`). Files so far: everything under `frontend/src/`, `frontend/vite.config.ts`, `backend/app/main.py` and everything under `pipeline/`.
 - Content marked **"FICTITIOUS DATA"** is placeholder data; missing values are shown as "no data".
 
 ## Local setup
 
-Not available yet. It will be added with milestone M1 (technical foundation).
+Requirements: Node.js 20.19+ (or 22.12+) and Python 3.10+.
+
+**1. Front end** (map in the browser)
+
+```bash
+cd frontend
+npm install
+npm run dev          # opens on http://localhost:5173
+```
+
+**2. API** (optional; the site also works without it)
+
+```bash
+cd backend
+python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 8000           # docs on http://localhost:8000/docs
+```
+
+**3. Data pipeline** (needs the raw files in `data/raw/`, see `data/README.md`)
+
+```bash
+cd pipeline
+pip install -r requirements.txt
+python open_dem.py ../data/raw/dem/LDEM_85S_20M.JP2          # inspect the DEM
+python prepare_basemap.py ../data/raw/wac/<WAC file>.TIF     # build the web base map
+```
 
 API keys (for example the api.nasa.gov key) go in a local `.env` file, which is never committed. See `.env.example`.
+
+Code comments are written in Portuguese so the whole team can follow the logic; identifiers and user-facing text are in English.

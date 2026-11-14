@@ -72,7 +72,7 @@ def build_site(site: dict, origin: dict) -> dict:
 
     return {
         "contract_version": "0.1",
-        "site": {**site, "observer_height_m": 2.0, "coordinate_origin": origin},
+        "site": {**{k: v for k, v in site.items() if k != "outline"}, "observer_height_m": 2.0, "coordinate_origin": origin},
         "period": {"start_utc": series[0]["t_utc"], "end_utc": series[-1]["t_utc"], "step_min": STEP_MIN},
         "horizon": {
             "azimuth_step_deg": 1,

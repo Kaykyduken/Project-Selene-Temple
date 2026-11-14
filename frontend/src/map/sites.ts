@@ -16,6 +16,10 @@ export class SiteLayer {
   /** onSelect é chamado quando o usuário clica num marcador. */
   constructor(map: L.Map, sites: SiteSummary[], onSelect: (site: SiteSummary) => void) {
     for (const site of sites) {
+      // Contorno da região (área da grade do USGS), desenhado por baixo do marcador.
+      if (site.outline) {
+        L.polygon(site.outline, { color: '#ffb347', weight: 1.5, fillOpacity: 0.08, interactive: false }).addTo(map);
+      }
       const marker = L.circleMarker([site.lat_deg, site.lon_deg], NORMAL)
         .bindTooltip(site.name)
         .on('click', (e) => {

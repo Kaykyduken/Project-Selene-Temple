@@ -82,6 +82,10 @@ export class SitePanel {
     nodes.push(el('p', 'coords', formatLatLon(data.site.lat_deg, data.site.lon_deg)));
     if (!data.site.coordinate_origin.verified) {
       nodes.push(el('p', 'warning', '⚠ Approximate position, pending verification against the original source.'));
+    } else {
+      // Posição conferida: é o centro da área da região, não um ponto de pouso oficial.
+      const area = data.site.area_km2 ? ` Region area: ${data.site.area_km2} km².` : '';
+      nodes.push(el('p', 'muted', `Centre of the region area (USGS grid), not a selected landing point.${area}`));
     }
 
     const days = Math.round(

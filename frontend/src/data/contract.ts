@@ -13,6 +13,8 @@ export interface SiteSummary {
   name: string;
   lat_deg: number;
   lon_deg: number;
+  area_km2?: number; // área da região na grade do USGS
+  outline?: [number, number][]; // contorno da região: lista de [lat, lon]
 }
 
 export interface CoordinateOrigin {

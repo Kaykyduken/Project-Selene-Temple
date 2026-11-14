@@ -1,65 +1,272 @@
 {
-  "contract_version": "0.1",
-  "note": "Region names: NASA news release, 2024-10-28. Coordinates are APPROXIMATE placeholders taken from nearby named features and are NOT verified against the original source yet.",
-  "sites": [
-    {
-      "id": "peak-near-cabeus-b",
-      "name": "Peak near Cabeus B",
-      "lat_deg": -82.3,
-      "lon_deg": -54.0
-    },
-    {
-      "id": "haworth",
-      "name": "Haworth",
-      "lat_deg": -87.5,
-      "lon_deg": -5.0
-    },
-    {
-      "id": "malapert-massif",
-      "name": "Malapert Massif",
-      "lat_deg": -85.9,
-      "lon_deg": 0.0
-    },
-    {
-      "id": "mons-mouton-plateau",
-      "name": "Mons Mouton Plateau",
-      "lat_deg": -84.34,
-      "lon_deg": 30.62
-    },
-    {
-      "id": "mons-mouton",
-      "name": "Mons Mouton",
-      "lat_deg": -84.6,
-      "lon_deg": 31.5
-    },
-    {
-      "id": "nobile-rim-1",
-      "name": "Nobile Rim 1",
-      "lat_deg": -85.4,
-      "lon_deg": 37.0
-    },
-    {
-      "id": "nobile-rim-2",
-      "name": "Nobile Rim 2",
-      "lat_deg": -83.9,
-      "lon_deg": 58.0
-    },
-    {
-      "id": "de-gerlache-rim-2",
-      "name": "de Gerlache Rim 2",
-      "lat_deg": -88.2,
-      "lon_deg": -64.0
-    },
-    {
-      "id": "slater-plain",
-      "name": "Slater Plain",
-      "lat_deg": -87.9,
-      "lon_deg": 105.0
-    }
-  ],
-  "coordinate_origin": {
-    "source": "Approximate placeholder, pending verification (track F3)",
-    "class": "hypothesis",
-    "verified": false
+ "contract_version": "0.1",
+ "note": "Region names: NASA news release, 2024-10-28. Each position is the centroid of the region's USGS grid area, not a NASA-selected landing point.",
+ "sites": [
+  {
+   "id": "peak-near-cabeus-b",
+   "name": "Peak near Cabeus B",
+   "lat_deg": -83.6514,
+   "lon_deg": -68.7263,
+   "area_km2": 441,
+   "outline": [
+    [
+     -83.4383,
+     -72.6632
+    ],
+    [
+     -83.199,
+     -67.058
+    ],
+    [
+     -83.8326,
+     -64.5367
+    ],
+    [
+     -84.0978,
+     -70.6492
+    ],
+    [
+     -83.4383,
+     -72.6632
+    ]
+   ]
+  },
+  {
+   "id": "haworth",
+   "name": "Haworth",
+   "lat_deg": -86.7661,
+   "lon_deg": -22.6199,
+   "area_km2": 930,
+   "outline": [
+    [
+     -86.9539,
+     -35.2476
+    ],
+    [
+     -86.0993,
+     -26.7829
+    ],
+    [
+     -86.4419,
+     -11.8336
+    ],
+    [
+     -87.4073,
+     -16.3482
+    ],
+    [
+     -86.9539,
+     -35.2476
+    ]
+   ]
+  },
+  {
+   "id": "malapert-massif",
+   "name": "Malapert Massif",
+   "lat_deg": -85.9872,
+   "lon_deg": -0.2368,
+   "area_km2": 462,
+   "outline": [
+    [
+     -86.3336,
+     -5.7106
+    ],
+    [
+     -85.6076,
+     -4.7636
+    ],
+    [
+     -85.6102,
+     4.3323
+    ],
+    [
+     -86.3367,
+     5.1944
+    ],
+    [
+     -86.3336,
+     -5.7106
+    ]
+   ]
+  },
+  {
+   "id": "mons-mouton-plateau",
+   "name": "Mons Mouton Plateau",
+   "lat_deg": -84.3375,
+   "lon_deg": 30.6186,
+   "area_km2": 4524,
+   "outline": [
+    [
+     -85.7755,
+     22.1355
+    ],
+    [
+     -83.9532,
+     15.2551
+    ],
+    [
+     -82.8281,
+     35.5992
+    ],
+    [
+     -84.2775,
+     46.8779
+    ],
+    [
+     -85.7755,
+     22.1355
+    ]
+   ]
+  },
+  {
+   "id": "mons-mouton",
+   "name": "Mons Mouton",
+   "lat_deg": -85.4218,
+   "lon_deg": 31.6755,
+   "area_km2": 289,
+   "outline": [
+    [
+     -85.8083,
+     30.4196
+    ],
+    [
+     -85.314,
+     26.9277
+    ],
+    [
+     -85.0335,
+     32.7352
+    ],
+    [
+     -85.4968,
+     36.6168
+    ],
+    [
+     -85.8083,
+     30.4196
+    ]
+   ]
+  },
+  {
+   "id": "nobile-rim-1",
+   "name": "Nobile Rim 1",
+   "lat_deg": -85.4338,
+   "lon_deg": 37.3276,
+   "area_km2": 441,
+   "outline": [
+    [
+     -85.9208,
+     36.4041
+    ],
+    [
+     -85.3425,
+     31.3135
+    ],
+    [
+     -84.946,
+     38.0728
+    ],
+    [
+     -85.4731,
+     43.516
+    ],
+    [
+     -85.9208,
+     36.4041
+    ]
+   ]
+  },
+  {
+   "id": "nobile-rim-2",
+   "name": "Nobile Rim 2",
+   "lat_deg": -83.9545,
+   "lon_deg": 58.7938,
+   "area_km2": 420,
+   "outline": [
+    [
+     -84.4161,
+     60.0864
+    ],
+    [
+     -84.039,
+     54.2771
+    ],
+    [
+     -83.4904,
+     57.6854
+    ],
+    [
+     -83.8336,
+     63.1595
+    ],
+    [
+     -84.4161,
+     60.0864
+    ]
+   ]
+  },
+  {
+   "id": "de-gerlache-rim-2",
+   "name": "de Gerlache Rim 2",
+   "lat_deg": -88.2263,
+   "lon_deg": -65.1126,
+   "area_km2": 441,
+   "outline": [
+    [
+     -88.0027,
+     -78.5034
+    ],
+    [
+     -87.7575,
+     -60.7808
+    ],
+    [
+     -88.3304,
+     -49.0283
+    ],
+    [
+     -88.678,
+     -72.4744
+    ],
+    [
+     -88.0027,
+     -78.5034
+    ]
+   ]
+  },
+  {
+   "id": "slater-plain",
+   "name": "Slater Plain",
+   "lat_deg": -87.1697,
+   "lon_deg": 125.4596,
+   "area_km2": 441,
+   "outline": [
+    [
+     -87.2088,
+     135.4815
+    ],
+    [
+     -87.6539,
+     123.4654
+    ],
+    [
+     -87.0479,
+     115.9892
+    ],
+    [
+     -86.6832,
+     126.8699
+    ],
+    [
+     -87.2088,
+     135.4815
+    ]
+   ]
   }
+ ],
+ "coordinate_origin": {
+  "source": "Area centroid computed from the USGS 1 km navigational grids of the down-selected Artemis III candidate landing regions (doi:10.5066/P1MEQ6UK, CC0)",
+  "class": "model",
+  "verified": true
+ }
 }

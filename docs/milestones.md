@@ -2,6 +2,11 @@
 
 Milestones in sequence, without fixed hours: only the order matters. Kayky is the only programmer, so his programming hours (~19 h in total) are what limits scope. Budgets are estimates, not measurements, and assume Claude writes first drafts that Kayky reviews and runs.
 
+## Progress (2026-11-14)
+
+- M1: code done and tested with a synthetic raster; still needs a run with the real WAC and DEM files
+- M2: done with fictitious data (9 regions on the map, list and marker selection, click → lat/lon, site panel, `/sites` and `/visibility`)
+
 ## Anchors (relative to the deadline, Sunday 2026-11-15, 22:00 Brasília)
 
 | Anchor | When | What happens |

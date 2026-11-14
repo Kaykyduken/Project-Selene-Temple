@@ -11,3 +11,5 @@ Things not verified yet. Remove an item once it is confirmed, and record the ans
 - [ ] Pages that did not open in automated reading: USGS Astrogeology search and LPI Lunar Surface
 - [ ] Time and format of the local judging in Sorocaba
 - [ ] Official deadline time with the Local Lead
+- [ ] Data contract v0.1 was drafted with Portuguese field names; translate the keys to English when it is implemented in M2
+- [ ] Folder names: the plan says `dados/` and `fisica/`; this repository uses English names (`data/`, `pipeline/`). Kayky confirms the final layout at the start of M1

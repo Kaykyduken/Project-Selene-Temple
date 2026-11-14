@@ -11,11 +11,19 @@
       <span id="api-status" class="badge badge-unknown">API: checking…</span>
     </header>
     <main>
+      <nav class="side-panel" aria-label="Candidate regions">
+        <h2>Candidate regions</h2>
+        <p class="muted">Artemis III candidate landing regions (NASA, 2024).</p>
+        <div id="site-list">Loading…</div>
+        <h2>Legend</h2>
+        <ul class="legend">
+          <li><span class="swatch swatch-site"></span> Candidate region</li>
+          <li><span class="swatch swatch-grid"></span> Latitude / longitude grid</li>
+        </ul>
+        <p id="basemap-status" class="muted"></p>
+      </nav>
       <div id="map" aria-label="Lunar south pole map, polar stereographic projection"></div>
-      <aside id="info" class="info-panel">
-        <p>Click anywhere on the map to see its coordinates.</p>
-        <p id="basemap-status"></p>
-      </aside>
+      <aside id="site-panel" class="side-panel site-panel" aria-live="polite" aria-label="Selected site"></aside>
     </main>
     <script type="module" src="/src/main.ts"></script>
   </body>

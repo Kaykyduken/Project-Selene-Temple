@@ -88,7 +88,7 @@ uvicorn app.main:app --reload --port 8000           # docs on http://localhost:8
 cd pipeline
 pip install -r requirements.txt
 python open_dem.py ../data/raw/dem/LDEM_85S_20M.JP2          # inspect the DEM
-python prepare_basemap.py ../data/raw/wac/<WAC file>.TIF     # build the web base map
+python prepare_basemap.py ../data/raw/moonkit/lroc_color_2k.jpg   # build the web base map (or the WAC polar mosaic)
 ```
 
 API keys (for example the api.nasa.gov key) go in a local `.env` file, which is never committed. See `.env.example`.

@@ -6,6 +6,7 @@ Expected layout for milestone M1:
 
 ```
 data/raw/
+├── moonkit/  NASA SVS CGI Moon Kit color map (e.g. lroc_color_2k.jpg), quick base map
 ├── wac/   LROC WAC south polar mosaic (e.g. WAC_GLOBAL_P900S0000_100M.TIF)
 └── dem/   LOLA south pole DEM (e.g. LDEM_85S_20M.JP2 or a PGDA 90 GeoTIFF)
 ```

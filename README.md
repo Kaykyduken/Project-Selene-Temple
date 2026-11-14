@@ -57,6 +57,7 @@ Full list, licenses and verification status in [`docs/data-sources.md`](docs/dat
 In line with the Space Apps rules, this team uses AI as a tool, not as the author of the idea. The solution concept was created by the team.
 
 - **Claude (Anthropic)** helps with planning documents, code drafts on request, code review and explanations.
+- **Google Stitch** was used by Kayky for interface prototyping: it turned the team's paper sketches into high-fidelity mockups that guided the layout and visual style. The mockups are design references only; the values shown in them are placeholders and are not used as data. See [`docs/design-process.md`](docs/design-process.md).
 - Every source file with AI-generated code carries a header comment saying so (`AI-assisted: first draft written by Claude (Anthropic), reviewed by the team.`). Files so far: everything under `frontend/src/`, `frontend/vite.config.ts`, `backend/app/main.py` and everything under `pipeline/`.
 - Content marked **"FICTITIOUS DATA"** is placeholder data; missing values are shown as "no data".
 

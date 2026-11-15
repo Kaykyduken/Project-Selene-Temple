@@ -319,3 +319,8 @@ body[data-mode='educational'] .mode-toggle { border-color: #ffffff; }
 body[data-mode='educational'] .mode-toggle button { color: #ffffff; }
 body[data-mode='educational'] .mode-toggle button[aria-pressed='true'] { background: #ffffff; color: #1d3f73; font-weight: 700; }
 body[data-mode='educational'] .mode-toggle button:not([aria-pressed='true']):hover { background: rgba(255, 255, 255, 0.18); }
+
+/* Educational: "Guided tour" e o selo da API com o mesmo destaque (branco, texto azul) */
+body[data-mode='educational'] .tour-btn { background: #ffffff; color: #1d3f73; border-color: #ffffff; font-weight: 700; }
+body[data-mode='educational'] .tour-btn:hover { background: #e3ecfa; }
+body[data-mode='educational'] .topbar .badge { background: #ffffff; color: #1d3f73; border-color: #ffffff; font-weight: 700; }

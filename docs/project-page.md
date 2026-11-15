@@ -26,7 +26,7 @@ missing is shown as "no data" instead of being invented.
 
 ## Link to Final Project
 
-[Public URL of the deployed site] and the source code: https://github.com/Kaykyduken/Projeto-de-site-de-explora-o-lunar
+https://projeto-de-site-de-explora-o-lunar.vercel.app and the source code: https://github.com/Kaykyduken/Projeto-de-site-de-explora-o-lunar
 
 ## Detailed Project Description
 

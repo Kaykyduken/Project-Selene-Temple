@@ -110,7 +110,7 @@ pip install -r requirements.txt -r ../pipeline/requirements.txt
 uvicorn app.main:app --reload --port 8000           # docs on http://localhost:8000/docs
 ```
 
-The live analysis tool (next section) needs this API. Without it the site still works in static mode.
+The live analysis tool (section above) needs this API. Without it the site still works in static mode.
 
 **3. Data pipeline** (needs the raw files in `data/raw/`, see `data/README.md`)
 

@@ -11,6 +11,14 @@
 
 import type { SiteSummary } from '../data/contract';
 
+/** Ponto extra na Lua 3D (marco histórico): só precisa de id, nome e posição. */
+export interface GlobePoint {
+  id: string;
+  name: string;
+  lat_deg: number;
+  lon_deg: number;
+}
+
 type Three = typeof import('three');
 type OrbitControlsClass = typeof import('three/examples/jsm/controls/OrbitControls.js').OrbitControls;
 
@@ -18,6 +26,7 @@ const TEXTURE_URL = `${import.meta.env.BASE_URL}data/globe/moon_globe_4k.jpg`;
 const CREDIT = "Moon color map: NASA's Scientific Visualization Studio (CGI Moon Kit, LRO/LROC data). South polar detail: LROC WAC mosaic, NASA/GSFC/Arizona State University";
 const MARKER_COLOR = 0xf0a030; // laranja, igual aos marcadores do mapa
 const SELECTED_COLOR = 0xffffff;
+const LANDMARK_COLOR = 0x3fd0c9; // verde-água: marcos históricos (pousos Apollo)
 const START_DISTANCE = 3.0; // raio da Lua = 1
 const DEM_EDGE_LAT_DEG = -80; // o modelo de relevo cobre de 80°S até o polo
 
@@ -30,6 +39,7 @@ export class MoonGlobe {
   private readonly raycaster: import('three').Raycaster;
   private readonly markers = new Map<string, import('three').Mesh>();
   private readonly hitAreas: import('three').Mesh[] = [];
+  private readonly baseColor = new Map<string, number>(); // cor normal de cada marcador
   private readonly tooltip: HTMLDivElement;
   private focusDirection: import('three').Vector3 | null = null;
   private selectedId: string | null = null;
@@ -45,6 +55,8 @@ export class MoonGlobe {
     private readonly sites: SiteSummary[],
     private readonly onSelect: (site: SiteSummary) => void,
     texture: import('three').Texture,
+    private readonly landmarks: GlobePoint[],
+    private readonly onLandmark: (id: string) => void,
   ) {
     const { T: three } = this;
 
@@ -90,6 +102,22 @@ export class MoonGlobe {
       this.hitAreas.push(hit);
     }
 
+    // Marcos históricos: mesmo esquema, em outra cor e em forma de losango.
+    for (const mark of landmarks) {
+      const position = this.toVector(mark.lat_deg, mark.lon_deg, 1.014);
+      const dot = new three.Mesh(new three.OctahedronGeometry(0.02), new three.MeshBasicMaterial({ color: LANDMARK_COLOR }));
+      dot.position.copy(position);
+      this.scene.add(dot);
+      this.markers.set(mark.id, dot);
+      this.baseColor.set(mark.id, LANDMARK_COLOR);
+
+      const hit = new three.Mesh(new three.SphereGeometry(0.035, 8, 6), new three.MeshBasicMaterial({ visible: false }));
+      hit.position.copy(position);
+      hit.userData.landmarkId = mark.id;
+      this.scene.add(hit);
+      this.hitAreas.push(hit);
+    }
+
     this.raycaster = new three.Raycaster();
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -102,7 +130,7 @@ export class MoonGlobe {
     // Textos sobre a vista: instrução, crédito da imagem e etiqueta ao passar o mouse.
     const hint = document.createElement('div');
     hint.className = 'globe-hint';
-    hint.innerHTML = 'Drag to rotate · scroll to zoom · click an orange marker<br><span class="globe-ring">Red ring: 80°S. Custom points can be analysed only inside it.</span>';
+    hint.innerHTML = 'Drag to rotate · scroll to zoom · click a marker<br><span class="globe-landmark">◆ Apollo landing sites (historic landmarks)</span><br><span class="globe-ring">Red ring: 80°S. Custom points can be analysed only inside it.</span>';
     const credit = document.createElement('div');
     credit.className = 'globe-credit';
     credit.textContent = CREDIT;
@@ -122,6 +150,7 @@ export class MoonGlobe {
       const id = this.pick(e);
       const site = this.sites.find((s) => s.id === id);
       if (site) this.onSelect(site);
+      else if (id && this.landmarks.some((m) => m.id === id)) this.onLandmark(id);
     });
     canvas.addEventListener('pointermove', (e) => this.showTooltip(e));
     canvas.addEventListener('pointerleave', () => (this.tooltip.hidden = true));
@@ -131,10 +160,16 @@ export class MoonGlobe {
   }
 
   /** Baixa o Three.js e a textura e monta a Lua. Chamar com o contêiner já visível. */
-  static async create(container: HTMLElement, sites: SiteSummary[], onSelect: (site: SiteSummary) => void): Promise<MoonGlobe> {
+  static async create(
+    container: HTMLElement,
+    sites: SiteSummary[],
+    onSelect: (site: SiteSummary) => void,
+    landmarks: GlobePoint[] = [],
+    onLandmark: (id: string) => void = () => {},
+  ): Promise<MoonGlobe> {
     const [T, controlsModule] = await Promise.all([import('three'), import('three/examples/jsm/controls/OrbitControls.js')]);
     const texture = await new T.TextureLoader().loadAsync(TEXTURE_URL);
-    return new MoonGlobe(T, controlsModule.OrbitControls, container, sites, onSelect, texture);
+    return new MoonGlobe(T, controlsModule.OrbitControls, container, sites, onSelect, texture, landmarks, onLandmark);
   }
 
   /**
@@ -154,12 +189,13 @@ export class MoonGlobe {
     const pointer = new this.T.Vector2(((event.clientX - rect.left) / rect.width) * 2 - 1, -((event.clientY - rect.top) / rect.height) * 2 + 1);
     this.raycaster.setFromCamera(pointer, this.camera);
     const first = this.raycaster.intersectObjects([this.sphere, ...this.hitAreas])[0];
-    return (first?.object.userData.siteId as string | undefined) ?? null;
+    const data = first?.object.userData;
+    return (data?.siteId as string | undefined) ?? (data?.landmarkId as string | undefined) ?? null;
   }
 
   private showTooltip(event: PointerEvent): void {
     const id = this.pick(event);
-    const site = this.sites.find((s) => s.id === id);
+    const site = this.sites.find((s) => s.id === id) ?? this.landmarks.find((m) => m.id === id);
     this.renderer.domElement.style.cursor = site ? 'pointer' : 'grab';
     if (!site) {
       this.tooltip.hidden = true;
@@ -172,16 +208,23 @@ export class MoonGlobe {
     this.tooltip.hidden = false;
   }
 
-  /** Destaca uma região (ou nenhuma) e gira a Lua suavemente até ela. */
+  /** Destaca uma região ou um marco (ou nada) e gira a Lua suavemente até ele. */
   highlight(id: string | null): void {
-    if (this.selectedId) this.paint(this.selectedId, MARKER_COLOR, 1);
+    if (this.selectedId) this.paint(this.selectedId, this.baseColor.get(this.selectedId) ?? MARKER_COLOR, 1);
     this.selectedId = id;
     const site = this.sites.find((s) => s.id === id);
-    if (!site) return;
-    this.paint(site.id, SELECTED_COLOR, 2);
-    // A câmera mira de uma latitude de −70° na mesma longitude: a região fica visível
-    // perto da borda de baixo, sem ficar exatamente sobre o polo (onde o controle gira mal).
-    this.focusDirection = this.toVector(-70, site.lon_deg, 1).normalize();
+    if (site) {
+      this.paint(site.id, SELECTED_COLOR, 2);
+      // A câmera mira de uma latitude de −70° na mesma longitude: a região fica visível
+      // perto da borda de baixo, sem ficar exatamente sobre o polo (onde o controle gira mal).
+      this.focusDirection = this.toVector(-70, site.lon_deg, 1).normalize();
+      return;
+    }
+    const mark = this.landmarks.find((m) => m.id === id);
+    if (mark) {
+      this.paint(mark.id, SELECTED_COLOR, 1.6);
+      this.focusDirection = this.toVector(mark.lat_deg, mark.lon_deg, 1).normalize(); // marco bem no centro da vista
+    }
   }
 
   private paint(id: string, color: number, scale: number): void {

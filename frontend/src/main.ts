@@ -29,6 +29,8 @@ import { Favorites, MAX_FAVORITES } from './favorites';
 import { formatLatLon } from './panels/sitePanel';
 import type { SiteData } from './data/contract';
 import type { MoonGlobe } from './globe/moonGlobe';
+import { showLandmark } from './panels/landmarkPanel';
+import type { Landmark, LandmarkCatalog } from './panels/landmarkPanel';
 
 // Pergunta uma vez se a API está no ar; a resposta é reaproveitada no clique do mapa.
 const apiOnline = checkApiHealth();
@@ -52,7 +54,33 @@ function clearCustomMarker(): void {
 async function start(): Promise<void> {
   // Catálogo (lista de regiões) e resumo (métricas para a comparação) em paralelo.
   const [catalog, summary] = await Promise.all([loadSiteCatalog(), loadSummary()]);
-  const panel = new SitePanel(document.getElementById('site-panel')!, catalog.sites, loadSiteData);
+  const panelElement = document.getElementById('site-panel')!;
+  const panel = new SitePanel(panelElement, catalog.sites, loadSiteData);
+
+  // Marcos históricos (pousos Apollo). Se o arquivo faltar, o site segue sem eles.
+  const landmarkCatalog: LandmarkCatalog | null = await fetch(`${import.meta.env.BASE_URL}data/landmarks.json`)
+    .then((r) => (r.ok ? r.json() : null))
+    .catch(() => null);
+  const landmarks: Landmark[] = landmarkCatalog?.landmarks ?? [];
+  let currentLandmarkId: string | null = null;
+
+  // ---------- Janelas retráteis ----------
+  for (const button of document.querySelectorAll<HTMLButtonElement>('.collapse-btn')) {
+    const target = document.getElementById(button.dataset.collapse!)!;
+    const [open, closed] = button.dataset.collapse === 'left-panel' ? ['‹', '›'] : ['›', '‹'];
+    button.addEventListener('click', () => {
+      const collapsed = target.classList.toggle('collapsed');
+      button.textContent = collapsed ? closed : open;
+      button.setAttribute('aria-expanded', String(!collapsed));
+      button.setAttribute('aria-label', collapsed ? 'Expand this panel' : 'Collapse this panel');
+      map.invalidateSize(); // o mapa ganhou ou perdeu largura
+    });
+  }
+  /** Reabre o painel da direita quando algo novo vai aparecer nele. */
+  function expandRightPanel(): void {
+    const right = document.getElementById('right-panel')!;
+    if (right.classList.contains('collapsed')) right.querySelector<HTMLButtonElement>('.collapse-btn')!.click();
+  }
 
   // Botões Educational / Expert no topo: trocam a apresentação, não os números.
   const modeButtons = document.querySelectorAll<HTMLButtonElement>('.mode-toggle button[data-mode]');
@@ -61,8 +89,14 @@ async function start(): Promise<void> {
       panel.setMode(button.dataset.mode as Mode);
       document.body.dataset.mode = button.dataset.mode; // o CSS troca a fonte conforme o modo
       for (const b of modeButtons) b.setAttribute('aria-pressed', String(b === button));
-      // A Lua 3D é só do modo Educational: no Expert voltamos ao mapa.
-      if (button.dataset.mode === 'expert') void showView('map');
+      // A Lua 3D e os marcos históricos são só do modo Educational: no Expert voltamos ao mapa.
+      if (button.dataset.mode === 'expert') {
+        void showView('map');
+        if (currentLandmarkId) {
+          setLandmark(null);
+          panel.showEmpty();
+        }
+      }
     });
   }
 
@@ -89,8 +123,8 @@ async function start(): Promise<void> {
       try {
         // Import dinâmico: o Three.js só é baixado agora.
         const { MoonGlobe: Globe } = await import('./globe/moonGlobe');
-        globe = await Globe.create(globeElement, catalog.sites, (site) => void selectSite(site));
-        if (currentSiteId) globe.highlight(currentSiteId);
+        globe = await Globe.create(globeElement, catalog.sites, (site) => void selectSite(site), landmarks, (id) => void openLandmark(id));
+        globe.highlight(currentLandmarkId ?? currentSiteId);
       } catch {
         globeFailed = true; // por exemplo, navegador sem WebGL
         globeElement.textContent = '';
@@ -106,6 +140,49 @@ async function start(): Promise<void> {
   }
   for (const b of viewButtons) b.addEventListener('click', () => void showView(b.dataset.view as 'map' | 'globe'));
 
+  // ---------- Marcos históricos: lista na lateral e janela com fotos e história ----------
+  const landmarkButtons = new Map<string, HTMLButtonElement>();
+  function setLandmark(id: string | null): void {
+    currentLandmarkId = id;
+    for (const [key, button] of landmarkButtons) button.setAttribute('aria-current', String(key === id));
+  }
+  async function openLandmark(id: string): Promise<void> {
+    const landmark = landmarks.find((m) => m.id === id);
+    if (!landmark || !landmarkCatalog) return;
+    lastRequest++; // cancela respostas atrasadas de regiões
+    currentSiteId = null;
+    clearCustomMarker();
+    siteLayer.highlight(null);
+    siteList.highlight(null);
+    setLandmark(id);
+    panel.showEmpty(); // o painel de dados "esquece" a região anterior
+    showLandmark(panelElement, landmark, landmarkCatalog);
+    expandRightPanel();
+    await showView('globe'); // os pousos Apollo ficam fora do mapa polar: só aparecem na Lua 3D
+    globe?.highlight(id);
+  }
+  const landmarkBox = document.getElementById('landmark-list')!;
+  if (landmarks.length === 0) {
+    landmarkBox.textContent = 'No data.';
+  } else {
+    const list = document.createElement('ul');
+    list.className = 'landmark-list';
+    for (const landmark of landmarks) {
+      const item = document.createElement('li');
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = landmark.name;
+      const place = document.createElement('small');
+      place.textContent = landmark.place;
+      button.append(place);
+      button.addEventListener('click', () => void openLandmark(landmark.id));
+      landmarkButtons.set(landmark.id, button);
+      item.append(button);
+      list.append(item);
+    }
+    landmarkBox.replaceChildren(list);
+  }
+
   // ---------- Favoritos ----------
   // Pontos livres guardados pelo usuário. Cada um tem um marcador amarelo fixo no mapa.
   const favorites = new Favorites();
@@ -118,6 +195,8 @@ async function start(): Promise<void> {
     siteLayer.highlight(null);
     siteList.highlight(null);
     globe?.highlight(null);
+    setLandmark(null);
+    expandRightPanel();
     map.flyTo([data.site.lat_deg, data.site.lon_deg], Math.max(map.getZoom(), 4));
     panel.showSite(data); // usa os dados guardados: não recalcula
   }
@@ -187,6 +266,8 @@ async function start(): Promise<void> {
   async function selectSite(site: SiteSummary): Promise<void> {
     const request = ++lastRequest;
     currentSiteId = site.id;
+    setLandmark(null);
+    expandRightPanel();
     clearCustomMarker();
     siteLayer.highlight(site.id);
     siteList.highlight(site.id);
@@ -215,6 +296,8 @@ async function start(): Promise<void> {
   // Sem a API (site publicado), mostramos só as coordenadas e "no data".
   map.on('click', async (e) => {
     const request = ++lastRequest;
+    setLandmark(null);
+    expandRightPanel();
     const { lat, lng } = e.latlng;
     siteLayer.highlight(null);
     siteList.highlight(null);

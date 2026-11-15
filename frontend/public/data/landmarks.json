@@ -1,0 +1,127 @@
+{
+ "source": "NASA NSSDCA, Apollo Landing Site Coordinates (lunar_sites.html), read 2026-11-15",
+ "touchdown_source": "NASA NSSDCA, Apollo Lunar Landings (apolloland.html), as compiled by the team; not re-checked",
+ "note": "History texts: AI-assisted draft, to be reviewed by the team. Images are loaded live from the NASA Image and Video Library.",
+ "landmarks": [
+  {
+   "id": "apollo-11",
+   "name": "Apollo 11",
+   "lander": "Lunar Module Eagle",
+   "place": "Mare Tranquillitatis (Sea of Tranquility)",
+   "lat_deg": 0.67416,
+   "lon_deg": 23.47314,
+   "touchdown_utc": "1969-07-20T20:17:40Z",
+   "crew": "Neil Armstrong and Buzz Aldrin on the surface; Michael Collins in lunar orbit",
+   "image_query": "Apollo 11 lunar surface",
+   "history": [
+    "Apollo 11 was the first crewed landing on the Moon. It met the goal set by the United States in 1961, during the Cold War space race with the Soviet Union: land people on the Moon and return them safely before the end of the decade.",
+    "The site was chosen for safety, not for science: a flat, smooth mare plain close to the equator, which made the approach and the return to orbit simpler. The crew made one moonwalk of about two and a half hours and stayed on the surface for less than a day.",
+    "They brought back about 21 kg of rock and soil. The samples showed that the dark maria are ancient volcanic basalt, more than three billion years old, and found no water or life. A laser reflector left at the site is still used to measure the Earth-Moon distance."
+   ],
+   "study_questions": [
+    "Why was a flat equatorial plain preferred for the first landing?",
+    "What did the first samples change in the theories about the Moon's origin?"
+   ]
+  },
+  {
+   "id": "apollo-12",
+   "name": "Apollo 12",
+   "lander": "Lunar Module Intrepid",
+   "place": "Oceanus Procellarum (Ocean of Storms)",
+   "lat_deg": -3.0128,
+   "lon_deg": -23.4219,
+   "touchdown_utc": "1969-11-19T06:54:35Z",
+   "crew": "Pete Conrad and Alan Bean on the surface; Richard Gordon in lunar orbit",
+   "image_query": "Apollo 12 lunar surface",
+   "history": [
+    "Apollo 12 proved that a crew could land at a chosen spot. The Lunar Module touched down within walking distance of Surveyor 3, a robotic probe that had landed there in 1967. Precision landing was a requirement for the later missions to rougher terrain.",
+    "In two moonwalks the crew set up the first full ALSEP science station, with instruments that kept sending data for years, and walked to Surveyor 3 to remove parts and bring them home. Those parts let engineers study how materials age after two and a half years on the Moon.",
+    "The mission returned about 34 kg of samples, younger basalts than those of Apollo 11, which showed that mare volcanism lasted for a long time. The launch is also remembered because the rocket was struck by lightning and the flight continued."
+   ],
+   "study_questions": [
+    "Why did precision landing matter for the missions that came after?",
+    "What can hardware left on the Moon teach about building long-lived surface systems?"
+   ]
+  },
+  {
+   "id": "apollo-14",
+   "name": "Apollo 14",
+   "lander": "Lunar Module Antares",
+   "place": "Fra Mauro highlands",
+   "lat_deg": -3.64589,
+   "lon_deg": -17.47194,
+   "touchdown_utc": "1971-02-05T09:18:11Z",
+   "crew": "Alan Shepard and Edgar Mitchell on the surface; Stuart Roosa in lunar orbit",
+   "image_query": "Apollo 14 lunar surface",
+   "history": [
+    "Apollo 14 landed at Fra Mauro, the target of the aborted Apollo 13. The area is covered by material thrown out by the giant impact that formed the Imbrium basin, so sampling it meant sampling rock excavated from deep in the lunar crust and dating that impact.",
+    "The crew made two moonwalks and pulled a small hand cart with tools and samples. On the second one they climbed toward the rim of Cone crater; the rolling terrain made navigation hard and they turned back close to the rim without seeing into the crater.",
+    "About 42 kg of samples came back, mostly breccias: rocks made of fragments welded together by impacts. They helped place the Imbrium impact at roughly 3.9 billion years ago, a key date in the history of the Moon."
+   ],
+   "study_questions": [
+    "Why do geologists sample the ejecta of a large crater instead of drilling deep?",
+    "What does the difficulty near Cone crater say about navigation without landmarks?"
+   ]
+  },
+  {
+   "id": "apollo-15",
+   "name": "Apollo 15",
+   "lander": "Lunar Module Falcon",
+   "place": "Hadley Rille, at the foot of the Apennine Mountains",
+   "lat_deg": 26.13239,
+   "lon_deg": 3.6333,
+   "touchdown_utc": "1971-07-30T22:16:29Z",
+   "crew": "David Scott and James Irwin on the surface; Alfred Worden in lunar orbit",
+   "image_query": "Apollo 15 lunar surface",
+   "history": [
+    "Apollo 15 opened the extended scientific missions. It carried the first Lunar Roving Vehicle, which let the crew drive kilometres from the lander, and the stay on the surface grew to almost three days, with three moonwalks.",
+    "The site combined three kinds of terrain in one place: a mare plain, the Apennine mountain front and Hadley Rille, a long winding channel carved by flowing lava. The crew had received extensive geology training and described the layers in the rille wall from its edge.",
+    "The mission returned about 77 kg of samples, including the anorthosite known as the Genesis Rock, a piece of the Moon's early crust about four billion years old. At the end, a hammer and a feather were dropped together to show that, without air, they fall at the same rate."
+   ],
+   "study_questions": [
+    "How did the rover change what could be studied in one mission?",
+    "Why is a piece of the original crust so valuable for understanding how the Moon formed?"
+   ]
+  },
+  {
+   "id": "apollo-16",
+   "name": "Apollo 16",
+   "lander": "Lunar Module Orion",
+   "place": "Descartes highlands",
+   "lat_deg": -8.9734,
+   "lon_deg": 15.5011,
+   "touchdown_utc": "1972-04-21T02:23:35Z",
+   "crew": "John Young and Charles Duke on the surface; Ken Mattingly in lunar orbit",
+   "image_query": "Apollo 16 lunar surface",
+   "history": [
+    "Apollo 16 was the only Apollo landing in the central lunar highlands, the bright, heavily cratered terrain that covers most of the Moon. Before the flight, the Descartes area was expected to be made of volcanic rock.",
+    "In three moonwalks with the rover the crew found almost no volcanic rock. Nearly everything was breccia produced by impacts. The prediction, based on photographs taken from orbit, was wrong, and the result changed how the highlands are interpreted.",
+    "About 95 kg of samples were returned, and the crew operated the first astronomical telescope used from the surface of another world, an ultraviolet camera. The mission is a classic example of field work overturning a hypothesis."
+   ],
+   "study_questions": [
+    "What are the limits of interpreting geology only from orbital images?",
+    "Why are the highlands important for knowing the age of the lunar crust?"
+   ]
+  },
+  {
+   "id": "apollo-17",
+   "name": "Apollo 17",
+   "lander": "Lunar Module Challenger",
+   "place": "Taurus-Littrow valley",
+   "lat_deg": 20.1911,
+   "lon_deg": 30.7723,
+   "touchdown_utc": "1972-12-11T19:54:57Z",
+   "crew": "Eugene Cernan and Harrison Schmitt on the surface; Ronald Evans in lunar orbit",
+   "image_query": "Apollo 17 lunar surface",
+   "history": [
+    "Apollo 17 was the last crewed landing of the Apollo program. Harrison Schmitt was a professional geologist, the only scientist to walk on the Moon so far. The crew spent about three days in the Taurus-Littrow valley, at the edge of Mare Serenitatis.",
+    "The valley is surrounded by massifs about two kilometres high, so one site gave access to old highland rock from the mountains and younger volcanic material on the valley floor. This is also the kind of place where surrounding terrain blocks part of the sky, the effect this project measures at the south pole.",
+    "In three moonwalks the crew drove the rover for tens of kilometres and collected about 110 kg of samples, the largest return of the program. At Shorty crater they found orange soil: tiny beads of volcanic glass from ancient fire fountains."
+   ],
+   "study_questions": [
+    "Why send a geologist instead of training a pilot in geology?",
+    "How do tall mountains around a site affect sunlight and line of sight to Earth?"
+   ]
+  }
+ ]
+}

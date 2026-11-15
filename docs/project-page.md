@@ -44,6 +44,8 @@ comparing, for each place and date, how much of the time the Sun and the Earth a
   above zero means visible) and a panorama of the horizon with the paths of the Sun and the Earth over the period.
 - Clicking any point south of 80°S computes its horizon and visibility on demand (when the local API is running)
   and lets the user keep it in a Favorites list stored in a file.
+- Educational mode also has a 3D Moon with the candidate regions and six historic landmarks (the Apollo landing sites),
+  each with a gallery of NASA images and a history text with questions for study.
 - Expert mode adds the parameters used, links that reproduce each JPL Horizons query, and a download tool where
   the user chooses which data to export (Sun and Earth positions from JPL Horizons, terrain horizon from LOLA,
   derived visibility, summary) as CSV or JSON.
@@ -98,7 +100,9 @@ made by the team.
   Dynamics.
 - LROC WAC mosaic (Lunar Reconnaissance Orbiter Camera, Arizona State University / NASA), used as the base map.
 - NASA PGDA product 69 (average illumination and Earth visibility), used as a validation reference.
-- NASA CGI Moon Kit (3D globe textures), [only if the globe is built].
+- NASA SVS CGI Moon Kit color map (texture of the 3D Moon).
+- NASA Image and Video Library (images of the Apollo landings, loaded live in the historic landmarks).
+- NASA NSSDCA Apollo landing site coordinates (historic landmarks).
 
 ## Space Agency Partner Data and Other References
 

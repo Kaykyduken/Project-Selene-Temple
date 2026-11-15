@@ -181,3 +181,34 @@ body[data-mode='expert'] .edu-only { display: none; }
 
 /* Borda vermelha: limite da análise de pontos livres (80°S). */
 .swatch-limit { height: 0; border-top: 3px solid #ff4d4d; flex: none; }
+
+/* Janelas retráteis: os dois painéis laterais encolhem para uma faixa estreita. */
+.side-panel { position: relative; flex: none; }
+.collapse-btn { position: absolute; top: 0.5rem; right: 0.5rem; width: 1.6rem; height: 1.6rem; border-radius: 6px; border: 1px solid #2a3344; background: #1b2436; color: var(--text); font-size: 1rem; line-height: 1; cursor: pointer; z-index: 2; }
+.collapse-btn:hover { background: #22304a; }
+.collapse-btn:focus-visible { outline: 2px solid var(--ok); }
+.side-panel.collapsed { width: 2.6rem; padding: 0.5rem 0; overflow: hidden; }
+.side-panel.collapsed > :not(.collapse-btn) { display: none; }
+.side-panel.collapsed .collapse-btn { right: 0.5rem; }
+#left-panel > h2:first-of-type, #site-panel > :first-child { padding-right: 2rem; }
+
+/* Marcos históricos (pousos Apollo) */
+.landmark-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.3rem; }
+.landmark-list button { width: 100%; text-align: left; background: transparent; color: var(--text); font: inherit; font-size: 0.9rem; border: 1px solid #2a3344; border-radius: 6px; padding: 0.35rem 0.6rem; cursor: pointer; }
+.landmark-list button:hover, .landmark-list button[aria-current='true'] { background: #17323a; border-color: #3fd0c9; }
+.landmark-list small { color: var(--muted); display: block; }
+.landmark-tag { display: inline-block; width: fit-content; margin: 0 0 0.4rem; padding: 0.1rem 0.5rem; border: 1px solid #3fd0c9; border-radius: 999px; color: #3fd0c9; font-size: 0.75rem; }
+.swatch-landmark { width: 11px; height: 11px; background: #3fd0c9; transform: rotate(45deg); margin: 0 1.5px; flex: none; }
+.globe-landmark { color: #3fd0c9; }
+body[data-mode='expert'] .edu-only-li { display: none; }
+.gallery-frame { background: #000; border: 1px solid #2a3344; border-radius: 8px; height: 260px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.gallery-frame img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.gallery-controls { display: flex; align-items: center; justify-content: center; gap: 1rem; margin: 0.5rem 0 0.25rem; }
+.gallery-nav { width: 2.2rem; height: 2.2rem; border-radius: 50%; border: 1px solid #2a3344; background: #1b2436; color: var(--text); font-size: 1.2rem; cursor: pointer; }
+.gallery-nav:hover { background: #22304a; }
+.gallery-counter { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 0.85rem; min-width: 3.5rem; text-align: center; }
+.gallery-caption { font-size: 0.85rem; margin: 0.25rem 0; }
+.edu-text { font-size: 0.9rem; line-height: 1.5; margin: 0 0 0.6rem; }
+.study-list { font-size: 0.9rem; padding-left: 1.1rem; margin: 0 0 0.75rem; }
+.study-list li { margin-bottom: 0.3rem; }
+@media (max-width: 900px) { .side-panel.collapsed { width: auto; height: 2.6rem; } }

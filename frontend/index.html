@@ -21,16 +21,23 @@
       </div>
     </header>
     <main>
-      <nav class="side-panel" aria-label="Candidate regions">
+      <nav class="side-panel" id="left-panel" aria-label="Candidate regions">
+        <button type="button" class="collapse-btn" data-collapse="left-panel" aria-expanded="true" aria-label="Collapse this panel" title="Collapse / expand">‹</button>
         <h2>Candidate regions</h2>
         <p class="muted">Artemis III candidate landing regions (NASA, 2024). Share of the period with the Sun and the Earth in view; click a column to sort.</p>
         <div id="site-list">Loading…</div>
+        <div class="edu-only">
+          <h2>Historic landmarks</h2>
+          <p class="muted">Apollo landing sites, shown on the 3D Moon with photos and history.</p>
+          <div id="landmark-list"></div>
+        </div>
         <h2>Favorites</h2>
         <div id="favorites"></div>
         <h2>Legend</h2>
         <ul class="legend">
           <li><span class="swatch swatch-site"></span> Candidate region (centre and outline)</li>
           <li><span class="swatch swatch-fav"></span> Favorite point</li>
+          <li class="edu-only-li"><span class="swatch swatch-landmark"></span> Historic landmark (3D Moon)</li>
           <li><span class="swatch swatch-grid"></span> Latitude / longitude grid</li>
           <li><span class="swatch swatch-limit"></span> Red border: 80°S. Custom points can be analysed only inside it; outside there is no terrain data</li>
         </ul>
@@ -38,7 +45,10 @@
       </nav>
       <div id="map" aria-label="Lunar south pole map, polar stereographic projection"></div>
       <div id="globe" class="globe is-hidden" aria-label="3D Moon with the candidate regions"></div>
-      <aside id="site-panel" class="side-panel site-panel" aria-live="polite" aria-label="Selected site"></aside>
+      <aside id="right-panel" class="side-panel site-panel" aria-label="Selected site">
+        <button type="button" class="collapse-btn" data-collapse="right-panel" aria-expanded="true" aria-label="Collapse this panel" title="Collapse / expand">›</button>
+        <div id="site-panel" aria-live="polite"></div>
+      </aside>
     </main>
     <footer class="site-footer">
       Independent hackathon project. Not an official NASA product and not endorsed by NASA.

@@ -51,3 +51,10 @@ Confirmed against the API on 2026-11-14: Moon `301`, Sun `10`, Earth `399`.
 ## 3D Moon texture (Educational mode)
 
 `frontend/public/data/globe/moon_globe_4k.jpg` is built by `pipeline/prepare_globe_texture.py` from the NASA SVS CGI Moon Kit global color map (2048 x 1024, LRO/LROC data), enlarged to 4096 x 2048, with the detail of the LROC WAC south polar mosaic (the site's base map) blended in below 60°S. The colour stays the NASA one; only local brightness and relief come from the WAC. The tool picks the axis orientation of the polar image by correlation with the global map (the chosen one matches the stereographic formula, correlation 0.46).
+
+## Historic landmarks (Educational mode)
+
+- Coordinates of the six Apollo landing sites: [NASA NSSDCA, Apollo Landing Site Coordinates](https://nssdc.gsfc.nasa.gov/planetary/lunar/lunar_sites.html), values as shown on that page on 2026-11-15 (they differ by a few metres from the table compiled by the team). Stored in `frontend/public/data/landmarks.json`.
+- Touchdown times (UTC): [NASA NSSDCA, Apollo Lunar Landings](https://nssdc.gsfc.nasa.gov/planetary/lunar/apolloland.html), as compiled by the team; not re-checked.
+- Images: [NASA Image and Video Library](https://images.nasa.gov) through its public API, loaded live in the browser with the search "Apollo NN lunar surface"; each image links to its page in the library. The selection is the library's search order, not curated.
+- History texts and study questions: AI-assisted draft (Claude), pending team review.

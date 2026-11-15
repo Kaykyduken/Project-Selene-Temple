@@ -10,7 +10,7 @@
   --line: #2a3344;  /* bordas e linhas finas */
   --ok: #4da3ff;   /* azul e laranja em vez de verde e vermelho (daltonismo) */
   --off: #ff9f40;
-  font-size: 16px;
+  font-size: 18px; /* base de todos os textos (era 16px) */
   color: var(--text);
   background: var(--bg);
 }
@@ -42,13 +42,13 @@ main { flex: 1; display: flex; min-height: 0; }
 #map { flex: 1; background: #000; }
 
 .side-panel {
-  width: 300px;
-  padding: 1rem;
+  width: 340px;
+  padding: 1.25rem 1.5rem;
   background: var(--panel);
   overflow-y: auto;
   font-size: 0.95rem;
 }
-.site-panel { width: 440px; }
+.site-panel { width: 480px; }
 .side-panel h2 { font-size: 1rem; margin: 0 0 0.5rem; }
 .side-panel h2:not(:first-child) { margin-top: 1.5rem; }
 .side-panel h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin: 1.25rem 0 0.5rem; }
@@ -145,7 +145,7 @@ main { flex: 1; display: flex; min-height: 0; }
 /* Gráficos */
 .chart { position: relative; margin: 0.25rem 0 0.5rem; }
 .chart svg { display: block; width: 100%; height: auto; }
-.chart-text { font-size: 10px; fill: var(--muted); font-family: inherit; }
+.chart-text { font-size: 12px; fill: var(--muted); font-family: inherit; }
 .chart-text-halo { paint-order: stroke; stroke: var(--panel); stroke-width: 4px; stroke-linejoin: round; }
 .chart-text-strong { fill: var(--text); font-weight: 600; }
 .chart-legend { display: flex; gap: 1rem; font-size: 0.8rem; color: var(--muted); margin-bottom: 0.25rem; }
@@ -185,7 +185,7 @@ body[data-mode='expert'] .edu-only { display: none; }
 
 /* Janelas retráteis: os dois painéis laterais encolhem para uma faixa estreita. */
 .side-panel { position: relative; flex: none; }
-.collapse-btn { position: absolute; top: 0.5rem; right: 0.5rem; width: 1.6rem; height: 1.6rem; border-radius: 6px; border: 1px solid var(--line); background: #1b2436; color: var(--text); font-size: 1rem; line-height: 1; cursor: pointer; z-index: 2; }
+.collapse-btn { position: absolute; top: 0.6rem; right: 0.6rem; width: 1.6rem; height: 1.6rem; border-radius: 6px; border: 1px solid var(--line); background: #1b2436; color: var(--text); font-size: 1rem; line-height: 1; cursor: pointer; z-index: 2; }
 .collapse-btn:hover { background: #22304a; }
 .collapse-btn:focus-visible { outline: 2px solid var(--ok); }
 .side-panel.collapsed { width: 2.6rem; padding: 0.5rem 0; overflow: hidden; }
@@ -249,6 +249,6 @@ body[data-mode='educational'] .side-panel { background: rgb(35 64 108 / 1); tran
 }
 body[data-mode='educational'] .collapse-btn, body[data-mode='educational'] .gallery-nav { background: #2f5187; }
 body[data-mode='educational'] .mode-toggle button[aria-pressed='true'] { background: #35598f; }
-body[data-mode='educational'] .dot, body[data-mode='educational'] .calendar-cell { background: #17294a; }
+body[data-mode='educational'] .dot, body[data-mode='educational'] .calendar-cell { background: #0f1b33; box-shadow: inset 0 0 0 1px var(--line); }
 body[data-mode='expert'] { --bg: #05080f; --panel: #0a1120; --line: #1f2a3d; background: var(--bg); }
 @media (prefers-reduced-motion: reduce) { body[data-mode='educational'] .side-panel { transition: none; } }

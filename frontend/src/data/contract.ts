@@ -81,3 +81,21 @@ export interface SiteData {
   /** true = dado inventado para teste. A interface É OBRIGADA a mostrar a faixa de aviso. */
   fictitious: boolean;
 }
+
+/** Linha do resumo (frontend/public/data/summary.json): métricas de uma região. */
+export interface SummaryRow {
+  id: string;
+  sun_time_pct: number | null;
+  earth_time_pct: number | null;
+  longest_no_sun_h: number | null;
+  fictitious: boolean;
+}
+
+export interface Summary {
+  contract_version: string;
+  same_period: boolean; // true se todas as regiões foram calculadas para o mesmo período
+  sites: SummaryRow[];
+}
+
+/** Os dois modos do site: mesmos números, apresentação diferente. */
+export type Mode = 'educational' | 'expert';

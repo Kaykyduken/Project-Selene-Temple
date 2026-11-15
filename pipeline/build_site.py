@@ -23,6 +23,7 @@ from pathlib import Path
 
 import numpy as np
 
+import build_summary
 import horizon as hz
 import horizons as jpl
 
@@ -139,6 +140,7 @@ def main() -> int:
         m = data["metrics"]
         print(f"{site['name']:22s} chão {data['site']['ground_height_m']:8.1f} m | Sol {m['sun_time_pct']['value']:5.1f}% | "
               f"Terra {m['earth_time_pct']['value']:5.1f}% | maior período sem Sol {m['longest_no_sun_h']['value']} h")
+    build_summary.main()  # atualiza o resumo usado na comparação entre regiões
     return 1 if failed else 0
 
 

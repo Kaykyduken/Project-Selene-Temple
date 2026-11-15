@@ -38,7 +38,8 @@ export function marginChart(data: SiteData): HTMLElement {
     root.append(svg('text', { x: LEFT - 6, y: y(t) + 3.5, 'text-anchor': 'end', class: 'chart-text' }, `${t}°`));
   }
   // Nome da linha do zero, dentro do gráfico (à esquerda) para não bater nos nomes das séries.
-  root.append(svg('text', { x: LEFT + 3, y: y(0) - 4, class: 'chart-text' }, 'terrain horizon'));
+  // (contorno da cor do fundo, para o texto continuar legível quando uma linha passa por trás)
+  root.append(svg('text', { x: LEFT + 3, y: y(0) - 4, class: 'chart-text chart-text-halo' }, 'terrain horizon'));
 
   // Rótulos do eixo X: 4 datas ao longo do período
   for (let k = 0; k <= 3; k++) {
@@ -54,6 +55,7 @@ export function marginChart(data: SiteData): HTMLElement {
       fill: 'none', stroke: color, 'stroke-width': 2, 'stroke-linejoin': 'round',
     });
   root.append(line(m.earth, COLOR.earth), line(m.sun, COLOR.sun));
+  root.append(root.querySelector('.chart-text-halo')!); // traz o nome da linha do zero para a frente
 
   // Nome de cada série na ponta direita da linha (afastados se ficarem colados)
   let ySun = y(clamp(m.sun[n - 1])), yEarth = y(clamp(m.earth[n - 1]));

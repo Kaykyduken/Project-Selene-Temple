@@ -1,0 +1,69 @@
+{
+ "contract_version": "0.1",
+ "same_period": true,
+ "sites": [
+  {
+   "id": "peak-near-cabeus-b",
+   "sun_time_pct": 34.4,
+   "earth_time_pct": 0.0,
+   "longest_no_sun_h": 445.0,
+   "fictitious": false
+  },
+  {
+   "id": "haworth",
+   "sun_time_pct": 6.5,
+   "earth_time_pct": 33.4,
+   "longest_no_sun_h": 599.0,
+   "fictitious": false
+  },
+  {
+   "id": "malapert-massif",
+   "sun_time_pct": 37.6,
+   "earth_time_pct": 45.5,
+   "longest_no_sun_h": 205.0,
+   "fictitious": false
+  },
+  {
+   "id": "mons-mouton-plateau",
+   "sun_time_pct": 28.0,
+   "earth_time_pct": 57.3,
+   "longest_no_sun_h": 377.0,
+   "fictitious": false
+  },
+  {
+   "id": "mons-mouton",
+   "sun_time_pct": 61.2,
+   "earth_time_pct": 38.7,
+   "longest_no_sun_h": 278.0,
+   "fictitious": false
+  },
+  {
+   "id": "nobile-rim-1",
+   "sun_time_pct": 20.7,
+   "earth_time_pct": 28.2,
+   "longest_no_sun_h": 305.0,
+   "fictitious": false
+  },
+  {
+   "id": "nobile-rim-2",
+   "sun_time_pct": 41.2,
+   "earth_time_pct": 56.2,
+   "longest_no_sun_h": 271.0,
+   "fictitious": false
+  },
+  {
+   "id": "de-gerlache-rim-2",
+   "sun_time_pct": 42.2,
+   "earth_time_pct": 43.3,
+   "longest_no_sun_h": 396.0,
+   "fictitious": false
+  },
+  {
+   "id": "slater-plain",
+   "sun_time_pct": 0.0,
+   "earth_time_pct": 31.1,
+   "longest_no_sun_h": 721.0,
+   "fictitious": false
+  }
+ ]
+}

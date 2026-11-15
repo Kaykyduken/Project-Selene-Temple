@@ -14,14 +14,13 @@ import { loadBasemap } from './map/basemap';
 import { SiteLayer } from './map/sites';
 import { SiteList } from './panels/siteList';
 import { SitePanel } from './panels/sitePanel';
-import { loadSiteCatalog, loadSiteData } from './data/loader';
-import type { SiteSummary } from './data/contract';
+import { loadSiteCatalog, loadSiteData, loadSummary } from './data/loader';
+import type { Mode, SiteSummary } from './data/contract';
 import { checkApiHealth } from './api';
 
 const map = createPolarMap('map');
 addGraticule(map);
 
-const panel = new SitePanel(document.getElementById('site-panel')!);
 const basemapStatus = document.getElementById('basemap-status')!;
 loadBasemap(map).then((message) => {
   basemapStatus.textContent = message;
@@ -35,7 +34,18 @@ function clearCustomMarker(): void {
 }
 
 async function start(): Promise<void> {
-  const catalog = await loadSiteCatalog();
+  // Catálogo (lista de regiões) e resumo (métricas para a comparação) em paralelo.
+  const [catalog, summary] = await Promise.all([loadSiteCatalog(), loadSummary()]);
+  const panel = new SitePanel(document.getElementById('site-panel')!, catalog.sites, loadSiteData);
+
+  // Botões Educational / Expert no topo: trocam a apresentação, não os números.
+  const modeButtons = document.querySelectorAll<HTMLButtonElement>('[data-mode]');
+  for (const button of modeButtons) {
+    button.addEventListener('click', () => {
+      panel.setMode(button.dataset.mode as Mode);
+      for (const b of modeButtons) b.setAttribute('aria-pressed', String(b === button));
+    });
+  }
 
   // Guarda qual foi o último pedido: se o usuário clicar em duas regiões rápido,
   // a resposta atrasada da primeira não pode sobrescrever a da segunda.
@@ -56,7 +66,7 @@ async function start(): Promise<void> {
   }
 
   const siteLayer = new SiteLayer(map, catalog.sites, selectSite);
-  const siteList = new SiteList(document.getElementById('site-list')!, catalog.sites, (site) => {
+  const siteList = new SiteList(document.getElementById('site-list')!, catalog.sites, summary, (site) => {
     // Pela lista, o mapa também se move até a região.
     map.flyTo([site.lat_deg, site.lon_deg], Math.max(map.getZoom(), 4));
     void selectSite(site);

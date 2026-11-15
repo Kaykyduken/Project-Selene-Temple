@@ -4,7 +4,7 @@
 // Lê os JSON pré-calculados da pasta public/data. São arquivos estáticos:
 // o site funciona sem a API (princípio de segurança da demo).
 
-import type { SiteCatalog, SiteData } from './contract';
+import type { SiteCatalog, SiteData, Summary } from './contract';
 
 const DATA_URL = `${import.meta.env.BASE_URL}data`;
 
@@ -20,4 +20,13 @@ export function loadSiteCatalog(): Promise<SiteCatalog> {
 
 export function loadSiteData(siteId: string): Promise<SiteData> {
   return getJson<SiteData>(`${DATA_URL}/sites/${encodeURIComponent(siteId)}.json`);
+}
+
+/** Resumo das métricas de todas as regiões. Se o arquivo não existir, devolve null. */
+export async function loadSummary(): Promise<Summary | null> {
+  try {
+    return await getJson<Summary>(`${DATA_URL}/summary.json`);
+  } catch {
+    return null;
+  }
 }

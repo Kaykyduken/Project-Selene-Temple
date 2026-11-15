@@ -36,7 +36,7 @@ main { flex: 1; display: flex; min-height: 0; }
 #map { flex: 1; background: #000; }
 
 .side-panel {
-  width: 280px;
+  width: 300px;
   padding: 1rem;
   background: var(--panel);
   overflow-y: auto;
@@ -48,16 +48,30 @@ main { flex: 1; display: flex; min-height: 0; }
 .side-panel h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin: 1.25rem 0 0.5rem; }
 .muted { color: var(--muted); font-size: 0.85rem; }
 
-/* Lista de regiões */
+/* Topo: botões de modo */
+.topbar-right { display: flex; align-items: center; gap: 0.75rem; }
+.mode-toggle { display: inline-flex; border: 1px solid #2a3344; border-radius: 999px; overflow: hidden; }
+.mode-toggle button { background: transparent; color: var(--muted); font: inherit; font-size: 0.85rem; padding: 0.25rem 0.8rem; border: 0; cursor: pointer; }
+.mode-toggle button[aria-pressed='true'] { background: #22304a; color: var(--text); font-weight: 600; }
+.mode-toggle button:focus-visible { outline: 2px solid var(--ok); outline-offset: -2px; }
+
+/* Lista de regiões (com as colunas de comparação) */
 .site-list { list-style: none; margin: 0; padding: 0; }
+.site-row { display: grid; grid-template-columns: 1fr 3.2rem 3.6rem; gap: 0.25rem; align-items: center; width: 100%; }
+.site-head { margin-bottom: 0.3rem; }
+.site-head button { background: transparent; border: 0; color: var(--muted); font: inherit; font-size: 0.75rem; cursor: pointer; padding: 0.1rem 0.3rem; text-align: right; }
+.site-head button:first-child { text-align: left; padding-left: 0.6rem; }
+.site-head button[aria-pressed='true'] { color: var(--text); font-weight: 600; }
 .site-list button {
-  width: 100%; text-align: left; padding: 0.5rem 0.6rem; margin-bottom: 0.25rem;
+  text-align: left; padding: 0.5rem 0.6rem; margin-bottom: 0.25rem;
   background: transparent; color: var(--text); font: inherit;
   border: 1px solid #2a3344; border-radius: 6px; cursor: pointer;
 }
+.site-list .num { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); font-size: 0.85rem; }
 .site-list button:hover { border-color: var(--ok); }
-.site-list button:focus-visible { outline: 2px solid var(--ok); outline-offset: 2px; }
+.site-list button:focus-visible, .site-head button:focus-visible { outline: 2px solid var(--ok); outline-offset: 2px; }
 .site-list button.selected { background: #22304a; border-color: var(--ok); font-weight: 600; }
+.site-list button.selected .num { color: var(--text); }
 
 /* Legenda */
 .legend { list-style: none; margin: 0; padding: 0; font-size: 0.85rem; color: var(--muted); }
@@ -79,10 +93,36 @@ main { flex: 1; display: flex; min-height: 0; }
 .sources { margin: 0; padding-left: 1.1rem; font-size: 0.85rem; color: var(--muted); }
 .disclaimer { margin-top: 1.25rem; font-size: 0.8rem; color: var(--muted); border-left: 3px solid var(--off); padding-left: 0.6rem; }
 
+/* Modo Educacional: cartões com o número grande */
+.edu-card { display: grid; grid-template-columns: 1fr auto; gap: 0.1rem 0.75rem; padding: 0.6rem 0.75rem; margin-bottom: 0.5rem; border: 1px solid #2a3344; border-radius: 8px; }
+.edu-title { font-weight: 600; }
+.edu-big { font-size: 1.4rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.edu-card p { grid-column: 1 / -1; margin: 0; font-size: 0.85rem; color: var(--muted); }
+
+/* Modo Especialista: parâmetros, links e downloads */
+.params { display: grid; grid-template-columns: auto 1fr; gap: 0.25rem 0.75rem; margin: 0; font-size: 0.85rem; }
+.params dt { color: var(--muted); }
+.params dd { margin: 0; overflow-wrap: anywhere; }
+.side-panel a { color: var(--ok); }
+.actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.actions button, .compare-select {
+  background: transparent; color: var(--text); font: inherit; font-size: 0.85rem;
+  border: 1px solid #2a3344; border-radius: 6px; padding: 0.4rem 0.7rem; cursor: pointer;
+}
+.compare-select { width: 100%; background: var(--panel); }
+.actions button:hover, .compare-select:hover { border-color: var(--ok); }
+
+/* Comparação lado a lado */
+.compare { width: 100%; border-collapse: collapse; margin-top: 0.6rem; font-size: 0.85rem; }
+.compare th, .compare td { padding: 0.4rem 0.3rem; border-bottom: 1px solid #2a3344; text-align: right; font-variant-numeric: tabular-nums; }
+.compare th:first-child { text-align: left; color: var(--muted); font-weight: 400; }
+.compare tr:first-child th { font-weight: 600; vertical-align: bottom; }
+
 /* Gráficos */
 .chart { position: relative; margin: 0.25rem 0 0.5rem; }
 .chart svg { display: block; width: 100%; height: auto; }
 .chart-text { font-size: 10px; fill: var(--muted); font-family: inherit; }
+.chart-text-halo { paint-order: stroke; stroke: var(--panel); stroke-width: 4px; stroke-linejoin: round; }
 .chart-text-strong { fill: var(--text); font-weight: 600; }
 .chart-legend { display: flex; gap: 1rem; font-size: 0.8rem; color: var(--muted); margin-bottom: 0.25rem; }
 .chart-legend > span { display: inline-flex; align-items: center; gap: 0.35rem; }

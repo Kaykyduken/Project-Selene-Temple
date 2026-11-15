@@ -44,8 +44,15 @@ comparing, for each place and date, how much of the time the Sun and the Earth a
   above zero means visible) and a panorama of the horizon with the paths of the Sun and the Earth over the period.
 - Clicking any point south of 80°S computes its horizon and visibility on demand (when the local API is running)
   and lets the user keep it in a Favorites list stored in a file.
-- Educational mode also has a 3D Moon with the candidate regions and six historic landmarks (the Apollo landing sites),
-  each with a gallery of NASA images and a history text with questions for study.
+- Educational mode opens on a 3D Moon (NASA CGI Moon Kit texture with LROC detail at the pole) that shows the
+  candidate regions with their outlines, the red 80°S border and name labels. Six historic landmarks (the Apollo
+  landing sites) turn and zoom the Moon to the site, and open a window with up to 100 official NASA images (click one
+  to enlarge it), a history text, a link to the event's Wikipedia article and questions for study.
+- For a point chosen by the user, Educational mode ends with a short explanation of what makes a place good or bad
+  to land (Sun, Earth view, length of the dark) and rates the point on those three criteria with a simple rule of
+  thumb for learning, not a NASA criterion.
+- A guided tour (shown on the first visit, repeatable from the top bar) walks new users through the whole site.
+- The site is available in English and Brazilian Portuguese, and has five text sizes for easier reading.
 - Expert mode adds the parameters used, links that reproduce each JPL Horizons query, and a download tool where
   the user chooses which data to export (Sun and Earth positions from JPL Horizons, terrain horizon from LOLA,
   derived visibility, summary) as CSV or JSON.
@@ -107,6 +114,7 @@ made by the team.
 ## Space Agency Partner Data and Other References
 
 - USGS Astrogeology: grids of the nine Artemis III candidate regions (centroids and outlines were derived from them).
+- Wikipedia articles on the Apollo missions (linked from each historic landmark, not used as data).
 - Software: Leaflet and Proj4Leaflet (maps), Proj4js / PROJ (projection), Vite and TypeScript, FastAPI, NumPy,
   rasterio, pyproj, Pillow, pyshp, Shapely.
 - Typeface: Montserrat (SIL Open Font License) for Educational mode; Calibri, with Arial as fallback, for Expert mode.
@@ -114,7 +122,9 @@ made by the team.
 
 ## Before submitting
 
+- [ ] Record the 30 s video (script in `docs/video/demo-script.md`), upload it as Unlisted with `demo.srt` as English captions.
 - [ ] Fill the demo and final project links and open both in a private window.
+- [ ] The Portuguese texts and the "good or bad to land" thresholds (50% / 20% of time; 100 h / 300 h of dark) are team choices drafted by Claude: have Raphaela and Alisson confirm them or state them as the team's choices.
 - [ ] Educational texts are drafts until Raphaela reviews them; confirm they are in English and say what the data shows.
 - [ ] Confirm the Moon Kit line and the "no AI-generated images" line.
 - [ ] Confirm the period, the 150 km radius and the 2 m observer height with Alisson, or state them as the team's choices.

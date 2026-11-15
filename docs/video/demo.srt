@@ -1,23 +1,23 @@
 1
-00:00:00,000 --> 00:00:05,000
-The Moon in 3D: nine Artemis III candidate regions at the south pole.
+00:00:00,000 --> 00:00:04,000
+Where should we land on the Moon? Meet the Lunar Landing Site Navigator.
 
 2
-00:00:05,000 --> 00:00:10,000
-Pick a site: how much sunlight, how much Earth in view?
+00:00:04,000 --> 00:00:10,000
+Pick a region near the south pole and see its Sun, its view of Earth, and its longest dark night.
 
 3
-00:00:10,000 --> 00:00:16,000
-Malapert Massif: Sun about 4 of every 10 hours, Earth about 5.
+00:00:10,000 --> 00:00:15,000
+Or visit Apollo's landing sites, with real NASA photos and history.
 
 4
-00:00:16,000 --> 00:00:21,000
-Historic landmarks: the Apollo landing sites, with NASA images.
+00:00:15,000 --> 00:00:22,000
+Click any point inside the red border. We compute its real terrain horizon from NASA LOLA data and JPL Horizons.
 
 5
-00:00:21,000 --> 00:00:26,000
-Expert mode: full charts, parameters and the exact JPL Horizons query.
+00:00:22,000 --> 00:00:26,000
+Expert mode shows every chart and source.
 
 6
 00:00:26,000 --> 00:00:30,000
-Built with NASA LOLA and JPL Horizons data. Not an official NASA product.
+Built for NASA Space Apps. Will you take the next step toward our next giant leap?

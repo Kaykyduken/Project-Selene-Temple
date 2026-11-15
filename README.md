@@ -20,6 +20,16 @@ The same calculations serve two modes:
 | Felipe | Validation reference values from JPL Horizons |
 | Raphaela | Data, sources, licenses and content for both modes |
 
+## Features (current)
+
+- **Educational mode** (opens on the 3D Moon): candidate regions with outlines and names, the red 80°S border, six Apollo
+  historic landmarks (zoom, up to 100 NASA images with enlarge, history, Wikipedia link, study questions), simple charts,
+  and, for custom points, what makes a place good or bad to land.
+- **Expert mode** (flat polar map): detailed charts, parameters, JPL Horizons links and data download.
+- **Custom points** (needs the local API, see below): click inside the red border to compute a point live.
+- **Guided tour** (first visit, or the "Guided tour" button), **EN | PT** language switch and **5 text sizes**.
+  Preferences are kept in the browser (`localStorage`: language, text size, tour seen).
+
 ## Planned stack
 
 | Layer | Choice |

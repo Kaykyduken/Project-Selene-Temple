@@ -47,3 +47,7 @@ Credit NASA as the data source, never suggest endorsement, and do not use the NA
 ## Horizons body codes
 
 Confirmed against the API on 2026-11-14: Moon `301`, Sun `10`, Earth `399`.
+
+## 3D Moon texture (Educational mode)
+
+`frontend/public/data/globe/moon_globe_4k.jpg` is built by `pipeline/prepare_globe_texture.py` from the NASA SVS CGI Moon Kit global color map (2048 x 1024, LRO/LROC data), enlarged to 4096 x 2048, with the detail of the LROC WAC south polar mosaic (the site's base map) blended in below 60°S. The colour stays the NASA one; only local brightness and relief come from the WAC. The tool picks the axis orientation of the polar image by correlation with the global map (the chosen one matches the stereographic formula, correlation 0.46).

@@ -14,8 +14,8 @@ import type { SiteSummary } from '../data/contract';
 type Three = typeof import('three');
 type OrbitControlsClass = typeof import('three/examples/jsm/controls/OrbitControls.js').OrbitControls;
 
-const TEXTURE_URL = `${import.meta.env.BASE_URL}data/globe/lroc_color_2k.jpg`;
-const CREDIT = "Moon color map: NASA's Scientific Visualization Studio (CGI Moon Kit, LRO/LROC data)";
+const TEXTURE_URL = `${import.meta.env.BASE_URL}data/globe/moon_globe_4k.jpg`;
+const CREDIT = "Moon color map: NASA's Scientific Visualization Studio (CGI Moon Kit, LRO/LROC data). South polar detail: LROC WAC mosaic, NASA/GSFC/Arizona State University";
 const MARKER_COLOR = 0xf0a030; // laranja, igual aos marcadores do mapa
 const SELECTED_COLOR = 0xffffff;
 const START_DISTANCE = 3.0; // raio da Lua = 1

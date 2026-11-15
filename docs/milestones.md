@@ -65,3 +65,5 @@ P0 total: ~14 h. About 5 h left for P1 and surprises.
 4. P1-06 **Site interface in English** (0.5 h, mandatory by the submission rules, done together with M6)
 
 Probably left as PLANNED: favorable-window calendar, landing suitability index, polygon tool, live Horizons query.
+
+- 2026-11-15: 3D Moon in Educational mode (Three.js, loaded only when opened). Markers of the nine regions are clickable and synced with the list and the panel; the Moon turns to the selected region. The view toggle is hidden in Expert mode. Texture: see `data-sources.md`. Known limit: right at the pole (inside about 88°S) the texture shows radial streaks because of the sphere's UV mapping.

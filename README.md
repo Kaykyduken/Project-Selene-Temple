@@ -26,7 +26,7 @@ The same calculations serve two modes:
 |---|---|
 | Front end | Vite + TypeScript |
 | 2D polar map | Leaflet + Proj4Leaflet (south polar stereographic) |
-| 3D globe (extra) | Three.js + NASA CGI Moon Kit |
+| 3D Moon (Educational mode) | Three.js + NASA CGI Moon Kit texture, with LROC WAC polar detail |
 | API | FastAPI (Python) |
 | Data | Pre-computed JSON and Cloud Optimized GeoTIFF (COG) |
 | Hosting | Static hosting for the site; the demo does not depend on live APIs |
@@ -128,6 +128,7 @@ cd pipeline
 pip install -r requirements.txt
 python open_dem.py ../data/raw/dem/LDEM_85S_20M.JP2          # inspect the DEM
 python prepare_basemap.py ../data/raw/moonkit/lroc_color_2k.jpg   # build the web base map (or the WAC polar mosaic)
+python prepare_globe_texture.py ../data/raw/moonkit/lroc_color_2k.jpg   # 4k texture for the 3D Moon (needs the base map above)
 ```
 
 API keys (for example the api.nasa.gov key) go in a local `.env` file, which is never committed. See `.env.example`.

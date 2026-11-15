@@ -9,7 +9,7 @@ The same calculations serve two modes:
 - **Educational mode**: guided, plain-language explanations of light, shadow and Earth visibility at the pole.
 - **Expert mode**: a data panel with the time series, the horizon profile, the parameters used and the exact JPL Horizons query, downloadable as CSV and JSON.
 
-> **Status:** planning finished, code not started yet. See [`docs/decisions.md`](docs/decisions.md) and [`docs/milestones.md`](docs/milestones.md).
+> **Status:** working prototype with real data for the nine Artemis III candidate regions (one 30-day period). See [`docs/milestones.md`](docs/milestones.md) for progress, [`docs/validation.md`](docs/validation.md) for the checks against JPL Horizons and [`docs/project-page.md`](docs/project-page.md) for the submission text.
 
 ## Team
 

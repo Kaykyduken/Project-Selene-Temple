@@ -314,13 +314,15 @@ body[data-mode='expert'] { --text: #ffffff; --muted: #ffffff; }
 .topbar-right { flex-wrap: wrap; justify-content: flex-end; }
 .topbar-right button, .topbar-right .badge { white-space: nowrap; }
 
-/* Educational: barra do topo com as cores invertidas (opção escolhida em branco com texto azul) */
-body[data-mode='educational'] .mode-toggle { border-color: #ffffff; }
-body[data-mode='educational'] .mode-toggle button { color: #ffffff; }
-body[data-mode='educational'] .mode-toggle button[aria-pressed='true'] { background: #ffffff; color: #1d3f73; font-weight: 700; }
-body[data-mode='educational'] .mode-toggle button:not([aria-pressed='true']):hover { background: rgba(255, 255, 255, 0.18); }
-
-/* Educational: "Guided tour" e o selo da API com o mesmo destaque (branco, texto azul) */
-body[data-mode='educational'] .tour-btn { background: #ffffff; color: #1d3f73; border-color: #ffffff; font-weight: 700; }
-body[data-mode='educational'] .tour-btn:hover { background: #e3ecfa; }
-body[data-mode='educational'] .topbar .badge { background: #ffffff; color: #1d3f73; border-color: #ffffff; font-weight: 700; }
+/* Educational: barra do topo invertida: fundo branco, textos e contornos em azul;
+   a opção escolhida fica azul com texto branco. */
+body[data-mode='educational'] .topbar { background: #ffffff; color: #1d3f73; }
+body[data-mode='educational'] .topbar h1 { color: #1d3f73; }
+body[data-mode='educational'] .mode-toggle { border-color: #1d3f73; }
+body[data-mode='educational'] .mode-toggle button { color: #1d3f73; }
+body[data-mode='educational'] .mode-toggle button[aria-pressed='true'] { background: #1d3f73; color: #ffffff; font-weight: 700; }
+body[data-mode='educational'] .mode-toggle button:not([aria-pressed='true']):hover { background: #e3ecfa; }
+body[data-mode='educational'] .mode-toggle button:focus-visible { outline-color: #1d3f73; }
+body[data-mode='educational'] .tour-btn { background: #1d3f73; color: #ffffff; border-color: #1d3f73; font-weight: 700; }
+body[data-mode='educational'] .tour-btn:hover { background: #2a5599; }
+body[data-mode='educational'] .topbar .badge { background: #ffffff; color: #1d3f73; border-color: #1d3f73; font-weight: 700; }

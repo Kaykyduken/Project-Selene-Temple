@@ -115,6 +115,8 @@ async function start(): Promise<void> {
       map.invalidateSize(); // o mapa ganhou ou perdeu largura
     });
   }
+  // O site começa com os dois painéis fechados (só a Lua/mapa à vista).
+  for (const button of document.querySelectorAll<HTMLButtonElement>('.collapse-btn')) button.click();
   /** Reabre o painel da direita quando algo novo vai aparecer nele. */
   function expandRightPanel(): void {
     const right = document.getElementById('right-panel')!;

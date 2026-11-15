@@ -45,6 +45,7 @@ export const PT: Record<string, string> = {
   "Forecast for one month: {days} days ({hours} h), from {start} to {end} (UTC). Percentages are shares of this period; the hours are the equivalent time (percentage × {hours} h).": "Previsão para um mês: {days} dias ({hours} h), de {start} a {end} (UTC). As porcentagens são partes deste período; as horas são o tempo equivalente (porcentagem × {hours} h).",
   "Compare the charts": "Comparar os gráficos",
   "Regions": "Regiões",
+  "Compare lunar landing sites by Sun and Earth view": "Compare locais de pouso lunares pela visão do Sol e da Terra",
   "Map": "Mapa",
   "3D Moon": "Lua 3D",
   "Educational": "Educacional",

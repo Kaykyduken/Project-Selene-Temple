@@ -26,6 +26,11 @@ function setPanel(id: 'left-panel' | 'right-panel', open: boolean): void {
   const panel = document.getElementById(id);
   if (panel && panel.classList.contains('collapsed') === open) click(`.collapse-btn[data-collapse="${id}"]`);
 }
+/** Abre uma seção do menu da esquerda (n a partir de 1), para o passo mostrar o conteúdo. */
+function openSection(n: number): void {
+  const section = document.querySelector<HTMLDetailsElement>(`#left-panel details.section:nth-of-type(${n})`);
+  if (section) section.open = true;
+}
 function setView(view: 'map' | 'globe'): void {
   click(`.view-toggle button[data-view="${view}"]`);
 }
@@ -60,11 +65,13 @@ function steps(): Step[] {
       before: () => {
         setPanel('right-panel', false);
         setPanel('left-panel', true);
+        openSection(1);
       },
     },
     {
       target: '#left-panel details.section:nth-of-type(2)',
       title: t('Historic landmarks'),
+      before: () => openSection(2),
       text: t('Click an Apollo mission here. The Moon turns and zooms to the landing site, and a window opens with the story and official NASA photos. Click a photo to enlarge it.'),
     },
     {

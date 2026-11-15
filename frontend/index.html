@@ -3,11 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lunar Landing Site Navigator</title>
+    <title>Selene Temple | Lunar Landing Site Navigator</title>
   </head>
   <body data-mode="educational">
     <header class="topbar">
-      <h1>Lunar Landing Site Navigator</h1>
+      <div class="brand">
+        <h1>Selene Temple</h1>
+        <p class="subtitle">Compare lunar landing sites by Sun and Earth view</p>
+      </div>
       <div class="topbar-right">
         <div class="mode-toggle view-toggle edu-only" role="group" aria-label="Map view">
           <button type="button" data-view="map" aria-pressed="true">Map</button>
@@ -35,21 +38,21 @@
     <main>
       <nav class="side-panel" id="left-panel" aria-label="Candidate regions">
         <button type="button" class="collapse-btn" data-collapse="left-panel" aria-expanded="true" aria-label="Collapse this panel" title="Collapse / expand">‹</button>
-        <details class="section" open>
+        <details class="section">
           <summary title="Show or hide this section">Candidate regions</summary>
           <p class="muted">Artemis III candidate landing regions (NASA, 2024). Share of the period with the Sun and the Earth in view; click a column to sort.</p>
           <div id="site-list">Loading…</div>
         </details>
-        <details class="section edu-only" open>
+        <details class="section edu-only">
           <summary title="Show or hide this section">Historic landmarks</summary>
           <p class="muted">Apollo landing sites, shown on the 3D Moon with photos and history.</p>
           <div id="landmark-list"></div>
         </details>
-        <details class="section" open>
+        <details class="section">
           <summary title="Show or hide this section">Favorites</summary>
           <div id="favorites"></div>
         </details>
-        <details class="section" open>
+        <details class="section">
           <summary title="Show or hide this section">Legend</summary>
           <ul class="legend">
             <li><span class="swatch swatch-site"></span> Candidate region (centre and outline)</li>

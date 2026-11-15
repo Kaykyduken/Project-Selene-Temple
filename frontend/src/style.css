@@ -333,3 +333,8 @@ body[data-mode='educational'] .topbar .badge { background: #ffffff; color: #2f51
 .block > summary { font-size: 0.95rem; }
 .compare-charts { display: block; margin: 0.6rem 0; cursor: pointer; }
 .compare-name { margin: 1rem 0 0.25rem; color: var(--ok); }
+
+/* Título e subtítulo (função do projeto) */
+.brand { display: flex; flex-direction: column; line-height: 1.15; }
+.subtitle { margin: 0.1rem 0 0; font-size: 0.7rem; color: var(--muted); }
+body[data-mode='educational'] .subtitle { color: #2f5187; }

@@ -316,13 +316,13 @@ body[data-mode='expert'] { --text: #ffffff; --muted: #ffffff; }
 
 /* Educational: barra do topo invertida: fundo branco, textos e contornos em azul;
    a opção escolhida fica azul com texto branco. */
-body[data-mode='educational'] .topbar { background: #ffffff; color: #1d3f73; }
-body[data-mode='educational'] .topbar h1 { color: #1d3f73; }
-body[data-mode='educational'] .mode-toggle { border-color: #1d3f73; }
-body[data-mode='educational'] .mode-toggle button { color: #1d3f73; }
-body[data-mode='educational'] .mode-toggle button[aria-pressed='true'] { background: #1d3f73; color: #ffffff; font-weight: 700; }
+body[data-mode='educational'] .topbar { background: #ffffff; color: #2f5187; }
+body[data-mode='educational'] .topbar h1 { color: #2f5187; }
+body[data-mode='educational'] .mode-toggle { border-color: #2f5187; }
+body[data-mode='educational'] .mode-toggle button { color: #2f5187; }
+body[data-mode='educational'] .mode-toggle button[aria-pressed='true'] { background: #3f66a3; color: #ffffff; font-weight: 700; }
 body[data-mode='educational'] .mode-toggle button:not([aria-pressed='true']):hover { background: #e3ecfa; }
-body[data-mode='educational'] .mode-toggle button:focus-visible { outline-color: #1d3f73; }
-body[data-mode='educational'] .tour-btn { background: #1d3f73; color: #ffffff; border-color: #1d3f73; font-weight: 700; }
+body[data-mode='educational'] .mode-toggle button:focus-visible { outline-color: #2f5187; }
+body[data-mode='educational'] .tour-btn { background: #3f66a3; color: #ffffff; border-color: #2f5187; font-weight: 700; }
 body[data-mode='educational'] .tour-btn:hover { background: #2a5599; }
-body[data-mode='educational'] .topbar .badge { background: #ffffff; color: #1d3f73; border-color: #1d3f73; font-weight: 700; }
+body[data-mode='educational'] .topbar .badge { background: #ffffff; color: #2f5187; border-color: #2f5187; font-weight: 700; }

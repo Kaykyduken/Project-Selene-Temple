@@ -90,6 +90,8 @@ async function start(): Promise<void> {
       document.body.dataset.mode = button.dataset.mode; // o CSS troca a fonte conforme o modo
       for (const b of modeButtons) b.setAttribute('aria-pressed', String(b === button));
       // A Lua 3D e os marcos históricos são só do modo Educational: no Expert voltamos ao mapa.
+      // O modo Educational sempre abre na Lua 3D.
+      if (button.dataset.mode === 'educational') void showView('globe');
       if (button.dataset.mode === 'expert') {
         // Sempre abre no mapa plano do polo sul, centrado no polo e na escala inicial.
         void showView('map').then(() => map.setView([-90, 0], 2));
@@ -294,6 +296,9 @@ async function start(): Promise<void> {
     map.flyTo([site.lat_deg, site.lon_deg], Math.max(map.getZoom(), 4));
     void selectSite(site);
   });
+
+  // O site começa no modo Educational, que abre na Lua 3D (sem WebGL, fica no mapa).
+  void showView('globe');
 
   // Ao abrir o site: lê os favoritos do arquivo (se a API estiver ligada).
   void apiOnline.then((ok) => favorites.load(ok));

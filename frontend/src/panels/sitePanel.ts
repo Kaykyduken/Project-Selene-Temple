@@ -11,6 +11,7 @@
 import type { Metric, Mode, ProvenanceClass, SiteData, SiteSummary } from '../data/contract';
 import { marginChart } from '../charts/marginChart';
 import { panoramaChart } from '../charts/panoramaChart';
+import { dayCalendar, tenHoursChart } from '../charts/simpleCharts';
 import { downloadTool } from './downloadTool';
 
 /** Texto e símbolo de cada classe de origem (nunca só cor: acessibilidade). */
@@ -167,24 +168,26 @@ export class SitePanel {
       box.append(el('span', 'edu-title', title), el('span', 'edu-big', big), el('p', '', text));
       return box;
     };
-    nodes.push(el('h3', '', `What happens here over ${days} days`));
+    nodes.push(el('h3', '', `What happens here in ${days} days`));
     nodes.push(card('Sunlight (solar power)', show(sun, '%'),
-      'Share of the time the Sun is above the surrounding hills. Solar panels only make power during this time.'));
-    nodes.push(card('Earth in view (direct radio link)', show(earth, '%'),
-      'Share of the time the Earth is above the surrounding hills. A direct radio link needs a clear line of sight to Earth.'));
+      'How much of the time the Sun shines here. Solar panels only make electricity while the Sun is in view.'));
+    nodes.push(card('Earth in view (radio contact)', show(earth, '%'),
+      'How much of the time you could see the Earth from here. Radio signals need a clear path to Earth.'));
     nodes.push(card('Longest time in the dark', dark.value === null ? 'no data' : `${dark.value} h`,
-      dark.value === null ? '' : `About ${(dark.value / 24).toFixed(1)} Earth days in a row without sunlight. Batteries and heaters must last that long.`));
+      dark.value === null ? '' : `That is about ${(dark.value / 24).toFixed(1)} Earth days in a row with no sunlight. Batteries and heaters must last that long.`));
+
+    // Gráficos simples (os detalhados ficam no modo Expert).
+    nodes.push(el('h3', '', 'Out of every 10 hours…'));
+    nodes.push(el('p', 'muted', 'Each coloured dot is one hour with the Sun (or the Earth) in view. Grey dots are hours when the hills hide it.'));
+    nodes.push(tenHoursChart(data));
+
+    nodes.push(el('h3', '', 'Day by day'));
+    nodes.push(el('p', 'muted', 'One square for each day. The fuller the square, the more hours of that day the Sun (or the Earth) could be seen.'));
+    nodes.push(dayCalendar(data));
 
     nodes.push(el('h3', '', 'Why do hills matter so much?'));
-    nodes.push(el('p', 'muted', 'Near the lunar south pole the Sun and the Earth never climb high in the sky: they stay within a few degrees of the horizon. A hill or a crater rim in the right direction is enough to hide them, so two places a few kilometres apart can be very different.'));
-
-    nodes.push(el('h3', '', 'When are they in view?'));
-    nodes.push(el('p', 'muted', 'The lines show how far the Sun and the Earth are above (+) or below (−) the hills. Above the "terrain horizon" line they are in view. The coloured bars underneath mark those periods.'));
-    nodes.push(marginChart(data));
-
-    nodes.push(el('h3', '', 'The view around the site'));
-    nodes.push(el('p', 'muted', 'Imagine turning all the way around. The grey shape is the outline of the hills. The Sun travels along the orange line; the Earth stays in the small blue loop. They can be seen where their line is above the grey shape.'));
-    nodes.push(panoramaChart(data));
+    nodes.push(el('p', 'muted', 'At the Moon\'s south pole the Sun and the Earth always stay low in the sky, close to the ground line. A hill or a crater rim in the way is enough to hide them. That is why two places only a few kilometres apart can be so different.'));
+    nodes.push(el('p', 'muted', 'Want every detail? Switch to Expert mode (top of the page) to see the full charts.'));
     return nodes;
   }
 

@@ -16,6 +16,8 @@ import './style.css';
 import L from 'leaflet';
 import { createPolarMap } from './map/polarMap';
 import { addGraticule } from './map/graticule';
+import { addAnalysisArea } from './map/analysisArea';
+import { ANALYSIS_LIMIT_LAT_DEG } from './config';
 import { loadBasemap } from './map/basemap';
 import { SiteLayer } from './map/sites';
 import { SiteList } from './panels/siteList';
@@ -33,6 +35,7 @@ const apiOnline = checkApiHealth();
 
 const map = createPolarMap('map');
 addGraticule(map);
+addAnalysisArea(map);
 
 const basemapStatus = document.getElementById('basemap-status')!;
 loadBasemap(map).then((message) => {
@@ -220,12 +223,13 @@ async function start(): Promise<void> {
     // imagem que costumam quebrar quando o site é empacotado pelo Vite.
     customMarker = L.circleMarker(e.latlng, { radius: 6, color: '#4da3ff', weight: 3, fillOpacity: 0.2, interactive: false }).addTo(map);
 
-    if (!(await apiOnline)) {
-      if (request === lastRequest) panel.showCustomPoint(lat, lng, 'No data: live analysis of custom points needs the project API, which is not running here.');
+    // Fora da borda vermelha não há modelo de relevo: a resposta é a mesma com ou sem API.
+    if (lat > ANALYSIS_LIMIT_LAT_DEG) {
+      panel.showCustomPoint(lat, lng, `No data: the terrain model covers only ${Math.abs(ANALYSIS_LIMIT_LAT_DEG)}°S to the pole (inside the red border).`);
       return;
     }
-    if (lat > -80) {
-      panel.showCustomPoint(lat, lng, 'No data: the terrain model covers only 80°S to the pole.');
+    if (!(await apiOnline)) {
+      if (request === lastRequest) panel.showCustomPoint(lat, lng, 'No data: live analysis of custom points needs the project API, which is not running here.');
       return;
     }
     panel.showCustomPoint(lat, lng, 'Computing the horizon and the visibility… this takes a few seconds.');

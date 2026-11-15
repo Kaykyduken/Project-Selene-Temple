@@ -8,7 +8,8 @@
 
 import L from 'leaflet';
 
-const LATITUDES = [-60, -70, -80, -85, -88];
+// 80°S não entra aqui: ele é desenhado em vermelho por analysisArea.ts (limite da análise).
+const LATITUDES = [-60, -70, -85, -88];
 const LONGITUDE_STEP_DEG = 30;
 
 const lineStyle: L.PolylineOptions = {

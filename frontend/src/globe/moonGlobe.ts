@@ -65,13 +65,13 @@ export class MoonGlobe {
     );
     this.scene.add(this.sphere);
 
-    // Anel azul em 80°S: de lá até o polo temos o modelo de relevo (LOLA).
+    // Anel vermelho em 80°S: de lá até o polo temos o modelo de relevo (LOLA).
     const ringPoints: import('three').Vector3[] = [];
     for (let lon = 0; lon <= 360; lon += 2) ringPoints.push(this.toVector(DEM_EDGE_LAT_DEG, lon, 1.003));
     this.scene.add(
       new three.LineLoop(
         new three.BufferGeometry().setFromPoints(ringPoints),
-        new three.LineBasicMaterial({ color: 0x6aa6ff, transparent: true, opacity: 0.8 }),
+        new three.LineBasicMaterial({ color: 0xff4d4d }),
       ),
     );
 
@@ -102,7 +102,7 @@ export class MoonGlobe {
     // Textos sobre a vista: instrução, crédito da imagem e etiqueta ao passar o mouse.
     const hint = document.createElement('div');
     hint.className = 'globe-hint';
-    hint.innerHTML = 'Drag to rotate · scroll to zoom · click an orange marker<br><span class="globe-ring">Blue ring: 80°S. The terrain model covers 80°S to the pole.</span>';
+    hint.innerHTML = 'Drag to rotate · scroll to zoom · click an orange marker<br><span class="globe-ring">Red ring: 80°S. Custom points can be analysed only inside it.</span>';
     const credit = document.createElement('div');
     credit.className = 'globe-credit';
     credit.textContent = CREDIT;

@@ -27,3 +27,9 @@ export const MAP_HALF_EXTENT_M = 1_000_000;
 
 /** Onde o pipeline grava a imagem de fundo e os metadados dela. */
 export const BASEMAP_JSON_URL = `${import.meta.env.BASE_URL}data/basemap/wac_south.json`;
+
+/**
+ * Latitude (graus) até onde temos modelo de relevo (LOLA 20 m: de 80°S ao polo).
+ * Só dentro dela a ferramenta de pontos livres consegue calcular; mais ao norte é "no data".
+ */
+export const ANALYSIS_LIMIT_LAT_DEG = -80;

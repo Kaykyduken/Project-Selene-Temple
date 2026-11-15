@@ -67,3 +67,4 @@ P0 total: ~14 h. About 5 h left for P1 and surprises.
 Probably left as PLANNED: favorable-window calendar, landing suitability index, polygon tool, live Horizons query.
 
 - 2026-11-15: 3D Moon in Educational mode (Three.js, loaded only when opened). Markers of the nine regions are clickable and synced with the list and the panel; the Moon turns to the selected region. The view toggle is hidden in Expert mode. Texture: see `data-sources.md`. Known limit: right at the pole (inside about 88°S) the texture shows radial streaks because of the sphere's UV mapping.
+- 2026-11-15: red border at 80°S on the map and on the 3D Moon marks where custom points can be analysed (terrain model covers 80°S to the pole). A click north of it answers "No data" with or without the API. The blue 80°S grid line was removed so the red one stands alone.

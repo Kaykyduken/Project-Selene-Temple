@@ -91,7 +91,8 @@ async function start(): Promise<void> {
       for (const b of modeButtons) b.setAttribute('aria-pressed', String(b === button));
       // A Lua 3D e os marcos históricos são só do modo Educational: no Expert voltamos ao mapa.
       if (button.dataset.mode === 'expert') {
-        void showView('map');
+        // Sempre abre no mapa plano do polo sul, centrado no polo e na escala inicial.
+        void showView('map').then(() => map.setView([-90, 0], 2));
         if (currentLandmarkId) {
           setLandmark(null);
           panel.showEmpty();

@@ -110,13 +110,13 @@ export class SitePanel {
     this.container.replaceChildren(el('h2', '', name), el('p', 'muted', 'No data available for this site.'));
   }
 
-  /** Ponto livre clicado no mapa: ainda não tem análise. */
-  showCustomPoint(lat: number, lon: number): void {
+  /** Ponto livre clicado no mapa, enquanto não há resultado: mostra as coordenadas e um aviso. */
+  showCustomPoint(lat: number, lon: number, message: string, isError = false): void {
     this.current = null;
     this.container.replaceChildren(
       el('h2', '', 'Custom point'),
       el('p', 'coords', formatLatLon(lat, lon)),
-      el('p', 'muted', 'No data: analysis of custom points is not available yet.'),
+      el('p', isError ? 'warning' : 'muted', message),
     );
   }
 
@@ -139,7 +139,9 @@ export class SitePanel {
 
     nodes.push(el('h2', '', data.site.name));
     nodes.push(el('p', 'coords', formatLatLon(data.site.lat_deg, data.site.lon_deg)));
-    if (!data.site.coordinate_origin.verified) {
+    if (data.site.custom) {
+      nodes.push(el('p', 'muted', 'Point selected on the map, computed live from the LOLA terrain model and JPL Horizons.'));
+    } else if (!data.site.coordinate_origin.verified) {
       nodes.push(el('p', 'warning', '⚠ Approximate position, pending verification against the original source.'));
     } else {
       const area = data.site.area_km2 ? ` Region area: ${data.site.area_km2} km².` : '';

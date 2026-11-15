@@ -10,7 +10,10 @@
 # Depois abra http://localhost:8000/docs para ver a documentação automática.
 
 import json
+import os
 import re
+import sys
+from datetime import datetime
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Query
@@ -19,13 +22,22 @@ from fastapi.middleware.cors import CORSMiddleware
 # Pasta dos dados: <raiz do repositório>/frontend/public/data
 DATA_DIR = Path(__file__).resolve().parents[2] / "frontend" / "public" / "data"
 
+# O cálculo mora na pasta pipeline/ (os mesmos arquivos usados para gerar as
+# regiões). Colocamos essa pasta no caminho de busca do Python para importá-los.
+PIPELINE_DIR = Path(__file__).resolve().parents[2] / "pipeline"
+sys.path.insert(0, str(PIPELINE_DIR))
+
+# Arquivo de relevo usado no cálculo ao vivo. Dá para trocar com a variável de
+# ambiente LLSN_DEM; o padrão é o mesmo das regiões.
+DEM_PATH = Path(os.environ.get("LLSN_DEM", PIPELINE_DIR.parent / "data" / "raw" / "dem" / "LDEM_80S_20M.JP2"))
+
 # Um id de região só pode ter letras minúsculas, números e hífen. Isso impede
 # que alguém peça "../../outro-arquivo" e leia arquivos fora da pasta de dados.
 SITE_ID_PATTERN = re.compile(r"^[a-z0-9-]+$")
 
 app = FastAPI(
     title="Lunar Landing Site Navigator API",
-    version="0.2.0",
+    version="0.3.0",
     description="Sun and Earth visibility over the real horizon of lunar south pole sites.",
 )
 
@@ -63,3 +75,43 @@ def visibility(site: str = Query(description="Site id, e.g. 'haworth'")) -> dict
     if not SITE_ID_PATTERN.fullmatch(site):
         raise HTTPException(status_code=400, detail="Invalid site id")
     return read_json(DATA_DIR / "sites" / f"{site}.json")
+
+
+def reference_period() -> tuple[str, int, int]:
+    """Período usado nas regiões (início, dias, passo), lido de um arquivo pronto.
+    O ponto livre usa o MESMO período, para a comparação com as regiões ser justa."""
+    for path in sorted((DATA_DIR / "sites").glob("*.json")):
+        period = json.loads(path.read_text(encoding="utf-8"))["period"]
+        start = datetime.fromisoformat(period["start_utc"].replace("Z", "+00:00"))
+        end = datetime.fromisoformat(period["end_utc"].replace("Z", "+00:00"))
+        return start.strftime("%Y-%m-%d"), max(1, round((end - start).total_seconds() / 86400)), period["step_min"]
+    return "2027-01-01", 30, 60
+
+
+@app.get("/analyze")
+def analyze(
+    lat: float = Query(ge=-90, le=-80, description="Latitude in degrees (the DEM covers 80°S to the pole)"),
+    lon: float = Query(ge=-180, le=360, description="East longitude in degrees"),
+    height: float = Query(default=2.0, ge=0, le=100, description="Observer height above ground, metres"),
+) -> dict:
+    """Calcula AO VIVO o horizonte e a visibilidade de um ponto qualquer.
+
+    Só funciona onde o arquivo de relevo está disponível (o computador da equipe)
+    e com internet, porque consulta o JPL Horizons. Leva alguns segundos.
+    """
+    if not DEM_PATH.exists():
+        raise HTTPException(status_code=503, detail=f"DEM file not found on this server: {DEM_PATH.name}")
+
+    # Importa aqui dentro: assim /health e /sites funcionam mesmo numa máquina
+    # sem numpy/rasterio instalados.
+    import build_site
+
+    start, days, step_min = reference_period()
+    site = {"id": "custom-point", "name": "Custom point", "lat_deg": round(lat, 4), "lon_deg": round(lon, 4), "custom": True}
+    origin = {"source": "Point selected by the user on the map", "class": "observed", "verified": True}
+    try:
+        return build_site.build(site, origin, DEM_PATH, start, days, step_min, height, 150.0)
+    except ValueError as err:   # ponto fora do DEM, resposta inesperada do Horizons...
+        raise HTTPException(status_code=422, detail=str(err)) from err
+    except OSError as err:      # sem internet / Horizons fora do ar
+        raise HTTPException(status_code=502, detail=f"Could not reach JPL Horizons: {err}") from err

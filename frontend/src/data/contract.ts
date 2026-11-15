@@ -15,6 +15,7 @@ export interface SiteSummary {
   lon_deg: number;
   area_km2?: number; // área da região na grade do USGS
   outline?: [number, number][]; // contorno da região: lista de [lat, lon]
+  custom?: boolean; // true = ponto livre clicado no mapa (calculado ao vivo pela API)
 }
 
 export interface CoordinateOrigin {

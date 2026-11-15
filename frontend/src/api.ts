@@ -6,6 +6,8 @@
 // O site precisa funcionar MESMO com a API desligada (a demo usa dados
 // pré-calculados), então toda chamada aqui tem que tolerar falha.
 
+import type { SiteData } from './data/contract';
+
 const API_BASE = '/api';
 
 export async function checkApiHealth(): Promise<boolean> {
@@ -18,4 +20,26 @@ export async function checkApiHealth(): Promise<boolean> {
   } catch {
     return false;
   }
+}
+
+/**
+ * Pede à API o cálculo ao vivo de um ponto qualquer (rota /analyze).
+ * Pode levar vários segundos: a API lê o relevo e consulta o Horizons.
+ * Em caso de erro, lança um Error com a mensagem que a API devolveu.
+ */
+export async function analyzePoint(lat: number, lon: number): Promise<SiteData> {
+  const url = `${API_BASE}/analyze?lat=${lat.toFixed(4)}&lon=${lon.toFixed(4)}`;
+  const response = await fetch(url, { signal: AbortSignal.timeout(90_000) });
+  if (!response.ok) {
+    let detail = `HTTP ${response.status}`;
+    try {
+      const body = (await response.json()) as { detail?: unknown };
+      if (typeof body.detail === 'string') detail = body.detail;
+      else if (response.status === 422) detail = 'The point must be between 80°S and the pole.';
+    } catch {
+      /* resposta sem JSON: fica só o código HTTP */
+    }
+    throw new Error(detail);
+  }
+  return (await response.json()) as SiteData;
 }

@@ -1,2 +1,4 @@
 fastapi>=0.115
 uvicorn[standard]>=0.30
+# The live /analyze route also needs the pipeline packages:
+# pip install -r ../pipeline/requirements.txt

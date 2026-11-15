@@ -104,7 +104,10 @@ class DemSampler:
         window = from_bounds(self.x0 - radius_m, self.y0 - radius_m, self.x0 + radius_m, self.y0 + radius_m,
                              self.ds.transform).round_offsets().round_lengths()
         # Corta a janela para dentro do arquivo (perto da borda do DEM).
-        window = window.intersection(Window(0, 0, self.ds.width, self.ds.height))
+        try:
+            window = window.intersection(Window(0, 0, self.ds.width, self.ds.height))
+        except rasterio.errors.WindowError as err:  # o recorte inteiro caiu fora do arquivo
+            raise ValueError(f"The point is outside the area covered by {self.product}") from err
         shape = (max(1, int(window.height // factor)), max(1, int(window.width // factor)))
         data = self.ds.read(1, window=window, out_shape=shape).astype("float32") * self.scale
         if self.ds.nodata is not None:

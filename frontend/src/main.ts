@@ -16,7 +16,10 @@ import { SiteList } from './panels/siteList';
 import { SitePanel } from './panels/sitePanel';
 import { loadSiteCatalog, loadSiteData, loadSummary } from './data/loader';
 import type { Mode, SiteSummary } from './data/contract';
-import { checkApiHealth } from './api';
+import { analyzePoint, checkApiHealth } from './api';
+
+// Pergunta uma vez se a API está no ar; a resposta é reaproveitada no clique do mapa.
+const apiOnline = checkApiHealth();
 
 const map = createPolarMap('map');
 addGraticule(map);
@@ -72,16 +75,35 @@ async function start(): Promise<void> {
     void selectSite(site);
   });
 
-  // Clique em qualquer outro lugar do mapa → ponto livre com lat/lon.
-  map.on('click', (e) => {
-    lastRequest++;
+  // Clique em qualquer outro lugar do mapa → ponto livre.
+  // Com a API ligada (computador da equipe), o ponto é calculado ao vivo.
+  // Sem a API (site publicado), mostramos só as coordenadas e "no data".
+  map.on('click', async (e) => {
+    const request = ++lastRequest;
+    const { lat, lng } = e.latlng;
     siteLayer.highlight(null);
     siteList.highlight(null);
     clearCustomMarker();
     // circleMarker em vez do "pino" padrão do Leaflet: o pino depende de arquivos de
     // imagem que costumam quebrar quando o site é empacotado pelo Vite.
     customMarker = L.circleMarker(e.latlng, { radius: 6, color: '#4da3ff', weight: 3, fillOpacity: 0.2, interactive: false }).addTo(map);
-    panel.showCustomPoint(e.latlng.lat, e.latlng.lng);
+
+    if (!(await apiOnline)) {
+      if (request === lastRequest) panel.showCustomPoint(lat, lng, 'No data: live analysis of custom points needs the project API, which is not running here.');
+      return;
+    }
+    if (lat > -80) {
+      panel.showCustomPoint(lat, lng, 'No data: the terrain model covers only 80°S to the pole.');
+      return;
+    }
+    panel.showCustomPoint(lat, lng, 'Computing the horizon and the visibility… this takes a few seconds.');
+    try {
+      const data = await analyzePoint(lat, lng);
+      // Se o usuário clicou em outro lugar enquanto calculava, descartamos este resultado.
+      if (request === lastRequest) panel.showSite(data);
+    } catch (err) {
+      if (request === lastRequest) panel.showCustomPoint(lat, lng, `No data: ${(err as Error).message}`, true);
+    }
   });
 }
 
@@ -91,7 +113,7 @@ start().catch(() => {
 
 // Selo "API: online/offline" no topo da página.
 const apiBadge = document.getElementById('api-status')!;
-checkApiHealth().then((ok) => {
+apiOnline.then((ok) => {
   apiBadge.textContent = ok ? 'API: online' : 'API: offline (static mode)';
   apiBadge.className = `badge ${ok ? 'badge-ok' : 'badge-off'}`;
 });

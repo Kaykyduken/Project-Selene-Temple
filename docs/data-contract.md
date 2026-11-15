@@ -26,3 +26,4 @@ All nine site files hold **real** results (`pipeline/build_site.py`, 2027-01-01,
 | `GET /health` | API status |
 | `GET /sites` | `sites.json` |
 | `GET /visibility?site=<id>` | The site file |
+| `GET /analyze?lat=&lon=&height=` | Live computation for any point south of 80°S, same format and same period as the regions (needs the DEM and Horizons) |

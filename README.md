@@ -82,6 +82,10 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000           # docs on http://localhost:8000/docs
 ```
 
+With the API running, clicking any point south of 80°S on the map computes its horizon and visibility live
+(`GET /analyze`). This needs the pipeline packages (`pip install -r ../pipeline/requirements.txt`), the DEM in
+`data/raw/dem/LDEM_80S_20M.JP2` and internet access to JPL Horizons. The published static site does not include it.
+
 **3. Data pipeline** (needs the raw files in `data/raw/`, see `data/README.md`)
 
 ```bash

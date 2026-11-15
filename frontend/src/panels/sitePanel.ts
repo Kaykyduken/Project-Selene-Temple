@@ -67,10 +67,11 @@ export class SitePanel {
   private mode: Mode = 'educational';
   private current: SiteData | null = null;
   private other: SiteData | null = null; // região escolhida para comparar
+  private otherKey = ''; // escolha no seletor: id da região, ou "fav:<id>" para um favorito
   private compareCharts = false; // mostrar os gráficos das duas regiões juntos?
   private readonly openBlocks = new Set<string>(); // blocos do modo Expert que o usuário abriu (começam fechados)
   /** Ligação com os Favoritos (preenchida pelo main.ts). */
-  favorites: { has: (id: string) => boolean; toggle: (data: SiteData) => string | null } | null = null;
+  favorites: { list: () => SiteData[]; has: (id: string) => boolean; toggle: (data: SiteData) => string | null } | null = null;
 
   /**
    * sites: lista de regiões (para o seletor "Compare with").
@@ -118,6 +119,7 @@ export class SitePanel {
   showSite(data: SiteData): void {
     this.current = data;
     this.other = null;
+    this.otherKey = '';
     this.render();
   }
 
@@ -313,18 +315,30 @@ export class SitePanel {
   /** Comparação lado a lado com outra região (mesmos números dos painéis individuais). */
   private comparison(data: SiteData): HTMLElement[] {
     const others = this.sites.filter((s) => s.id !== data.site.id);
-    if (others.length === 0) return [];
+    const favorites = (this.favorites?.list() ?? []).filter((f) => f.site.id !== data.site.id);
+    if (others.length === 0 && favorites.length === 0) return [];
     const nodes: HTMLElement[] = [];
 
     const select = el('select', 'compare-select');
     select.setAttribute('aria-label', t('Region to compare with'));
     select.append(new Option(t('Choose a region…'), ''));
-    for (const s of others) select.append(new Option(s.name, s.id));
-    select.value = this.other?.site.id ?? '';
+    const group = (label: string, options: HTMLOptionElement[]): void => {
+      if (options.length === 0) return;
+      const optgroup = document.createElement('optgroup');
+      optgroup.label = label;
+      optgroup.append(...options);
+      select.append(optgroup);
+    };
+    group(t('Regions'), others.map((s) => new Option(s.name, s.id)));
+    group(t('Favorites'), favorites.map((f) => new Option(`★ ${f.site.name}`, `fav:${f.site.id}`)));
+    select.value = this.other ? this.otherKey : '';
     select.addEventListener('change', async () => {
-      const id = select.value;
+      const key = select.value;
+      this.otherKey = key;
       try {
-        this.other = id ? await this.loadSite(id) : null;
+        if (!key) this.other = null;
+        else if (key.startsWith('fav:')) this.other = favorites.find((f) => `fav:${f.site.id}` === key) ?? null; // já guardado: não recalcula
+        else this.other = await this.loadSite(key);
       } catch {
         this.other = null;
       }

@@ -315,6 +315,7 @@ async function start(): Promise<void> {
 
   // O painel usa isto para desenhar o botão de estrela e para adicionar/remover.
   panel.favorites = {
+    list: () => favorites.list(),
     has: (id) => favorites.has(id),
     toggle: (data) => {
       if (favorites.has(data.site.id)) {

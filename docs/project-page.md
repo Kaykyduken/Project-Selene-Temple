@@ -6,11 +6,13 @@ AI-assisted: first draft written by Claude (Anthropic), reviewed by the team.
 
 ## Project Name
 
-Lunar Landing Site Navigator
+Selene Temple
+
+(Selene is the Greek Titaness who personifies the Moon. The challenge is "Lunar Landing Site Navigator"; the site and repository still use that name.)
 
 ## High-Level Project Summary
 
-Lunar Landing Site Navigator is a web platform that compares candidate landing sites at the lunar south pole.
+Selene Temple (Lunar Landing Site Navigator challenge) is a web platform that compares candidate landing sites at the lunar south pole.
 For each site it shows where the Sun and the Earth are, hour by hour, against that site's real terrain horizon
 computed from NASA LOLA elevation data and JPL Horizons ephemerides. That answers two questions that decide
 whether a lander can live there: when does the site get sunlight for solar power, and when does it have a direct

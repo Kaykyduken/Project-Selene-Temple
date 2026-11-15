@@ -10,7 +10,7 @@
 // não responder, a janela mostra "no images" e o texto continua funcionando.
 
 import { formatLatLon } from './sitePanel';
-import { t } from '../i18n';
+import { LANG, t } from '../i18n';
 
 export interface Landmark {
   id: string;
@@ -41,6 +41,15 @@ export interface Photo {
 }
 
 const MAX_PHOTOS = 10;
+
+/** Em português: títulos das fotos traduzidos (por nasa_id). Carregado uma vez. */
+const translatedTitles: Promise<Record<string, string>> =
+  LANG === 'pt'
+    ? fetch(`${import.meta.env.BASE_URL}data/photo-titles.pt.json`)
+        .then((r) => (r.ok ? r.json() : { titles: {} }))
+        .then((json) => json.titles ?? {})
+        .catch(() => ({}))
+    : Promise.resolve({});
 const cache = new Map<string, Promise<Photo[]>>(); // uma busca por marco, reaproveitada
 
 function el<K extends keyof HTMLElementTagNameMap>(tag: K, className = '', text = ''): HTMLElementTagNameMap[K] {
@@ -60,14 +69,16 @@ export function fetchPhotos(query: string): Promise<Photo[]> {
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       return response.json();
     })
-    .then((json) => {
+    .then(async (json) => {
+      const titles = await translatedTitles;
       const photos: Photo[] = [];
       for (const item of json?.collection?.items ?? []) {
         const data = item?.data?.[0];
         const preview = (item?.links ?? []).find((link: { href?: string }) => /\.(jpe?g|png)$/i.test(link?.href ?? ''))?.href;
         if (!data?.nasa_id || !preview) continue;
         photos.push({
-          title: String(data.title ?? data.nasa_id),
+          // Sem tradução guardada, fica o título original da NASA, com aviso.
+          title: titles[data.nasa_id] ?? (LANG === 'pt' ? `${data.title ?? data.nasa_id} ${t('(original NASA title)')}` : String(data.title ?? data.nasa_id)),
           date: String(data.date_created ?? '').slice(0, 10),
           preview,
           page: `https://images.nasa.gov/details/${encodeURIComponent(data.nasa_id)}`,

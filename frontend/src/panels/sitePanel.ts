@@ -151,7 +151,7 @@ export class SitePanel {
 
     nodes.push(el('h3', '', t('Sources')));
     const sources = el('ul', 'sources');
-    for (const source of data.sources) sources.append(el('li', '', source.name));
+    for (const source of data.sources) sources.append(el('li', '', t(source.name)));
     nodes.push(sources);
     nodes.push(el('p', 'disclaimer', t('Geometric visibility only, for one point and one period. Not a certification for space missions.')));
 

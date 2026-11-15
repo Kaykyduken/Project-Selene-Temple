@@ -46,7 +46,11 @@ export class MoonGlobe {
   private focusDirection: import('three').Vector3 | null = null;
   private focusDistance: number | null = null; // zoom pedido junto com o giro (só nos marcos)
   private readonly photoCard: HTMLDivElement; // foto oficial presa ao marco, na Lua
-  private photoFor: string | null = null; // id do marco dono da foto carregada
+  private readonly photos = new Map<string, { url: string; title: string }>(); // foto de cada marco já carregada
+  private shownPhoto: string | null = null; // marco cuja foto está no cartão agora
+  private hoverLandmark: string | null = null; // marco sob o mouse (sem clicar)
+  /** Avisado quando o mouse passa sobre um marco, para o site buscar a foto dele. */
+  onLandmarkHover: (id: string) => void = () => {};
   private arrived = false; // o giro + zoom até o marco já terminou?
   private selectedId: string | null = null;
   private running = false;
@@ -172,7 +176,10 @@ export class MoonGlobe {
       else if (id && this.landmarks.some((m) => m.id === id)) this.onLandmark(id);
     });
     canvas.addEventListener('pointermove', (e) => this.showTooltip(e));
-    canvas.addEventListener('pointerleave', () => (this.tooltip.hidden = true));
+    canvas.addEventListener('pointerleave', () => {
+      this.tooltip.hidden = true;
+      this.hoverLandmark = null;
+    });
 
     new ResizeObserver(() => this.resize()).observe(container);
     this.resize();
@@ -216,6 +223,9 @@ export class MoonGlobe {
     const id = this.pick(event);
     const site = this.sites.find((s) => s.id === id) ?? this.landmarks.find((m) => m.id === id);
     this.renderer.domElement.style.cursor = site ? 'pointer' : 'grab';
+    const overLandmark = id && this.landmarks.some((m) => m.id === id) ? id : null;
+    if (overLandmark && overLandmark !== this.hoverLandmark) this.onLandmarkHover(overLandmark);
+    this.hoverLandmark = overLandmark;
     if (!site) {
       this.tooltip.hidden = true;
       return;
@@ -230,12 +240,6 @@ export class MoonGlobe {
   /** Destaca uma região ou um marco (ou nada) e gira a Lua suavemente até ele. */
   highlight(id: string | null): void {
     if (this.selectedId) this.paint(this.selectedId, this.baseColor.get(this.selectedId) ?? MARKER_COLOR, 1);
-    if (id !== this.selectedId) {
-      // Outro alvo: a foto do marco anterior sai da tela.
-      this.photoFor = null;
-      this.photoCard.hidden = true;
-      this.photoCard.replaceChildren();
-    }
     this.selectedId = id;
     this.arrived = false;
     this.focusDistance = null;
@@ -268,14 +272,7 @@ export class MoonGlobe {
    * Ela só aparece quando o giro + zoom até o marco termina.
    */
   setLandmarkPhoto(id: string, url: string, title: string): void {
-    if (id !== this.selectedId) return; // o usuário já escolheu outra coisa
-    const image = document.createElement('img');
-    image.src = url;
-    image.alt = title;
-    const caption = document.createElement('span');
-    caption.textContent = `${title} · NASA`;
-    this.photoCard.replaceChildren(image, caption);
-    this.photoFor = id;
+    this.photos.set(id, { url, title });
   }
 
   /** Aproxima a direção (giro) e a distância (zoom) da câmera do alvo, um pouco a cada quadro. */
@@ -296,10 +293,23 @@ export class MoonGlobe {
 
   /** Mantém a foto ao lado do marco na tela; esconde se o marco for para o outro lado da Lua. */
   private placePhoto(): void {
-    const marker = this.photoFor && this.photoFor === this.selectedId ? this.markers.get(this.photoFor) : null;
-    if (!marker || !this.arrived) {
+    // Qual marco mostra a foto: o que está sob o mouse; senão, o selecionado (depois do zoom).
+    const selected = this.selectedId && this.arrived && this.photos.has(this.selectedId) ? this.selectedId : null;
+    const target = this.hoverLandmark && this.photos.has(this.hoverLandmark) ? this.hoverLandmark : selected;
+    const marker = target ? this.markers.get(target) : null;
+    if (!target || !marker) {
       this.photoCard.hidden = true;
       return;
+    }
+    if (target !== this.shownPhoto) {
+      const photo = this.photos.get(target)!;
+      const image = document.createElement('img');
+      image.src = photo.url;
+      image.alt = photo.title;
+      const caption = document.createElement('span');
+      caption.textContent = `${photo.title} · NASA`;
+      this.photoCard.replaceChildren(image, caption);
+      this.shownPhoto = target;
     }
     const cameraDistance = this.camera.position.length();
     const facing = marker.position.clone().normalize().dot(this.camera.position.clone().normalize());

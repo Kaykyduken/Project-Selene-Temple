@@ -139,6 +139,8 @@ async function start(): Promise<void> {
         const { MoonGlobe: Globe } = await import('./globe/moonGlobe');
         globe = await Globe.create(globeElement, catalog.sites, (site) => void selectSite(site), landmarks, (id) => void openLandmark(id));
         globe.highlight(currentLandmarkId ?? currentSiteId);
+        // Mouse sobre um marco (sem clicar): busca a foto dele para o cartão aparecer.
+        globe.onLandmarkHover = (id) => loadLandmarkPhoto(id);
       } catch {
         globeFailed = true; // por exemplo, navegador sem WebGL
         globeElement.textContent = '';
@@ -174,12 +176,17 @@ async function start(): Promise<void> {
     expandRightPanel();
     await showView('globe'); // os pousos Apollo ficam fora do mapa polar: só aparecem na Lua 3D
     globe?.highlight(id); // gira e dá zoom até o marco
-    // Primeira foto oficial do evento: aparece sobre a Lua, ao lado do marco, quando o zoom termina.
+    loadLandmarkPhoto(id); // foto oficial sobre a Lua, ao lado do marco, quando o zoom termina
+  }
+  /** Busca a primeira foto oficial do marco e entrega para a Lua 3D (uma vez por marco). */
+  function loadLandmarkPhoto(id: string): void {
+    const landmark = landmarks.find((m) => m.id === id);
+    if (!landmark) return;
     fetchPhotos(landmark.image_query)
       .then((photos) => {
         if (photos[0]) globe?.setLandmarkPhoto(id, photos[0].preview, photos[0].title);
       })
-      .catch(() => {}); // sem acervo: a Lua só gira e aproxima (a janela já avisa "No images")
+      .catch(() => {}); // sem acervo: nada de cartão (a janela do marco já avisa "No images")
   }
   const landmarkBox = document.getElementById('landmark-list')!;
   if (landmarks.length === 0) {
@@ -314,6 +321,8 @@ async function start(): Promise<void> {
   // Ao abrir o site: lê os favoritos do arquivo (se a API estiver ligada).
   void apiOnline.then((ok) => favorites.load(ok));
 
+  const busy = document.getElementById('busy')!;
+
   // Clique em qualquer outro lugar do mapa → ponto livre.
   // Com a API ligada (computador da equipe), o ponto é calculado ao vivo.
   // Sem a API (site publicado), mostramos só as coordenadas e "no data".
@@ -339,6 +348,7 @@ async function start(): Promise<void> {
       return;
     }
     panel.showCustomPoint(lat, lng, t('Computing the horizon and the visibility… this takes a few seconds.'));
+    busy.classList.remove('is-hidden'); // tela de carregamento enquanto o cálculo roda
     try {
       const data = await analyzePoint(lat, lng);
       // Identifica o ponto pelas coordenadas, para os Favoritos e para o nome dos arquivos baixados.
@@ -350,6 +360,8 @@ async function start(): Promise<void> {
       if (request === lastRequest) panel.showSite(data);
     } catch (err) {
       if (request === lastRequest) panel.showCustomPoint(lat, lng, t('No data: {message}', { message: (err as Error).message }), true);
+    } finally {
+      busy.classList.add('is-hidden');
     }
   });
 }

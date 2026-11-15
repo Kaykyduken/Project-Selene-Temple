@@ -183,4 +183,10 @@ export const PT: Record<string, string> = {
   "Base map not generated yet (run pipeline/prepare_basemap.py). Showing the coordinate grid only.": "Mapa-base ainda não gerado (rode pipeline/prepare_basemap.py). Mostrando apenas a grade de coordenadas.",
   "FICTITIOUS DATA: placeholder base map.": "DADOS FICTÍCIOS: mapa-base de exemplo.",
   "The point must be between 80°S and the pole.": "O ponto precisa estar entre 80°S e o polo.",
+  "(original NASA title)": "(título original da NASA)",
+  "LOLA polar DEM LDEM_80S_20M (NASA PDS, LRO/LOLA)": "DEM polar LOLA LDEM_80S_20M (NASA PDS, LRO/LOLA)",
+  "JPL Horizons ephemerides (NASA/JPL)": "Efemérides do JPL Horizons (NASA/JPL)",
+  "Computing…": "Calculando…",
+  "This takes a few seconds.": "Isso leva alguns segundos.",
+  "Show or hide this section": "Mostrar ou esconder esta seção",
 };

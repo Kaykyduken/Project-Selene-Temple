@@ -313,3 +313,9 @@ body[data-mode='expert'] { --text: #ffffff; --muted: #ffffff; }
 .tour-buttons .tour-next { background: #ffd166; color: #1a1200; border-color: #ffd166; font-weight: 700; }
 .topbar-right { flex-wrap: wrap; justify-content: flex-end; }
 .topbar-right button, .topbar-right .badge { white-space: nowrap; }
+
+/* Educational: barra do topo com as cores invertidas (opção escolhida em branco com texto azul) */
+body[data-mode='educational'] .mode-toggle { border-color: #ffffff; }
+body[data-mode='educational'] .mode-toggle button { color: #ffffff; }
+body[data-mode='educational'] .mode-toggle button[aria-pressed='true'] { background: #ffffff; color: #1d3f73; font-weight: 700; }
+body[data-mode='educational'] .mode-toggle button:not([aria-pressed='true']):hover { background: rgba(255, 255, 255, 0.18); }

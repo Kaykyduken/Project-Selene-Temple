@@ -6,6 +6,16 @@
 // Escolher uma região em qualquer lugar atualiza os outros dois.
 
 import 'leaflet/dist/leaflet.css';
+// Fontes embutidas no site (funcionam sem internet):
+//   Montserrat → modo Educational
+//   Carlito    → modo Expert, como substituta livre da Calibri (mesmas medidas).
+//                A Calibri é da Microsoft e não pode ser distribuída com o site;
+//                quem tem a Calibri instalada (Windows/Office) vê a própria Calibri.
+import '@fontsource/montserrat/400.css';
+import '@fontsource/montserrat/600.css';
+import '@fontsource/montserrat/700.css';
+import '@fontsource/carlito/400.css';
+import '@fontsource/carlito/700.css';
 import './style.css';
 import L from 'leaflet';
 import { createPolarMap } from './map/polarMap';
@@ -42,10 +52,11 @@ async function start(): Promise<void> {
   const panel = new SitePanel(document.getElementById('site-panel')!, catalog.sites, loadSiteData);
 
   // Botões Educational / Expert no topo: trocam a apresentação, não os números.
-  const modeButtons = document.querySelectorAll<HTMLButtonElement>('[data-mode]');
+  const modeButtons = document.querySelectorAll<HTMLButtonElement>('.mode-toggle button');
   for (const button of modeButtons) {
     button.addEventListener('click', () => {
       panel.setMode(button.dataset.mode as Mode);
+      document.body.dataset.mode = button.dataset.mode; // o CSS troca a fonte conforme o modo
       for (const b of modeButtons) b.setAttribute('aria-pressed', String(b === button));
     });
   }

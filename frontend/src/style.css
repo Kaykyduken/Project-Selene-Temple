@@ -9,11 +9,15 @@
   --muted: #9aa6b8;
   --ok: #4da3ff;   /* azul e laranja em vez de verde e vermelho (daltonismo) */
   --off: #ff9f40;
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   font-size: 16px;
   color: var(--text);
   background: var(--bg);
 }
+
+/* Fonte por modo: Montserrat no Educational, Calibri (ou Carlito) no Expert. */
+body { font-family: 'Montserrat', system-ui, sans-serif; }
+body[data-mode='expert'] { font-family: Calibri, 'Carlito', system-ui, sans-serif; font-size: 1.06rem; }
+button, select { font-family: inherit; }
 
 * { box-sizing: border-box; }
 body { margin: 0; height: 100vh; display: flex; flex-direction: column; }

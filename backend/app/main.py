@@ -16,7 +16,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import Body, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 
 # Pasta dos dados: <raiz do repositório>/frontend/public/data
@@ -31,13 +31,18 @@ sys.path.insert(0, str(PIPELINE_DIR))
 # ambiente LLSN_DEM; o padrão é o mesmo das regiões.
 DEM_PATH = Path(os.environ.get("LLSN_DEM", PIPELINE_DIR.parent / "data" / "raw" / "dem" / "LDEM_80S_20M.JP2"))
 
+# Arquivo onde os pontos favoritos ficam guardados NESTA máquina.
+# Fica em data/ (fora do Git): são escolhas de quem usa, não parte do projeto.
+FAVORITES_FILE = PIPELINE_DIR.parent / "data" / "favorites.json"
+MAX_FAVORITES = 12
+
 # Um id de região só pode ter letras minúsculas, números e hífen. Isso impede
 # que alguém peça "../../outro-arquivo" e leia arquivos fora da pasta de dados.
 SITE_ID_PATTERN = re.compile(r"^[a-z0-9-]+$")
 
 app = FastAPI(
     title="Lunar Landing Site Navigator API",
-    version="0.3.0",
+    version="0.4.0",
     description="Sun and Earth visibility over the real horizon of lunar south pole sites.",
 )
 
@@ -45,7 +50,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
-    allow_methods=["GET"],
+    allow_methods=["GET", "PUT"],
     allow_headers=["*"],
 )
 
@@ -115,3 +120,30 @@ def analyze(
         raise HTTPException(status_code=422, detail=str(err)) from err
     except OSError as err:      # sem internet / Horizons fora do ar
         raise HTTPException(status_code=502, detail=f"Could not reach JPL Horizons: {err}") from err
+
+
+@app.get("/favorites")
+def get_favorites() -> list:
+    """Pontos favoritos guardados no arquivo data/favorites.json. O site lê isto ao abrir."""
+    if not FAVORITES_FILE.is_file():
+        return []
+    try:
+        saved = json.loads(FAVORITES_FILE.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return []  # arquivo corrompido: começa vazio em vez de quebrar o site
+    return saved if isinstance(saved, list) else []
+
+
+@app.put("/favorites")
+def put_favorites(favorites: list[dict] = Body(max_length=MAX_FAVORITES)) -> dict:
+    """Substitui a lista inteira de favoritos (o site manda a lista completa a cada mudança)."""
+    for item in favorites:
+        if not isinstance(item.get("site"), dict) or "id" not in item["site"]:
+            raise HTTPException(status_code=422, detail="Each favorite must be a site data object")
+    # Grava num arquivo temporário e troca de nome: se a gravação falhar no meio,
+    # o arquivo antigo continua inteiro.
+    FAVORITES_FILE.parent.mkdir(parents=True, exist_ok=True)
+    temp = FAVORITES_FILE.with_suffix(".tmp")
+    temp.write_text(json.dumps(favorites, separators=(",", ":")), encoding="utf-8")
+    temp.replace(FAVORITES_FILE)
+    return {"saved": len(favorites)}

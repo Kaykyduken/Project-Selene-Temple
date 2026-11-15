@@ -25,3 +25,7 @@ Thumbs.db
 
 # Cached API responses
 data/cache/
+
+# Favorite points saved on this machine by the local API
+data/favorites.json
+data/favorites.tmp

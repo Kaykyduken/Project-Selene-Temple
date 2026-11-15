@@ -77,11 +77,14 @@ async function start(): Promise<void> {
 
   function drawFavorites(): void {
     favoriteMarkers.clearLayers();
+    const where = document.createElement('p');
+    where.className = 'muted';
+    where.textContent = favorites.where();
     if (favorites.list().length === 0) {
       const empty = document.createElement('p');
       empty.className = 'muted';
       empty.textContent = 'No favorite points yet. Analyse a point on the map and add it here to keep it.';
-      favoriteBox.replaceChildren(empty);
+      favoriteBox.replaceChildren(empty, where);
       return;
     }
     const list = document.createElement('ul');
@@ -107,9 +110,15 @@ async function start(): Promise<void> {
       item.append(open, remove);
       list.append(item);
     }
-    favoriteBox.replaceChildren(list);
+    favoriteBox.replaceChildren(list, where);
   }
   favorites.onChange = drawFavorites;
+  favorites.onError = (message) => {
+    const warning = document.createElement('p');
+    warning.className = 'warning';
+    warning.textContent = message;
+    favoriteBox.append(warning);
+  };
 
   // O painel usa isto para desenhar o botão de estrela e para adicionar/remover.
   panel.favorites = {
@@ -148,7 +157,8 @@ async function start(): Promise<void> {
     void selectSite(site);
   });
 
-  drawFavorites();
+  // Ao abrir o site: lê os favoritos do arquivo (se a API estiver ligada).
+  void apiOnline.then((ok) => favorites.load(ok));
 
   // Clique em qualquer outro lugar do mapa → ponto livre.
   // Com a API ligada (computador da equipe), o ponto é calculado ao vivo.

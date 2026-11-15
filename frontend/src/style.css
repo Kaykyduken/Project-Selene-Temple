@@ -7,6 +7,7 @@
   --panel: #151b27;
   --text: #e6ebf2;
   --muted: #9aa6b8;
+  --line: #2a3344;  /* bordas e linhas finas */
   --ok: #4da3ff;   /* azul e laranja em vez de verde e vermelho (daltonismo) */
   --off: #ff9f40;
   font-size: 16px;
@@ -55,7 +56,7 @@ main { flex: 1; display: flex; min-height: 0; }
 
 /* Topo: botões de modo */
 .topbar-right { display: flex; align-items: center; gap: 0.75rem; }
-.mode-toggle { display: inline-flex; border: 1px solid #2a3344; border-radius: 999px; overflow: hidden; }
+.mode-toggle { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
 .mode-toggle button { background: transparent; color: var(--muted); font: inherit; font-size: 0.85rem; padding: 0.25rem 0.8rem; border: 0; cursor: pointer; }
 .mode-toggle button[aria-pressed='true'] { background: #22304a; color: var(--text); font-weight: 600; }
 .mode-toggle button:focus-visible { outline: 2px solid var(--ok); outline-offset: -2px; }
@@ -70,7 +71,7 @@ main { flex: 1; display: flex; min-height: 0; }
 .site-list button {
   text-align: left; padding: 0.5rem 0.6rem; margin-bottom: 0.25rem;
   background: transparent; color: var(--text); font: inherit;
-  border: 1px solid #2a3344; border-radius: 6px; cursor: pointer;
+  border: 1px solid var(--line); border-radius: 6px; cursor: pointer;
 }
 .site-list .num { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); font-size: 0.85rem; }
 .site-list button:hover { border-color: var(--ok); }
@@ -92,14 +93,14 @@ main { flex: 1; display: flex; min-height: 0; }
 }
 .coords { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; margin: 0 0 0.5rem; }
 .warning { color: var(--off); font-size: 0.85rem; margin: 0 0 0.5rem; }
-.metric { display: grid; grid-template-columns: 1fr auto; gap: 0.1rem 0.75rem; padding: 0.5rem 0; border-bottom: 1px solid #2a3344; }
+.metric { display: grid; grid-template-columns: 1fr auto; gap: 0.1rem 0.75rem; padding: 0.5rem 0; border-bottom: 1px solid var(--line); }
 .metric-value { font-weight: 700; font-variant-numeric: tabular-nums; }
 .provenance { grid-column: 1 / -1; font-size: 0.75rem; color: var(--muted); }
 .sources { margin: 0; padding-left: 1.1rem; font-size: 0.85rem; color: var(--muted); }
 .disclaimer { margin-top: 1.25rem; font-size: 0.8rem; color: var(--muted); border-left: 3px solid var(--off); padding-left: 0.6rem; }
 
 /* Modo Educacional: cartões com o número grande */
-.edu-card { display: grid; grid-template-columns: 1fr auto; gap: 0.1rem 0.75rem; padding: 0.6rem 0.75rem; margin-bottom: 0.5rem; border: 1px solid #2a3344; border-radius: 8px; }
+.edu-card { display: grid; grid-template-columns: 1fr auto; gap: 0.1rem 0.75rem; padding: 0.6rem 0.75rem; margin-bottom: 0.5rem; border: 1px solid var(--line); border-radius: 8px; }
 .edu-title { font-weight: 600; }
 .edu-big { font-size: 1.4rem; font-weight: 700; font-variant-numeric: tabular-nums; }
 .edu-card p { grid-column: 1 / -1; margin: 0; font-size: 0.85rem; color: var(--muted); }
@@ -112,24 +113,24 @@ main { flex: 1; display: flex; min-height: 0; }
 .actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 .actions button, .compare-select {
   background: transparent; color: var(--text); font: inherit; font-size: 0.85rem;
-  border: 1px solid #2a3344; border-radius: 6px; padding: 0.4rem 0.7rem; cursor: pointer;
+  border: 1px solid var(--line); border-radius: 6px; padding: 0.4rem 0.7rem; cursor: pointer;
 }
 .compare-select { width: 100%; background: var(--panel); }
 .actions button:hover, .compare-select:hover { border-color: var(--ok); }
 
 /* Comparação lado a lado */
 .compare { width: 100%; border-collapse: collapse; margin-top: 0.6rem; font-size: 0.85rem; }
-.compare th, .compare td { padding: 0.4rem 0.3rem; border-bottom: 1px solid #2a3344; text-align: right; font-variant-numeric: tabular-nums; }
+.compare th, .compare td { padding: 0.4rem 0.3rem; border-bottom: 1px solid var(--line); text-align: right; font-variant-numeric: tabular-nums; }
 .compare th:first-child { text-align: left; color: var(--muted); font-weight: 400; }
 .compare tr:first-child th { font-weight: 600; vertical-align: bottom; }
 
 /* Favoritos */
-.favorite-button { background: transparent; color: var(--text); font: inherit; font-size: 0.85rem; border: 1px solid #2a3344; border-radius: 6px; padding: 0.4rem 0.7rem; cursor: pointer; margin-bottom: 0.25rem; }
+.favorite-button { background: transparent; color: var(--text); font: inherit; font-size: 0.85rem; border: 1px solid var(--line); border-radius: 6px; padding: 0.4rem 0.7rem; cursor: pointer; margin-bottom: 0.25rem; }
 .favorite-button[aria-pressed='true'] { border-color: #e7c84a; color: #e7c84a; }
 .favorite-button:hover { border-color: var(--ok); }
 .fav-list { list-style: none; margin: 0; padding: 0; }
 .fav-list li { display: flex; gap: 0.25rem; margin-bottom: 0.25rem; }
-.fav-list button { background: transparent; color: var(--text); font: inherit; font-size: 0.85rem; border: 1px solid #2a3344; border-radius: 6px; padding: 0.4rem 0.6rem; cursor: pointer; }
+.fav-list button { background: transparent; color: var(--text); font: inherit; font-size: 0.85rem; border: 1px solid var(--line); border-radius: 6px; padding: 0.4rem 0.6rem; cursor: pointer; }
 .fav-list button:first-child { flex: 1; text-align: left; }
 .fav-list button:hover { border-color: var(--ok); }
 .fav-list button:focus-visible, .favorite-button:focus-visible { outline: 2px solid var(--ok); outline-offset: 2px; }
@@ -152,7 +153,7 @@ main { flex: 1; display: flex; min-height: 0; }
 .chart-key { display: inline-block; width: 14px; height: 3px; border-radius: 2px; }
 .chart-tooltip {
   position: absolute; top: 28px; pointer-events: none; z-index: 5;
-  background: #0b0f17; border: 1px solid #2a3344; border-radius: 6px;
+  background: #0b0f17; border: 1px solid var(--line); border-radius: 6px;
   padding: 0.4rem 0.55rem; font-size: 0.78rem; white-space: nowrap;
 }
 .chart-tooltip-title { color: var(--muted); margin-bottom: 0.2rem; }
@@ -166,7 +167,7 @@ main { flex: 1; display: flex; min-height: 0; }
 }
 
 /* Rodapé com o aviso obrigatório (projeto independente, sem aval da NASA). */
-.site-footer { padding: 0.35rem 1rem; font-size: 0.75rem; color: var(--muted); border-top: 1px solid #2a3344; text-align: center; }
+.site-footer { padding: 0.35rem 1rem; font-size: 0.75rem; color: var(--muted); border-top: 1px solid var(--line); text-align: center; }
 
 /* Lua 3D (modo Educational): troca de vista com o mapa; só aparece no modo Educational. */
 .is-hidden { display: none !important; }
@@ -176,7 +177,7 @@ body[data-mode='expert'] .edu-only { display: none; }
 .globe-hint { position: absolute; top: 0.75rem; left: 0.75rem; font-size: 0.8rem; color: var(--muted); background: rgba(10, 14, 22, 0.7); padding: 0.4rem 0.6rem; border-radius: 6px; pointer-events: none; }
 .globe-ring { color: #ff6b6b; }
 .globe-credit { position: absolute; bottom: 0.4rem; left: 0.75rem; right: 0.75rem; font-size: 0.7rem; color: var(--muted); background: rgba(10, 14, 22, 0.7); padding: 0.2rem 0.4rem; border-radius: 4px; pointer-events: none; }
-.globe-tooltip { position: absolute; background: #0b1220; color: var(--text); border: 1px solid #2a3344; border-radius: 6px; padding: 0.2rem 0.5rem; font-size: 0.8rem; pointer-events: none; white-space: nowrap; }
+.globe-tooltip { position: absolute; background: #0b1220; color: var(--text); border: 1px solid var(--line); border-radius: 6px; padding: 0.2rem 0.5rem; font-size: 0.8rem; pointer-events: none; white-space: nowrap; }
 .view-toggle { margin-right: 0.25rem; }
 
 /* Borda vermelha: limite da análise de pontos livres (80°S). */
@@ -184,7 +185,7 @@ body[data-mode='expert'] .edu-only { display: none; }
 
 /* Janelas retráteis: os dois painéis laterais encolhem para uma faixa estreita. */
 .side-panel { position: relative; flex: none; }
-.collapse-btn { position: absolute; top: 0.5rem; right: 0.5rem; width: 1.6rem; height: 1.6rem; border-radius: 6px; border: 1px solid #2a3344; background: #1b2436; color: var(--text); font-size: 1rem; line-height: 1; cursor: pointer; z-index: 2; }
+.collapse-btn { position: absolute; top: 0.5rem; right: 0.5rem; width: 1.6rem; height: 1.6rem; border-radius: 6px; border: 1px solid var(--line); background: #1b2436; color: var(--text); font-size: 1rem; line-height: 1; cursor: pointer; z-index: 2; }
 .collapse-btn:hover { background: #22304a; }
 .collapse-btn:focus-visible { outline: 2px solid var(--ok); }
 .side-panel.collapsed { width: 2.6rem; padding: 0.5rem 0; overflow: hidden; }
@@ -194,17 +195,17 @@ body[data-mode='expert'] .edu-only { display: none; }
 
 /* Marcos históricos (pousos Apollo) */
 .landmark-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.3rem; }
-.landmark-list button { width: 100%; text-align: left; background: transparent; color: var(--text); font: inherit; font-size: 0.9rem; border: 1px solid #2a3344; border-radius: 6px; padding: 0.35rem 0.6rem; cursor: pointer; }
+.landmark-list button { width: 100%; text-align: left; background: transparent; color: var(--text); font: inherit; font-size: 0.9rem; border: 1px solid var(--line); border-radius: 6px; padding: 0.35rem 0.6rem; cursor: pointer; }
 .landmark-list button:hover, .landmark-list button[aria-current='true'] { background: #17323a; border-color: #3fd0c9; }
 .landmark-list small { color: var(--muted); display: block; }
 .landmark-tag { display: inline-block; width: fit-content; margin: 0 0 0.4rem; padding: 0.1rem 0.5rem; border: 1px solid #3fd0c9; border-radius: 999px; color: #3fd0c9; font-size: 0.75rem; }
 .swatch-landmark { width: 11px; height: 11px; background: #3fd0c9; transform: rotate(45deg); margin: 0 1.5px; flex: none; }
 .globe-landmark { color: #3fd0c9; }
 body[data-mode='expert'] .edu-only-li { display: none; }
-.gallery-frame { background: #000; border: 1px solid #2a3344; border-radius: 8px; height: 260px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.gallery-frame { background: #000; border: 1px solid var(--line); border-radius: 8px; height: 260px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
 .gallery-frame img { max-width: 100%; max-height: 100%; object-fit: contain; }
 .gallery-controls { display: flex; align-items: center; justify-content: center; gap: 1rem; margin: 0.5rem 0 0.25rem; }
-.gallery-nav { width: 2.2rem; height: 2.2rem; border-radius: 50%; border: 1px solid #2a3344; background: #1b2436; color: var(--text); font-size: 1.2rem; cursor: pointer; }
+.gallery-nav { width: 2.2rem; height: 2.2rem; border-radius: 50%; border: 1px solid var(--line); background: #1b2436; color: var(--text); font-size: 1.2rem; cursor: pointer; }
 .gallery-nav:hover { background: #22304a; }
 .gallery-counter { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 0.85rem; min-width: 3.5rem; text-align: center; }
 .gallery-caption { font-size: 0.85rem; margin: 0.25rem 0; }
@@ -225,13 +226,29 @@ body[data-mode='expert'] .edu-only-li { display: none; }
 .dots-row, .calendar-row { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.45rem; }
 .dots-name { width: 2.8rem; flex: none; font-size: 0.85rem; font-weight: 600; }
 .dots { display: inline-flex; gap: 4px; }
-.dot { width: 18px; height: 18px; border-radius: 50%; background: #2a3344; }
+.dot { width: 18px; height: 18px; border-radius: 50%; background: var(--line); }
 .dots-text { font-size: 0.85rem; color: var(--muted); }
 .calendar-cells { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); grid-auto-flow: column; gap: 2px; flex: 1; }
-.calendar-cell { position: relative; height: 26px; padding: 0; border: 0; border-radius: 3px; background: #2a3344; overflow: hidden; cursor: pointer; display: block; }
+.calendar-cell { position: relative; height: 26px; padding: 0; border: 0; border-radius: 3px; background: var(--line); overflow: hidden; cursor: pointer; display: block; }
 .calendar-cell:hover, .calendar-cell:focus-visible { outline: 2px solid var(--text); outline-offset: 0; }
 .calendar-fill { position: absolute; left: 0; right: 0; bottom: 0; border-radius: 0 0 3px 3px; }
 .calendar-numbers span { font-size: 0.65rem; color: var(--muted); text-align: center; overflow: visible; white-space: nowrap; }
 .calendar-key { display: flex; align-items: center; flex-wrap: wrap; gap: 0.35rem; }
 .calendar-sample { display: inline-block; width: 14px; height: 14px; cursor: default; }
 .calendar-info { font-size: 0.85rem; min-height: 1.3rem; margin: 0.25rem 0 0; }
+
+/* ---------- Cores das janelas por modo ----------
+   Educational: azul mais claro; a janela fica translúcida quando o mouse não está
+   sobre ela e opaca quando está (ou quando algo dentro dela tem o foco do teclado).
+   Expert: azul mais escuro, sempre opaco. */
+body[data-mode='educational'] { --panel: #23406c; --muted: #c5d0e2; --line: #46618c; }
+body[data-mode='educational'] main { background: radial-gradient(circle at 50% 50%, #151d2e 0%, #05080f 70%); }
+body[data-mode='educational'] .side-panel { background: rgb(35 64 108 / 1); transition: background-color 0.25s ease; }
+@media (hover: hover) {
+  body[data-mode='educational'] .side-panel:not(:hover):not(:focus-within) { background: rgb(35 64 108 / 0.5); }
+}
+body[data-mode='educational'] .collapse-btn, body[data-mode='educational'] .gallery-nav { background: #2f5187; }
+body[data-mode='educational'] .mode-toggle button[aria-pressed='true'] { background: #35598f; }
+body[data-mode='educational'] .dot, body[data-mode='educational'] .calendar-cell { background: #17294a; }
+body[data-mode='expert'] { --bg: #05080f; --panel: #0a1120; --line: #1f2a3d; background: var(--bg); }
+@media (prefers-reduced-motion: reduce) { body[data-mode='educational'] .side-panel { transition: none; } }

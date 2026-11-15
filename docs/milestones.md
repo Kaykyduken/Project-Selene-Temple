@@ -7,7 +7,8 @@ Milestones in sequence, without fixed hours: only the order matters. Kayky is th
 - M1: done with the real WAC mosaic and LOLA DEM
 - M2: done; region positions are real (USGS grids), visibility numbers still fictitious
 - M3: Horizons client validated on Kayky's machine against the reference table; Felipe's independent table still pending
-- M4: horizon mask (`pipeline/horizon.py`) tested with analytic cases and the real 85°S DEM; `pipeline/build_site.py` writes real site files. Pending: run for the 9 regions, Alisson's review
+- M4: horizon mask (`pipeline/horizon.py`) tested with analytic cases and the real 85°S DEM; `pipeline/build_site.py` writes real site files. Real data generated for the 9 regions (2027-01-01, 30 days, hourly). Pending: Alisson's review
+- M5: site panel shows real data with two charts (margin above the terrain over time; 360° terrain panorama with Sun and Earth paths)
 
 ## Anchors (relative to the deadline, Sunday 2026-11-15, 22:00 Brasília)
 

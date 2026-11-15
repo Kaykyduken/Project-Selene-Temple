@@ -5,6 +5,8 @@
 // origem de cada número, e os avisos obrigatórios.
 
 import type { Metric, ProvenanceClass, SiteData } from '../data/contract';
+import { marginChart } from '../charts/marginChart';
+import { panoramaChart } from '../charts/panoramaChart';
 
 /** Texto e símbolo de cada classe de origem (nunca só cor: acessibilidade). */
 const CLASS_LABEL: Record<ProvenanceClass, string> = {
@@ -100,6 +102,15 @@ export class SitePanel {
     nodes.push(metricRow('Time with Earth in view (direct comms)', data.metrics.earth_time_pct, '%'));
     nodes.push(metricRow('Longest period without Sun', data.metrics.longest_no_sun_h, 'h'));
     nodes.push(metricRow('Mean slope', data.metrics.mean_slope_deg, '°'));
+
+    // Gráficos. Cada um tem uma frase explicando como ler (ninguém depende só do desenho).
+    nodes.push(el('h3', '', 'When are they in view?'));
+    nodes.push(el('p', 'muted', 'Degrees above (+) or below (−) the terrain in the direction of each body. Above the "terrain horizon" line it is in view. The bars underneath mark the periods in view.'));
+    nodes.push(marginChart(data));
+
+    nodes.push(el('h3', '', 'Horizon around the site'));
+    nodes.push(el('p', 'muted', 'The terrain silhouette seen while turning 360°, with the paths of the Sun and the Earth in the sky. A body is in view where its path runs above the silhouette.'));
+    nodes.push(panoramaChart(data));
 
     nodes.push(el('h3', '', 'Sources'));
     const sources = el('ul', 'sources');

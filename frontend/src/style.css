@@ -295,3 +295,21 @@ body[data-mode='expert'] { --text: #ffffff; --muted: #ffffff; }
 .globe-labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
 .globe-label { position: absolute; left: 0; top: 0; white-space: nowrap; font-size: 0.72rem; color: #fff; background: rgba(8, 12, 20, 0.62); padding: 0.05rem 0.35rem; border-radius: 4px; text-shadow: 0 0 3px #000; border-left: 2px solid #f0a030; }
 .globe-label-landmark { border-left-color: #3fd0c9; }
+
+/* Tour guiado */
+.tour-btn { background: transparent; color: var(--text); font: inherit; font-size: 0.85rem; padding: 0.25rem 0.8rem; border: 1px solid var(--ok); border-radius: 999px; cursor: pointer; }
+.tour-btn:hover { background: #22304a; }
+.tour-block { position: fixed; inset: 0; z-index: 2000; }
+.tour-block.dim { background: rgba(0, 0, 0, 0.7); }
+.tour-spot { position: fixed; z-index: 2001; border-radius: 10px; border: 2px solid #ffd166; box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7); pointer-events: none; display: none; }
+.tour-card { position: fixed; z-index: 2002; width: min(26rem, calc(100vw - 24px)); background: #12203a; color: #fff; border: 1px solid #ffd166; border-radius: 12px; padding: 1rem 1.25rem; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7); }
+.tour-card h2 { margin: 0.2rem 0 0.5rem; font-size: 1.1rem; }
+.tour-card p { margin: 0 0 0.9rem; line-height: 1.5; font-size: 0.92rem; }
+.tour-counter { font-size: 0.75rem; color: #ffd166; }
+.tour-buttons { display: flex; gap: 0.5rem; justify-content: flex-end; }
+.tour-buttons button { font: inherit; font-size: 0.85rem; padding: 0.3rem 0.9rem; border-radius: 999px; border: 1px solid #6b7b99; background: transparent; color: #fff; cursor: pointer; }
+.tour-buttons button:disabled { opacity: 0.4; cursor: default; }
+.tour-buttons .tour-skip { margin-right: auto; border-color: transparent; color: #c5cee0; }
+.tour-buttons .tour-next { background: #ffd166; color: #1a1200; border-color: #ffd166; font-weight: 700; }
+.topbar-right { flex-wrap: wrap; justify-content: flex-end; }
+.topbar-right button, .topbar-right .badge { white-space: nowrap; }

@@ -33,6 +33,7 @@ import { fetchPhotos, showLandmark } from './panels/landmarkPanel';
 import type { Landmark, LandmarkCatalog } from './panels/landmarkPanel';
 import { LANG, setLang, t, translatePage } from './i18n';
 import type { Lang } from './i18n';
+import { setupTour } from './tour';
 
 // Idioma: traduz os textos fixos da página e liga os botões EN | PT.
 translatePage();
@@ -415,3 +416,5 @@ apiOnline.then((ok) => {
   apiBadge.textContent = ok ? t('API: online') : t('API: offline (static mode)');
   apiBadge.className = `badge ${ok ? 'badge-ok' : 'badge-off'}`;
 });
+
+setupTour();

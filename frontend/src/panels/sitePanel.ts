@@ -188,7 +188,29 @@ export class SitePanel {
 
     nodes.push(el('h3', '', t('Why do hills matter so much?')));
     nodes.push(el('p', 'muted', t('At the Moon\'s south pole the Sun and the Earth always stay low in the sky, close to the ground line. A hill or a crater rim in the way is enough to hide them. That is why two places only a few kilometres apart can be so different.')));
+    if (data.site.custom) nodes.push(...this.goodOrBad(sun.value, earth.value, dark.value));
     nodes.push(el('p', 'muted', t('Want every detail? Switch to Expert mode (top of the page) to see the full charts.')));
+    return nodes;
+  }
+
+  /** Só para pontos livres: o que faz um lugar ser bom ou ruim para pousar, com a leitura deste ponto. */
+  private goodOrBad(sun: number | null, earth: number | null, dark: number | null): HTMLElement[] {
+    const nodes: HTMLElement[] = [];
+    nodes.push(el('h3', '', t('What makes a place good or bad to land?')));
+    nodes.push(el('p', 'muted', t('Mission planners look at several things at once. This tool measures the first three.')));
+    const row = (name: string, why: string, verdict: string): HTMLElement => {
+      const box = el('div', 'edu-card');
+      box.append(el('span', 'edu-title', name), el('span', 'edu-big', verdict), el('p', '', why));
+      return box;
+    };
+    const level = (value: number | null): string =>
+      value === null ? t('no data') : value >= 50 ? t('Good') : value >= 20 ? t('Medium') : t('Poor');
+    nodes.push(row(t('Lots of sunlight'), t('More Sun means more electricity from solar panels and less cold. Good places have it most of the time.'), level(sun)));
+    nodes.push(row(t('Earth in view'), t('Without a clear view of the Earth, the crew or the rover cannot talk to home by direct radio.'), level(earth)));
+    nodes.push(row(t('Short nights'), t('Long darkness drains batteries and freezes equipment. Shorter dark periods are better.'),
+      dark === null ? t('no data') : dark <= 100 ? t('Good') : dark <= 300 ? t('Medium') : t('Poor')));
+    nodes.push(el('p', 'muted', t('Not measured here, but just as important: a gentle slope and few boulders (a safe landing), ice nearby for water, and a flat place to move around. A great place on this list can still be unsafe to land on.')));
+    nodes.push(el('p', 'muted', t('Good / Medium / Poor is a simple rule of thumb for learning, not a NASA criterion.')));
     return nodes;
   }
 

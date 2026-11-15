@@ -21,7 +21,8 @@
    "study_questions": [
     "Why was a flat equatorial plain preferred for the first landing?",
     "What did the first samples change in the theories about the Moon's origin?"
-   ]
+   ],
+   "wikipedia": "https://en.wikipedia.org/wiki/Apollo_11"
   },
   {
    "id": "apollo-12",
@@ -41,7 +42,8 @@
    "study_questions": [
     "Why did precision landing matter for the missions that came after?",
     "What can hardware left on the Moon teach about building long-lived surface systems?"
-   ]
+   ],
+   "wikipedia": "https://en.wikipedia.org/wiki/Apollo_12"
   },
   {
    "id": "apollo-14",
@@ -61,7 +63,8 @@
    "study_questions": [
     "Why do geologists sample the ejecta of a large crater instead of drilling deep?",
     "What does the difficulty near Cone crater say about navigation without landmarks?"
-   ]
+   ],
+   "wikipedia": "https://en.wikipedia.org/wiki/Apollo_14"
   },
   {
    "id": "apollo-15",
@@ -81,7 +84,8 @@
    "study_questions": [
     "How did the rover change what could be studied in one mission?",
     "Why is a piece of the original crust so valuable for understanding how the Moon formed?"
-   ]
+   ],
+   "wikipedia": "https://en.wikipedia.org/wiki/Apollo_15"
   },
   {
    "id": "apollo-16",
@@ -101,7 +105,8 @@
    "study_questions": [
     "What are the limits of interpreting geology only from orbital images?",
     "Why are the highlands important for knowing the age of the lunar crust?"
-   ]
+   ],
+   "wikipedia": "https://en.wikipedia.org/wiki/Apollo_16"
   },
   {
    "id": "apollo-17",
@@ -121,7 +126,8 @@
    "study_questions": [
     "Why send a geologist instead of training a pilot in geology?",
     "How do tall mountains around a site affect sunlight and line of sight to Earth?"
-   ]
+   ],
+   "wikipedia": "https://en.wikipedia.org/wiki/Apollo_17"
   }
  ]
 }

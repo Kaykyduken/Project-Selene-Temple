@@ -43,6 +43,34 @@ for (const button of document.querySelectorAll<HTMLButtonElement>('.lang-toggle 
   });
 }
 
+// Tamanho do texto: 5 níveis, guardado no navegador. O nível 3 é o padrão (18 px).
+const FONT_SIZES_PX = [14, 16, 18, 20, 23];
+function applyTextSize(level: number): void {
+  document.documentElement.style.fontSize = `${FONT_SIZES_PX[level - 1]}px`;
+  for (const b of document.querySelectorAll<HTMLButtonElement>('.size-toggle button')) {
+    b.setAttribute('aria-pressed', String(Number(b.dataset.size) === level));
+  }
+}
+let savedSize = 3;
+try {
+  savedSize = Number(localStorage.getItem('llsn-text-size')) || 3;
+} catch {
+  /* sem armazenamento: usa o padrão */
+}
+applyTextSize(Math.min(5, Math.max(1, savedSize)));
+for (const button of document.querySelectorAll<HTMLButtonElement>('.size-toggle button')) {
+  button.title = t('Text size {n} of 5', { n: button.dataset.size! });
+  button.addEventListener('click', () => {
+    const level = Number(button.dataset.size);
+    applyTextSize(level);
+    try {
+      localStorage.setItem('llsn-text-size', String(level));
+    } catch {
+      /* ignora */
+    }
+  });
+}
+
 // Pergunta uma vez se a API está no ar; a resposta é reaproveitada no clique do mapa.
 const apiOnline = checkApiHealth();
 
@@ -141,6 +169,15 @@ async function start(): Promise<void> {
         globe.highlight(currentLandmarkId ?? currentSiteId);
         // Mouse sobre um marco (sem clicar): busca a foto dele para o cartão aparecer.
         globe.onLandmarkHover = (id) => loadLandmarkPhoto(id);
+        // Clique fora de qualquer marco: fecha a janela do marco e tira a seleção.
+        globe.onBackgroundClick = () => {
+          if (!currentLandmarkId) return;
+          setLandmark(null);
+          globe?.highlight(null);
+          panel.showEmpty();
+          const right = document.getElementById('right-panel')!;
+          if (!right.classList.contains('collapsed')) right.querySelector<HTMLButtonElement>('.collapse-btn')!.click();
+        };
       } catch {
         globeFailed = true; // por exemplo, navegador sem WebGL
         globeElement.textContent = '';

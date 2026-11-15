@@ -24,6 +24,7 @@ export interface Landmark {
   image_query: string;
   history: string[];
   study_questions: string[];
+  wikipedia?: string; // artigo da Wikipédia (no idioma do site)
 }
 
 export interface LandmarkCatalog {
@@ -164,6 +165,16 @@ export function showLandmark(container: HTMLElement, landmark: Landmark, catalog
 
   nodes.push(el('h3', '', t('History')));
   for (const paragraph of landmark.history) nodes.push(el('p', 'edu-text', paragraph));
+
+  if (landmark.wikipedia) {
+    const wiki = el('p', 'wiki-link');
+    const link = el('a', '', t('Read more on Wikipedia: {name}', { name: landmark.name }));
+    link.href = landmark.wikipedia;
+    link.target = '_blank';
+    link.rel = 'noopener';
+    wiki.append(link);
+    nodes.push(wiki);
+  }
 
   nodes.push(el('h3', '', t('Questions for study')));
   const list = el('ul', 'study-list');

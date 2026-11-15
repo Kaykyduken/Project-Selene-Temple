@@ -51,6 +51,8 @@ export class MoonGlobe {
   private hoverLandmark: string | null = null; // marco sob o mouse (sem clicar)
   /** Avisado quando o mouse passa sobre um marco, para o site buscar a foto dele. */
   onLandmarkHover: (id: string) => void = () => {};
+  /** Clique que não acertou nenhum marco nem região (Lua vazia ou espaço). */
+  onBackgroundClick: () => void = () => {};
   private arrived = false; // o giro + zoom até o marco já terminou?
   private selectedId: string | null = null;
   private running = false;
@@ -174,6 +176,7 @@ export class MoonGlobe {
       const site = this.sites.find((s) => s.id === id);
       if (site) this.onSelect(site);
       else if (id && this.landmarks.some((m) => m.id === id)) this.onLandmark(id);
+      else this.onBackgroundClick();
     });
     canvas.addEventListener('pointermove', (e) => this.showTooltip(e));
     canvas.addEventListener('pointerleave', () => {

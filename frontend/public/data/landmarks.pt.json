@@ -21,7 +21,8 @@
    "study_questions": [
     "Por que uma planície no equador foi a preferida para o primeiro pouso?",
     "O que as primeiras amostras mudaram nas teorias sobre a origem da Lua?"
-   ]
+   ],
+   "wikipedia": "https://pt.wikipedia.org/wiki/Apollo_11"
   },
   {
    "id": "apollo-12",
@@ -41,7 +42,8 @@
    "study_questions": [
     "Por que o pouso de precisão era importante para as missões seguintes?",
     "O que equipamentos deixados na Lua ensinam sobre construir sistemas de superfície que durem muito?"
-   ]
+   ],
+   "wikipedia": "https://pt.wikipedia.org/wiki/Apollo_12"
   },
   {
    "id": "apollo-14",
@@ -61,7 +63,8 @@
    "study_questions": [
     "Por que os geólogos coletam o material lançado por uma grande cratera em vez de perfurar fundo?",
     "O que a dificuldade perto da cratera Cone mostra sobre navegar sem pontos de referência?"
-   ]
+   ],
+   "wikipedia": "https://pt.wikipedia.org/wiki/Apollo_14"
   },
   {
    "id": "apollo-15",
@@ -81,7 +84,8 @@
    "study_questions": [
     "Como o jipe lunar mudou o que podia ser estudado em uma única missão?",
     "Por que um pedaço da crosta original vale tanto para entender como a Lua se formou?"
-   ]
+   ],
+   "wikipedia": "https://pt.wikipedia.org/wiki/Apollo_15"
   },
   {
    "id": "apollo-16",
@@ -101,7 +105,8 @@
    "study_questions": [
     "Quais são os limites de interpretar a geologia só com imagens de órbita?",
     "Por que as terras altas são importantes para conhecer a idade da crosta lunar?"
-   ]
+   ],
+   "wikipedia": "https://pt.wikipedia.org/wiki/Apollo_16"
   },
   {
    "id": "apollo-17",
@@ -121,7 +126,8 @@
    "study_questions": [
     "Por que enviar um geólogo em vez de treinar um piloto em geologia?",
     "Como montanhas altas ao redor de um local afetam a luz do Sol e a linha de visada para a Terra?"
-   ]
+   ],
+   "wikipedia": "https://pt.wikipedia.org/wiki/Apollo_17"
   }
  ]
 }

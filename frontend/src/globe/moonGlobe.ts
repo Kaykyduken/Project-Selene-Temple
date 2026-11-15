@@ -28,6 +28,7 @@ const MARKER_COLOR = 0xf0a030; // laranja, igual aos marcadores do mapa
 const SELECTED_COLOR = 0xffffff;
 const LANDMARK_COLOR = 0x3fd0c9; // verde-água: marcos históricos (pousos Apollo)
 const START_DISTANCE = 3.0; // raio da Lua = 1
+const LANDMARK_ZOOM_DISTANCE = 1.75; // distância da câmera ao abrir um marco histórico (zoom)
 const DEM_EDGE_LAT_DEG = -80; // o modelo de relevo cobre de 80°S até o polo
 
 export class MoonGlobe {
@@ -42,6 +43,10 @@ export class MoonGlobe {
   private readonly baseColor = new Map<string, number>(); // cor normal de cada marcador
   private readonly tooltip: HTMLDivElement;
   private focusDirection: import('three').Vector3 | null = null;
+  private focusDistance: number | null = null; // zoom pedido junto com o giro (só nos marcos)
+  private readonly photoCard: HTMLDivElement; // foto oficial presa ao marco, na Lua
+  private photoFor: string | null = null; // id do marco dono da foto carregada
+  private arrived = false; // o giro + zoom até o marco já terminou?
   private selectedId: string | null = null;
   private running = false;
   private frame = 0;
@@ -137,7 +142,10 @@ export class MoonGlobe {
     this.tooltip = document.createElement('div');
     this.tooltip.className = 'globe-tooltip';
     this.tooltip.hidden = true;
-    container.replaceChildren(this.renderer.domElement, hint, credit, this.tooltip);
+    this.photoCard = document.createElement('div');
+    this.photoCard.className = 'globe-photo';
+    this.photoCard.hidden = true;
+    container.replaceChildren(this.renderer.domElement, hint, credit, this.photoCard, this.tooltip);
 
     // Clique x arrasto: só conta como clique se o mouse quase não saiu do lugar.
     const canvas = this.renderer.domElement;
@@ -211,7 +219,15 @@ export class MoonGlobe {
   /** Destaca uma região ou um marco (ou nada) e gira a Lua suavemente até ele. */
   highlight(id: string | null): void {
     if (this.selectedId) this.paint(this.selectedId, this.baseColor.get(this.selectedId) ?? MARKER_COLOR, 1);
+    if (id !== this.selectedId) {
+      // Outro alvo: a foto do marco anterior sai da tela.
+      this.photoFor = null;
+      this.photoCard.hidden = true;
+      this.photoCard.replaceChildren();
+    }
     this.selectedId = id;
+    this.arrived = false;
+    this.focusDistance = null;
     const site = this.sites.find((s) => s.id === id);
     if (site) {
       this.paint(site.id, SELECTED_COLOR, 2);
@@ -222,8 +238,10 @@ export class MoonGlobe {
     }
     const mark = this.landmarks.find((m) => m.id === id);
     if (mark) {
-      this.paint(mark.id, SELECTED_COLOR, 1.6);
-      this.focusDirection = this.toVector(mark.lat_deg, mark.lon_deg, 1).normalize(); // marco bem no centro da vista
+      this.paint(mark.id, SELECTED_COLOR, 0.8); // menor: a câmera fica bem perto
+      // Gira até o marco ficar no centro da vista e aproxima a câmera (zoom) ao mesmo tempo.
+      this.focusDirection = this.toVector(mark.lat_deg, mark.lon_deg, 1).normalize();
+      this.focusDistance = LANDMARK_ZOOM_DISTANCE;
     }
   }
 
@@ -234,16 +252,61 @@ export class MoonGlobe {
     marker.scale.setScalar(scale);
   }
 
-  /** Aproxima a direção da câmera da direção pedida, um pouco a cada quadro. */
+  /**
+   * Foto oficial do evento (acervo da NASA) para mostrar sobre a Lua, presa ao marco.
+   * Ela só aparece quando o giro + zoom até o marco termina.
+   */
+  setLandmarkPhoto(id: string, url: string, title: string): void {
+    if (id !== this.selectedId) return; // o usuário já escolheu outra coisa
+    const image = document.createElement('img');
+    image.src = url;
+    image.alt = title;
+    const caption = document.createElement('span');
+    caption.textContent = `${title} · NASA`;
+    this.photoCard.replaceChildren(image, caption);
+    this.photoFor = id;
+  }
+
+  /** Aproxima a direção (giro) e a distância (zoom) da câmera do alvo, um pouco a cada quadro. */
   private stepFocus(): void {
     if (!this.focusDirection) return;
     const distance = this.camera.position.length();
+    const target = this.focusDistance ?? distance;
     const current = this.camera.position.clone().normalize();
-    if (current.angleTo(this.focusDirection) < 0.003) {
+    if (current.angleTo(this.focusDirection) < 0.003 && Math.abs(distance - target) < 0.01) {
       this.focusDirection = null;
+      this.focusDistance = null;
+      this.arrived = true;
       return;
     }
-    this.camera.position.copy(current.lerp(this.focusDirection, 0.08).normalize().multiplyScalar(distance));
+    const next = distance + (target - distance) * 0.06;
+    this.camera.position.copy(current.lerp(this.focusDirection, 0.08).normalize().multiplyScalar(next));
+  }
+
+  /** Mantém a foto ao lado do marco na tela; esconde se o marco for para o outro lado da Lua. */
+  private placePhoto(): void {
+    const marker = this.photoFor && this.photoFor === this.selectedId ? this.markers.get(this.photoFor) : null;
+    if (!marker || !this.arrived) {
+      this.photoCard.hidden = true;
+      return;
+    }
+    const cameraDistance = this.camera.position.length();
+    const facing = marker.position.clone().normalize().dot(this.camera.position.clone().normalize());
+    if (facing < 1 / cameraDistance + 0.05) {
+      this.photoCard.hidden = true; // marco atrás do horizonte da Lua
+      return;
+    }
+    const screen = marker.position.clone().project(this.camera);
+    const width = this.container.clientWidth;
+    const height = this.container.clientHeight;
+    const x = ((screen.x + 1) / 2) * width;
+    const y = ((1 - screen.y) / 2) * height;
+    this.photoCard.hidden = false;
+    const cardWidth = this.photoCard.offsetWidth;
+    const cardHeight = this.photoCard.offsetHeight;
+    // À direita e acima do marco, sem sair da área da Lua 3D.
+    this.photoCard.style.left = `${Math.min(Math.max(x + 18, 8), width - cardWidth - 8)}px`;
+    this.photoCard.style.top = `${Math.min(Math.max(y - cardHeight - 18, 8), height - cardHeight - 8)}px`;
   }
 
   /** Ajusta o tamanho do desenho ao do contêiner. */
@@ -267,6 +330,7 @@ export class MoonGlobe {
       this.stepFocus();
       this.controls.update();
       this.renderer.render(this.scene, this.camera);
+      this.placePhoto();
     };
     loop();
   }

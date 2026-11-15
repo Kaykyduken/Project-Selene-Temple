@@ -32,7 +32,7 @@ export interface LandmarkCatalog {
   landmarks: Landmark[];
 }
 
-interface Photo {
+export interface Photo {
   title: string;
   date: string;
   preview: string; // endereço da imagem
@@ -50,7 +50,7 @@ function el<K extends keyof HTMLElementTagNameMap>(tag: K, className = '', text 
 }
 
 /** Busca as fotos do evento no acervo da NASA (resposta em JSON). */
-function fetchPhotos(query: string): Promise<Photo[]> {
+export function fetchPhotos(query: string): Promise<Photo[]> {
   const cached = cache.get(query);
   if (cached) return cached;
   const url = `https://images-api.nasa.gov/search?q=${encodeURIComponent(query)}&media_type=image&page_size=${MAX_PHOTOS}`;

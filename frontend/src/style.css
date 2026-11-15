@@ -212,3 +212,10 @@ body[data-mode='expert'] .edu-only-li { display: none; }
 .study-list { font-size: 0.9rem; padding-left: 1.1rem; margin: 0 0 0.75rem; }
 .study-list li { margin-bottom: 0.3rem; }
 @media (max-width: 900px) { .side-panel.collapsed { width: auto; height: 2.6rem; } }
+
+/* Foto oficial do evento presa ao marco histórico, na Lua 3D (aparece ao fim do zoom). */
+.globe-photo { position: absolute; width: 230px; background: #0b1220; border: 1px solid #3fd0c9; border-radius: 8px; overflow: hidden; pointer-events: none; box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6); animation: photo-in 0.4s ease-out; }
+.globe-photo img { display: block; width: 100%; height: 150px; object-fit: cover; }
+.globe-photo span { display: block; padding: 0.3rem 0.5rem; font-size: 0.72rem; color: var(--muted); }
+@keyframes photo-in { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .globe-photo { animation: none; } }

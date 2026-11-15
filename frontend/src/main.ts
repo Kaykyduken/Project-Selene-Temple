@@ -29,7 +29,7 @@ import { Favorites, MAX_FAVORITES } from './favorites';
 import { formatLatLon } from './panels/sitePanel';
 import type { SiteData } from './data/contract';
 import type { MoonGlobe } from './globe/moonGlobe';
-import { showLandmark } from './panels/landmarkPanel';
+import { fetchPhotos, showLandmark } from './panels/landmarkPanel';
 import type { Landmark, LandmarkCatalog } from './panels/landmarkPanel';
 
 // Pergunta uma vez se a API está no ar; a resposta é reaproveitada no clique do mapa.
@@ -160,7 +160,13 @@ async function start(): Promise<void> {
     showLandmark(panelElement, landmark, landmarkCatalog);
     expandRightPanel();
     await showView('globe'); // os pousos Apollo ficam fora do mapa polar: só aparecem na Lua 3D
-    globe?.highlight(id);
+    globe?.highlight(id); // gira e dá zoom até o marco
+    // Primeira foto oficial do evento: aparece sobre a Lua, ao lado do marco, quando o zoom termina.
+    fetchPhotos(landmark.image_query)
+      .then((photos) => {
+        if (photos[0]) globe?.setLandmarkPhoto(id, photos[0].preview, photos[0].title);
+      })
+      .catch(() => {}); // sem acervo: a Lua só gira e aproxima (a janela já avisa "No images")
   }
   const landmarkBox = document.getElementById('landmark-list')!;
   if (landmarks.length === 0) {

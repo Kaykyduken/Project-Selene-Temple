@@ -89,3 +89,21 @@ The same run also prints the Earth (e.g. 2026-11-24: az 356.593, el 10.260); the
 with the daily one at 00:00 UTC.
 
 Result: **Sun: script confirmed.** **Earth: still unconfirmed independently** (needs Felipe's web output for 399).
+
+## V1, fourth check: Earth, raw output of the Horizons web interface (2026-11-15)
+
+Felipe's web output for the Earth (399), kept in
+[`validation/horizons_web_earth_malapert_2026-11-15.txt`](validation/horizons_web_earth_malapert_2026-11-15.txt).
+Header checked: target Earth (399), centre Moon (301), user-defined site, geodetic 359.7632 E, -85.9872, 0 km,
+frame MEAN_ME, airless refraction, 31 daily rows 2026-11-15 to 2026-12-15, azimuth and elevation (quantity 4).
+
+Compared with the project script output (3 decimals): **all 31 rows match; maximum difference 0.0005 degrees**,
+which is the rounding of the printed script values. Examples: 2026-11-15 az 357.621 / el 0.456;
+2026-11-24 az 356.593 / el 10.260; 2026-12-09 az 2.499 / el -2.302.
+
+Result: **accepted** for the Earth. With the Sun (third check) the position inputs of the pipeline are validated
+against the Horizons web interface for Malapert Massif, 2026-11-15 to 2026-12-15.
+
+Note for the visibility criterion (open question for Alisson): the web table flags the Earth with `i` ("upper limb
+above the apparent horizon") when the centre is slightly below the horizon (e.g. 2026-12-03, el -0.375). The Earth
+disc is about 1.9 degrees wide, so a centre-based and a limb-based criterion give different results near the horizon.

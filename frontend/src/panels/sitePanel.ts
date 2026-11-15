@@ -11,7 +11,7 @@
 import type { Metric, Mode, ProvenanceClass, SiteData, SiteSummary } from '../data/contract';
 import { marginChart } from '../charts/marginChart';
 import { panoramaChart } from '../charts/panoramaChart';
-import { margins } from '../charts/svg';
+import { downloadTool } from './downloadTool';
 
 /** Texto e símbolo de cada classe de origem (nunca só cor: acessibilidade). */
 const CLASS_LABEL: Record<ProvenanceClass, string> = {
@@ -50,32 +50,12 @@ function metricRow(label: string, metric: Metric, unit: string): HTMLElement {
   return row;
 }
 
-/** Faz o navegador baixar um texto como arquivo. */
-function download(filename: string, text: string, type: string): void {
-  const url = URL.createObjectURL(new Blob([text], { type }));
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = filename;
-  link.click();
-  URL.revokeObjectURL(url);
-}
-
-/** Série temporal em CSV: uma linha por instante, com a margem sobre o relevo. */
-function toCsv(data: SiteData): string {
-  const m = margins(data);
-  const head = 't_utc,sun_az_deg,sun_el_deg,sun_margin_deg,sun_visible,earth_az_deg,earth_el_deg,earth_margin_deg,earth_visible';
-  const lines = data.series.map((p, i) =>
-    [p.t_utc, p.sun.az_deg, p.sun.el_deg, m.sun[i].toFixed(3), p.sun.visible,
-     p.earth.az_deg, p.earth.el_deg, m.earth[i].toFixed(3), p.earth.visible].join(','),
-  );
-  const note = data.fictitious ? '# FICTITIOUS DATA\n' : '';
-  return `${note}${head}\n${lines.join('\n')}\n`;
-}
-
 export class SitePanel {
   private mode: Mode = 'educational';
   private current: SiteData | null = null;
   private other: SiteData | null = null; // região escolhida para comparar
+  /** Ligação com os Favoritos (preenchida pelo main.ts). */
+  favorites: { has: (id: string) => boolean; toggle: (data: SiteData) => string | null } | null = null;
 
   /**
    * sites: lista de regiões (para o seletor "Compare with").
@@ -139,6 +119,21 @@ export class SitePanel {
 
     nodes.push(el('h2', '', data.site.name));
     nodes.push(el('p', 'coords', formatLatLon(data.site.lat_deg, data.site.lon_deg)));
+    if (data.site.custom && this.favorites) {
+      // Botão de favorito: só os pontos livres precisam, porque só eles são descartados.
+      const fav = this.favorites;
+      const saved = fav.has(data.site.id);
+      const star = el('button', 'favorite-button', saved ? '★ In Favorites (click to remove)' : '☆ Add to Favorites');
+      star.type = 'button';
+      star.setAttribute('aria-pressed', String(saved));
+      const note = el('p', 'muted', saved ? 'This point is kept.' : 'Without this, the result is discarded when you click another point.');
+      star.addEventListener('click', () => {
+        const problem = fav.toggle(data);
+        if (problem) note.textContent = problem;
+        else this.render();
+      });
+      nodes.push(star, note);
+    }
     if (data.site.custom) {
       nodes.push(el('p', 'muted', 'Point selected on the map, computed live from the LOLA terrain model and JPL Horizons.'));
     } else if (!data.site.coordinate_origin.verified) {
@@ -240,16 +235,9 @@ export class SitePanel {
       nodes.push(list);
     }
 
-    nodes.push(el('h3', '', 'Download'));
-    const actions = el('div', 'actions');
-    const csv = el('button', '', 'Time series (CSV)');
-    csv.type = 'button';
-    csv.addEventListener('click', () => download(`${data.site.id}.csv`, toCsv(data), 'text/csv'));
-    const json = el('button', '', 'Full data (JSON)');
-    json.type = 'button';
-    json.addEventListener('click', () => download(`${data.site.id}.json`, JSON.stringify(data, null, 1), 'application/json'));
-    actions.append(csv, json);
-    nodes.push(actions);
+    nodes.push(el('h3', '', 'Download data'));
+    nodes.push(el('p', 'muted', 'Choose which data of this site to download. Each item shows its origin.'));
+    nodes.push(downloadTool(data));
     return nodes;
   }
 

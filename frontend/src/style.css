@@ -123,6 +123,24 @@ main { flex: 1; display: flex; min-height: 0; }
 .compare th:first-child { text-align: left; color: var(--muted); font-weight: 400; }
 .compare tr:first-child th { font-weight: 600; vertical-align: bottom; }
 
+/* Favoritos */
+.favorite-button { background: transparent; color: var(--text); font: inherit; font-size: 0.85rem; border: 1px solid #2a3344; border-radius: 6px; padding: 0.4rem 0.7rem; cursor: pointer; margin-bottom: 0.25rem; }
+.favorite-button[aria-pressed='true'] { border-color: #e7c84a; color: #e7c84a; }
+.favorite-button:hover { border-color: var(--ok); }
+.fav-list { list-style: none; margin: 0; padding: 0; }
+.fav-list li { display: flex; gap: 0.25rem; margin-bottom: 0.25rem; }
+.fav-list button { background: transparent; color: var(--text); font: inherit; font-size: 0.85rem; border: 1px solid #2a3344; border-radius: 6px; padding: 0.4rem 0.6rem; cursor: pointer; }
+.fav-list button:first-child { flex: 1; text-align: left; }
+.fav-list button:hover { border-color: var(--ok); }
+.fav-list button:focus-visible, .favorite-button:focus-visible { outline: 2px solid var(--ok); outline-offset: 2px; }
+.swatch-fav { border-radius: 50%; border: 2px solid #e7c84a; background: rgba(231, 200, 74, 0.5); }
+
+/* Ferramenta de download (modo Expert) */
+.download-tool label { display: grid; grid-template-columns: auto 1fr; gap: 0 0.5rem; align-items: start; padding: 0.3rem 0; font-size: 0.85rem; cursor: pointer; }
+.download-tool small { grid-column: 2; color: var(--muted); }
+.download-tool .actions { margin-top: 0.5rem; flex-wrap: nowrap; }
+.download-tool .compare-select { width: auto; flex: 1; }
+
 /* Gráficos */
 .chart { position: relative; margin: 0.25rem 0 0.5rem; }
 .chart svg { display: block; width: 100%; height: auto; }

@@ -23,6 +23,9 @@ import { SitePanel } from './panels/sitePanel';
 import { loadSiteCatalog, loadSiteData, loadSummary } from './data/loader';
 import type { Mode, SiteSummary } from './data/contract';
 import { analyzePoint, checkApiHealth } from './api';
+import { Favorites, MAX_FAVORITES } from './favorites';
+import { formatLatLon } from './panels/sitePanel';
+import type { SiteData } from './data/contract';
 
 // Pergunta uma vez se a API está no ar; a resposta é reaproveitada no clique do mapa.
 const apiOnline = checkApiHealth();
@@ -57,6 +60,69 @@ async function start(): Promise<void> {
     });
   }
 
+  // ---------- Favoritos ----------
+  // Pontos livres guardados pelo usuário. Cada um tem um marcador amarelo fixo no mapa.
+  const favorites = new Favorites();
+  const favoriteMarkers = L.layerGroup().addTo(map);
+  const favoriteBox = document.getElementById('favorites')!;
+
+  function openFavorite(data: SiteData): void {
+    lastRequest++;
+    clearCustomMarker();
+    siteLayer.highlight(null);
+    siteList.highlight(null);
+    map.flyTo([data.site.lat_deg, data.site.lon_deg], Math.max(map.getZoom(), 4));
+    panel.showSite(data); // usa os dados guardados: não recalcula
+  }
+
+  function drawFavorites(): void {
+    favoriteMarkers.clearLayers();
+    if (favorites.list().length === 0) {
+      const empty = document.createElement('p');
+      empty.className = 'muted';
+      empty.textContent = 'No favorite points yet. Analyse a point on the map and add it here to keep it.';
+      favoriteBox.replaceChildren(empty);
+      return;
+    }
+    const list = document.createElement('ul');
+    list.className = 'fav-list';
+    for (const data of favorites.list()) {
+      L.circleMarker([data.site.lat_deg, data.site.lon_deg], { radius: 6, color: '#e7c84a', weight: 2, fillColor: '#e7c84a', fillOpacity: 0.5 })
+        .bindTooltip(data.site.name)
+        .on('click', (e) => {
+          L.DomEvent.stopPropagation(e);
+          openFavorite(data);
+        })
+        .addTo(favoriteMarkers);
+      const item = document.createElement('li');
+      const open = document.createElement('button');
+      open.type = 'button';
+      open.textContent = data.site.name;
+      open.addEventListener('click', () => openFavorite(data));
+      const remove = document.createElement('button');
+      remove.type = 'button';
+      remove.textContent = '✕';
+      remove.setAttribute('aria-label', `Remove ${data.site.name} from Favorites`);
+      remove.addEventListener('click', () => favorites.remove(data.site.id));
+      item.append(open, remove);
+      list.append(item);
+    }
+    favoriteBox.replaceChildren(list);
+  }
+  favorites.onChange = drawFavorites;
+
+  // O painel usa isto para desenhar o botão de estrela e para adicionar/remover.
+  panel.favorites = {
+    has: (id) => favorites.has(id),
+    toggle: (data) => {
+      if (favorites.has(data.site.id)) {
+        favorites.remove(data.site.id);
+        return null;
+      }
+      return favorites.add(data) ? null : `Favorites is full (${MAX_FAVORITES} points). Remove one first.`;
+    },
+  };
+
   // Guarda qual foi o último pedido: se o usuário clicar em duas regiões rápido,
   // a resposta atrasada da primeira não pode sobrescrever a da segunda.
   let lastRequest = 0;
@@ -82,6 +148,8 @@ async function start(): Promise<void> {
     void selectSite(site);
   });
 
+  drawFavorites();
+
   // Clique em qualquer outro lugar do mapa → ponto livre.
   // Com a API ligada (computador da equipe), o ponto é calculado ao vivo.
   // Sem a API (site publicado), mostramos só as coordenadas e "no data".
@@ -106,7 +174,12 @@ async function start(): Promise<void> {
     panel.showCustomPoint(lat, lng, 'Computing the horizon and the visibility… this takes a few seconds.');
     try {
       const data = await analyzePoint(lat, lng);
+      // Identifica o ponto pelas coordenadas, para os Favoritos e para o nome dos arquivos baixados.
+      data.site.id = `point_${Math.abs(lat).toFixed(4)}S_${(((lng % 360) + 360) % 360).toFixed(4)}E`;
+      data.site.name = `Point ${formatLatLon(lat, lng)}`;
       // Se o usuário clicou em outro lugar enquanto calculava, descartamos este resultado.
+      // O resultado NÃO é guardado em lugar nenhum: fica só no painel. Ao clicar em
+      // outro ponto ele é substituído e se perde, a menos que esteja nos Favoritos.
       if (request === lastRequest) panel.showSite(data);
     } catch (err) {
       if (request === lastRequest) panel.showCustomPoint(lat, lng, `No data: ${(err as Error).message}`, true);

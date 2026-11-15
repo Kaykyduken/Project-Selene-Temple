@@ -8,6 +8,8 @@ Milestones in sequence, without fixed hours: only the order matters. Kayky is th
 - M2: done; region positions are real (USGS grids), visibility numbers still fictitious
 - M3: Horizons client validated on Kayky's machine against the reference table; Felipe's independent table still pending
 - M4: horizon mask (`pipeline/horizon.py`) tested with analytic cases and the real 85°S DEM; `pipeline/build_site.py` writes real site files. Real data generated for the 9 regions (2027-01-01, 30 days, hourly). Pending: Alisson's review
+- Favorites: a custom point's result is discarded when another point is clicked, unless it was added to Favorites (kept in the browser's localStorage, up to 12 points, with a marker on the map)
+- Expert download tool: choose which data to download (Sun position, Earth position, terrain horizon, visibility, summary) as CSV or JSON; each item names its origin (JPL Horizons API, LOLA terrain model from NASA PDS, or derived)
 - Custom points: live analysis through the local API (`/analyze`), for demos on the team's machine; the static site shows "no data"
 - M6 (in progress): Educational / Expert toggle with the same numbers; region list doubles as an all-region comparison (sortable Sun % and Earth %); side-by-side comparison of two regions; CSV and JSON download in Expert mode. Educational texts are drafts pending Raphaela's review. Comparing dates is not implemented
 - M5: site panel shows real data with two charts (margin above the terrain over time; 360° terrain panorama with Sun and Earth paths)

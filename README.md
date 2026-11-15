@@ -89,6 +89,15 @@ and shows "API: offline (static mode)".
 - API not running: the badge shows "API: offline (static mode)", clicking the map does not compute points, and Favorites
   are kept in the browser only.
 
+## Deployment (Vercel)
+
+`vercel.json` at the repository root deploys the site as one Vercel project with a single service, `frontend`
+(Vite, folder `frontend/`), served at `/`. The site is fully static: the region results are pre-computed JSON in
+`frontend/public/data`, so the public site needs no server. The FastAPI backend and the `pipeline/` scripts are **not**
+deployed: the live analysis tool needs the 20 m terrain file, which is too large for a serverless function, and the
+API stores Favorites in a local file. On the public site the badge reads "API: offline (static mode)" and Favorites
+use the browser's local storage.
+
 ## Local setup
 
 Requirements: Node.js 20.19+ (or 22.12+) and Python 3.10+.

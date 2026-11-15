@@ -6,16 +6,12 @@
 // Escolher uma região em qualquer lugar atualiza os outros dois.
 
 import 'leaflet/dist/leaflet.css';
-// Fontes embutidas no site (funcionam sem internet):
-//   Montserrat → modo Educational
-//   Carlito    → modo Expert, como substituta livre da Calibri (mesmas medidas).
-//                A Calibri é da Microsoft e não pode ser distribuída com o site;
-//                quem tem a Calibri instalada (Windows/Office) vê a própria Calibri.
+// Fonte do modo Educational, embutida no site (funciona sem internet).
+// O modo Expert usa Calibri quando o computador tem (Windows/Office) e Arial
+// nos demais; essas duas são fontes do sistema e não vão junto com o site.
 import '@fontsource/montserrat/400.css';
 import '@fontsource/montserrat/600.css';
 import '@fontsource/montserrat/700.css';
-import '@fontsource/carlito/400.css';
-import '@fontsource/carlito/700.css';
 import './style.css';
 import L from 'leaflet';
 import { createPolarMap } from './map/polarMap';

@@ -14,9 +14,10 @@
   background: var(--bg);
 }
 
-/* Fonte por modo: Montserrat no Educational, Calibri (ou Carlito) no Expert. */
+/* Fonte por modo: Montserrat no Educational; Calibri no Expert, ou Arial onde não houver Calibri.
+   (Liberation Sans e Helvetica são as equivalentes da Arial em Linux e macOS.) */
 body { font-family: 'Montserrat', system-ui, sans-serif; }
-body[data-mode='expert'] { font-family: Calibri, 'Carlito', system-ui, sans-serif; font-size: 1.06rem; }
+body[data-mode='expert'] { font-family: Calibri, Arial, 'Liberation Sans', Helvetica, sans-serif; }
 button, select { font-family: inherit; }
 
 * { box-sizing: border-box; }

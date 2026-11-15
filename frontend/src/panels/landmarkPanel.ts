@@ -41,7 +41,7 @@ export interface Photo {
   page: string; // página da foto no acervo da NASA
 }
 
-const MAX_PHOTOS = 10;
+const MAX_PHOTOS = 100; // máximo que a API da NASA devolve por página
 
 /** Em português: títulos das fotos traduzidos (por nasa_id). Carregado uma vez. */
 const translatedTitles: Promise<Record<string, string>> =
@@ -93,6 +93,40 @@ export function fetchPhotos(query: string): Promise<Photo[]> {
   return request;
 }
 
+/** Versão maior da foto: o acervo guarda a mesma imagem em vários tamanhos (~thumb, ~medium, ~large, ~orig). */
+function largeUrl(url: string): string {
+  return url.replace(/~(thumb|small|medium)\./, '~large.');
+}
+
+/** Foto ampliada sobre a página. Fecha com clique, Esc ou o botão ×. */
+function lightbox(photo: Photo): void {
+  const overlay = el('div', 'lightbox');
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
+  const image = el('img');
+  image.alt = photo.title;
+  image.src = largeUrl(photo.preview);
+  image.addEventListener('error', () => {
+    if (image.src !== photo.preview) image.src = photo.preview; // sem versão grande: usa a pequena
+  }, { once: true });
+  const caption = el('p', 'lightbox-caption', photo.date ? `${photo.title} (${photo.date}) · NASA` : `${photo.title} · NASA`);
+  const close = el('button', 'lightbox-close', '×');
+  close.type = 'button';
+  close.setAttribute('aria-label', t('Close'));
+  const onKey = (e: KeyboardEvent): void => {
+    if (e.key === 'Escape') done();
+  };
+  const done = (): void => {
+    document.removeEventListener('keydown', onKey);
+    overlay.remove();
+  };
+  overlay.addEventListener('click', done);
+  document.addEventListener('keydown', onKey);
+  overlay.append(image, caption, close);
+  document.body.append(overlay);
+  close.focus();
+}
+
 /** Galeria: uma foto por vez, com botões anterior/próxima e contador. */
 function gallery(landmark: Landmark): HTMLElement {
   const box = el('div', 'gallery');
@@ -132,6 +166,9 @@ function gallery(landmark: Landmark): HTMLElement {
         index = (index + 1) % photos.length;
         show();
       });
+      image.title = t('Click to enlarge');
+      image.style.cursor = 'zoom-in';
+      image.addEventListener('click', () => lightbox(photos[index]));
       frame.append(image);
       const controls = el('div', 'gallery-controls');
       controls.append(prev, counter, next);

@@ -142,6 +142,8 @@ export const PT: Record<string, string> = {
   "Questions for study": "Perguntas para estudo",
   "Read more on Wikipedia: {name}": "Saiba mais na Wikipédia: {name}",
   "Text size": "Tamanho do texto",
+  "Click to enlarge": "Clique para ampliar",
+  "Close": "Fechar",
   "Text size {n} of 5": "Tamanho do texto {n} de 5",
   "Coordinates: {source}. {note} No Sun/Earth horizon analysis here: the terrain model covers only 80°S to the pole.": "Coordenadas: {source}. {note} Aqui não há análise de Sol e Terra sobre o horizonte: o modelo de relevo cobre apenas de 80°S até o polo.",
   "Drag to rotate · scroll to zoom · click a marker": "Arraste para girar · role para aproximar · clique em um marcador",

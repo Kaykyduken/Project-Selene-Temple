@@ -290,3 +290,8 @@ body[data-mode='expert'] { --text: #ffffff; --muted: #ffffff; }
 .lightbox img { max-width: 100%; max-height: 82vh; object-fit: contain; border-radius: 6px; }
 .lightbox-caption { color: #fff; margin: 0; text-align: center; max-width: 60rem; }
 .lightbox-close { position: absolute; top: 0.75rem; right: 1rem; width: 2.5rem; height: 2.5rem; border-radius: 50%; border: 1px solid #fff; background: transparent; color: #fff; font-size: 1.6rem; line-height: 1; cursor: pointer; }
+
+/* Nomes dos locais sobre a Lua 3D */
+.globe-labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.globe-label { position: absolute; left: 0; top: 0; white-space: nowrap; font-size: 0.72rem; color: #fff; background: rgba(8, 12, 20, 0.62); padding: 0.05rem 0.35rem; border-radius: 4px; text-shadow: 0 0 3px #000; border-left: 2px solid #f0a030; }
+.globe-label-landmark { border-left-color: #3fd0c9; }

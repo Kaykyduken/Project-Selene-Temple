@@ -53,6 +53,8 @@ export class MoonGlobe {
   onLandmarkHover: (id: string) => void = () => {};
   /** Clique que não acertou nenhum marco nem região (Lua vazia ou espaço). */
   onBackgroundClick: () => void = () => {};
+  private readonly labelLayer: HTMLDivElement; // nomes dos locais, sobre a Lua
+  private readonly labels: { id: string; el: HTMLSpanElement; marker: import('three').Mesh; landmark: boolean }[] = [];
   private arrived = false; // o giro + zoom até o marco já terminou?
   private selectedId: string | null = null;
   private running = false;
@@ -99,6 +101,15 @@ export class MoonGlobe {
       ),
     );
 
+    // Fronteira de cada região candidata (o mesmo contorno do mapa polar), um pouco acima do solo.
+    for (const site of sites) {
+      if (!site.outline || site.outline.length < 3) continue;
+      const points = site.outline.map(([lat, lon]) => this.toVector(lat, lon, 1.004));
+      this.scene.add(
+        new three.LineLoop(new three.BufferGeometry().setFromPoints(points), new three.LineBasicMaterial({ color: MARKER_COLOR })),
+      );
+    }
+
     // Um marcador visível (pequeno) e uma área de clique invisível (maior) por região.
     for (const site of sites) {
       const position = this.toVector(site.lat_deg, site.lon_deg, 1.012);
@@ -129,6 +140,21 @@ export class MoonGlobe {
       this.scene.add(hit);
       this.hitAreas.push(hit);
     }
+
+    // Nomes dos locais (regiões e marcos): rótulos HTML que acompanham os marcadores.
+    this.labelLayer = document.createElement('div');
+    this.labelLayer.className = 'globe-labels';
+    const addLabel = (id: string, name: string, landmark: boolean): void => {
+      const marker = this.markers.get(id);
+      if (!marker) return;
+      const el = document.createElement('span');
+      el.className = landmark ? 'globe-label globe-label-landmark' : 'globe-label';
+      el.textContent = name;
+      this.labelLayer.append(el);
+      this.labels.push({ id, el, marker, landmark });
+    };
+    for (const site of sites) addLabel(site.id, site.name, false);
+    for (const mark of landmarks) addLabel(mark.id, mark.name, true);
 
     this.raycaster = new three.Raycaster();
 
@@ -162,7 +188,7 @@ export class MoonGlobe {
     this.photoCard = document.createElement('div');
     this.photoCard.className = 'globe-photo';
     this.photoCard.hidden = true;
-    container.replaceChildren(this.renderer.domElement, hint, credit, this.photoCard, this.tooltip);
+    container.replaceChildren(this.renderer.domElement, this.labelLayer, hint, credit, this.photoCard, this.tooltip);
 
     // Clique x arrasto: só conta como clique se o mouse quase não saiu do lugar.
     const canvas = this.renderer.domElement;
@@ -333,6 +359,37 @@ export class MoonGlobe {
     this.photoCard.style.top = `${Math.min(Math.max(y - cardHeight - 18, 8), height - cardHeight - 8)}px`;
   }
 
+  /**
+   * Posiciona os nomes ao lado dos marcadores. Esconde os que ficam atrás da Lua e,
+   * entre os que se sobreporiam na tela, mantém só o mais importante
+   * (o selecionado, depois as regiões, depois os marcos).
+   */
+  private placeLabels(): void {
+    const width = this.container.clientWidth;
+    const height = this.container.clientHeight;
+    const cameraDistance = this.camera.position.length();
+    const cameraDirection = this.camera.position.clone().normalize();
+    const order = [...this.labels].sort((a, b) => Number(b.id === this.selectedId) - Number(a.id === this.selectedId) || Number(a.landmark) - Number(b.landmark));
+    const taken: { x: number; y: number; w: number; h: number }[] = [];
+    for (const label of order) {
+      const facing = label.marker.position.clone().normalize().dot(cameraDirection);
+      let visible = facing > 1 / cameraDistance + 0.05;
+      if (visible) {
+        const screen = label.marker.position.clone().project(this.camera);
+        const x = ((screen.x + 1) / 2) * width + 10;
+        const y = ((1 - screen.y) / 2) * height - 9;
+        const w = label.el.offsetWidth || 80;
+        const h = label.el.offsetHeight || 18;
+        visible = !taken.some((o) => x < o.x + o.w && o.x < x + w && y < o.y + o.h && o.y < y + h);
+        if (visible) {
+          taken.push({ x, y, w, h });
+          label.el.style.transform = `translate(${x}px, ${y}px)`;
+        }
+      }
+      label.el.style.visibility = visible ? 'visible' : 'hidden';
+    }
+  }
+
   /** Ajusta o tamanho do desenho ao do contêiner. */
   resize(): void {
     const width = this.container.clientWidth;
@@ -355,6 +412,7 @@ export class MoonGlobe {
       this.controls.update();
       this.renderer.render(this.scene, this.camera);
       this.placePhoto();
+      this.placeLabels();
     };
     loop();
   }

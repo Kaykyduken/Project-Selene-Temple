@@ -9,6 +9,10 @@
     <header class="topbar">
       <h1>Lunar Landing Site Navigator</h1>
       <div class="topbar-right">
+        <div class="mode-toggle view-toggle edu-only" role="group" aria-label="Map view">
+          <button type="button" data-view="map" aria-pressed="true">Map</button>
+          <button type="button" data-view="globe" aria-pressed="false">3D Moon</button>
+        </div>
         <div class="mode-toggle" role="group" aria-label="Presentation mode">
           <button type="button" data-mode="educational" aria-pressed="true">Educational</button>
           <button type="button" data-mode="expert" aria-pressed="false">Expert</button>
@@ -32,6 +36,7 @@
         <p id="basemap-status" class="muted"></p>
       </nav>
       <div id="map" aria-label="Lunar south pole map, polar stereographic projection"></div>
+      <div id="globe" class="globe is-hidden" aria-label="3D Moon with the candidate regions"></div>
       <aside id="site-panel" class="side-panel site-panel" aria-live="polite" aria-label="Selected site"></aside>
     </main>
     <footer class="site-footer">

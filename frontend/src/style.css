@@ -167,3 +167,14 @@ main { flex: 1; display: flex; min-height: 0; }
 
 /* Rodapé com o aviso obrigatório (projeto independente, sem aval da NASA). */
 .site-footer { padding: 0.35rem 1rem; font-size: 0.75rem; color: var(--muted); border-top: 1px solid #2a3344; text-align: center; }
+
+/* Lua 3D (modo Educational): troca de vista com o mapa; só aparece no modo Educational. */
+.is-hidden { display: none !important; }
+body[data-mode='expert'] .edu-only { display: none; }
+.globe { flex: 1; min-width: 0; position: relative; overflow: hidden; background: radial-gradient(circle at 50% 50%, #151d2e 0%, #05080f 70%); }
+.globe canvas { display: block; width: 100%; height: 100%; cursor: grab; }
+.globe-hint { position: absolute; top: 0.75rem; left: 0.75rem; font-size: 0.8rem; color: var(--muted); background: rgba(10, 14, 22, 0.7); padding: 0.4rem 0.6rem; border-radius: 6px; pointer-events: none; }
+.globe-ring { color: #6aa6ff; }
+.globe-credit { position: absolute; bottom: 0.4rem; left: 0.75rem; font-size: 0.7rem; color: var(--muted); pointer-events: none; }
+.globe-tooltip { position: absolute; background: #0b1220; color: var(--text); border: 1px solid #2a3344; border-radius: 6px; padding: 0.2rem 0.5rem; font-size: 0.8rem; pointer-events: none; white-space: nowrap; }
+.view-toggle { margin-right: 0.25rem; }

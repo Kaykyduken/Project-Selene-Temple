@@ -26,6 +26,7 @@ import { analyzePoint, checkApiHealth } from './api';
 import { Favorites, MAX_FAVORITES } from './favorites';
 import { formatLatLon } from './panels/sitePanel';
 import type { SiteData } from './data/contract';
+import type { MoonGlobe } from './globe/moonGlobe';
 
 // Pergunta uma vez se a API está no ar; a resposta é reaproveitada no clique do mapa.
 const apiOnline = checkApiHealth();
@@ -51,14 +52,56 @@ async function start(): Promise<void> {
   const panel = new SitePanel(document.getElementById('site-panel')!, catalog.sites, loadSiteData);
 
   // Botões Educational / Expert no topo: trocam a apresentação, não os números.
-  const modeButtons = document.querySelectorAll<HTMLButtonElement>('.mode-toggle button');
+  const modeButtons = document.querySelectorAll<HTMLButtonElement>('.mode-toggle button[data-mode]');
   for (const button of modeButtons) {
     button.addEventListener('click', () => {
       panel.setMode(button.dataset.mode as Mode);
       document.body.dataset.mode = button.dataset.mode; // o CSS troca a fonte conforme o modo
       for (const b of modeButtons) b.setAttribute('aria-pressed', String(b === button));
+      // A Lua 3D é só do modo Educational: no Expert voltamos ao mapa.
+      if (button.dataset.mode === 'expert') void showView('map');
     });
   }
+
+  // ---------- Vista: mapa ou Lua 3D (só no modo Educational) ----------
+  const mapElement = document.getElementById('map')!;
+  const globeElement = document.getElementById('globe')!;
+  const viewButtons = document.querySelectorAll<HTMLButtonElement>('.view-toggle button');
+  let globe: MoonGlobe | null = null;
+  let globeFailed = false;
+
+  async function showView(view: 'map' | 'globe'): Promise<void> {
+    for (const b of viewButtons) b.setAttribute('aria-pressed', String(b.dataset.view === view));
+    if (view === 'map') {
+      globe?.stop();
+      globeElement.classList.add('is-hidden');
+      mapElement.classList.remove('is-hidden');
+      map.invalidateSize(); // o mapa estava escondido: recalcula o tamanho
+      return;
+    }
+    mapElement.classList.add('is-hidden');
+    globeElement.classList.remove('is-hidden');
+    if (!globe && !globeFailed) {
+      globeElement.textContent = 'Loading the 3D Moon…';
+      try {
+        // Import dinâmico: o Three.js só é baixado agora.
+        const { MoonGlobe: Globe } = await import('./globe/moonGlobe');
+        globe = await Globe.create(globeElement, catalog.sites, (site) => void selectSite(site));
+        if (currentSiteId) globe.highlight(currentSiteId);
+      } catch {
+        globeFailed = true; // por exemplo, navegador sem WebGL
+        globeElement.textContent = '';
+        globeElement.classList.add('is-hidden');
+        mapElement.classList.remove('is-hidden');
+        map.invalidateSize();
+        for (const b of viewButtons) b.setAttribute('aria-pressed', String(b.dataset.view === 'map'));
+        basemapStatus.textContent = 'The 3D Moon needs WebGL, which is not available in this browser. Showing the map instead.';
+        return;
+      }
+    }
+    globe?.start();
+  }
+  for (const b of viewButtons) b.addEventListener('click', () => void showView(b.dataset.view as 'map' | 'globe'));
 
   // ---------- Favoritos ----------
   // Pontos livres guardados pelo usuário. Cada um tem um marcador amarelo fixo no mapa.
@@ -71,6 +114,7 @@ async function start(): Promise<void> {
     clearCustomMarker();
     siteLayer.highlight(null);
     siteList.highlight(null);
+    globe?.highlight(null);
     map.flyTo([data.site.lat_deg, data.site.lon_deg], Math.max(map.getZoom(), 4));
     panel.showSite(data); // usa os dados guardados: não recalcula
   }
@@ -135,12 +179,15 @@ async function start(): Promise<void> {
   // Guarda qual foi o último pedido: se o usuário clicar em duas regiões rápido,
   // a resposta atrasada da primeira não pode sobrescrever a da segunda.
   let lastRequest = 0;
+  let currentSiteId: string | null = null; // região aberta, para destacar na Lua 3D ao abri-la
 
   async function selectSite(site: SiteSummary): Promise<void> {
     const request = ++lastRequest;
+    currentSiteId = site.id;
     clearCustomMarker();
     siteLayer.highlight(site.id);
     siteList.highlight(site.id);
+    globe?.highlight(site.id);
     panel.showLoading(site.name);
     try {
       const data = await loadSiteData(site.id);

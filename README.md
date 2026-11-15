@@ -61,6 +61,34 @@ In line with the Space Apps rules, this team uses AI as a tool, not as the autho
 - Every source file with AI-generated code carries a header comment saying so (`AI-assisted: first draft written by Claude (Anthropic), reviewed by the team.`). Files so far: everything under `frontend/src/`, `frontend/vite.config.ts`, `backend/app/main.py` and everything under `pipeline/`.
 - Content marked **"FICTITIOUS DATA"** is placeholder data; missing values are shown as "no data".
 
+## Live site-analysis tool (custom points)
+
+Besides the nine pre-computed regions, the site can analyse **any point south of 80°S**: click the map and the tool
+computes that point's terrain horizon and the visibility of the Sun and the Earth over the same period used for the
+regions, so the comparison is fair. The result opens in the same panels (Educational or Expert) and can be kept in
+**Favorites**. This tool runs only on a machine prepared as below; **the published static site does not include it**
+and shows "API: offline (static mode)".
+
+**What the tool needs**
+
+| Requirement | Detail |
+|---|---|
+| Local API running | `uvicorn app.main:app --port 8000` (see step 2 below). The front end reaches it through the `/api` proxy of `npm run dev` |
+| Python packages | `pip install -r backend/requirements.txt -r pipeline/requirements.txt` (adds numpy, rasterio, pyproj, Pillow, pyshp, shapely) |
+| Terrain data (DEM) | `data/raw/dem/LDEM_80S_20M.JP2` **and its `.LBL` label file in the same folder**. The label holds the scale factor (0.5) that turns pixel values into metres; without it all heights come out doubled. Download both from the [LOLA GDR polar archive](https://imbrium.mit.edu/BROWSE/LOLA_GDR/POLAR/SOUTH_POLE) (PDS), or set another path with the environment variable `LLSN_DEM` |
+| Internet access | Each new point queries the JPL Horizons API (Sun and Earth positions). Results are cached in `data/cache/`, so repeating a point is fast |
+| Allowed area | Latitude from −90° to −80° (the 80°S DEM ends there). Points outside return a clear message instead of a result |
+| Fixed parameters | Observer height 2 m, scan radius 150 km, horizon every 1° of azimuth, period read from the pre-computed region files |
+| Time | A new point takes several seconds (up to 90 s on a slow connection) |
+| Not committed | `data/raw/` and `data/cache/` stay out of Git (large files); `data/favorites.json` is created by the API |
+
+**Behaviour when something is missing**
+
+- No DEM file: the API answers "DEM file not found" and the site keeps working with the regions.
+- No internet or JPL Horizons down: the point is not computed and the message says Horizons could not be reached.
+- API not running: the badge shows "API: offline (static mode)", clicking the map does not compute points, and Favorites
+  are kept in the browser only.
+
 ## Local setup
 
 Requirements: Node.js 20.19+ (or 22.12+) and Python 3.10+.
@@ -77,14 +105,12 @@ npm run dev          # opens on http://localhost:5173
 
 ```bash
 cd backend
-python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
+python3 -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -r requirements.txt -r ../pipeline/requirements.txt
 uvicorn app.main:app --reload --port 8000           # docs on http://localhost:8000/docs
 ```
 
-With the API running, clicking any point south of 80°S on the map computes its horizon and visibility live
-(`GET /analyze`). This needs the pipeline packages (`pip install -r ../pipeline/requirements.txt`), the DEM in
-`data/raw/dem/LDEM_80S_20M.JP2` and internet access to JPL Horizons. The published static site does not include it.
+The live analysis tool (next section) needs this API. Without it the site still works in static mode.
 
 **3. Data pipeline** (needs the raw files in `data/raw/`, see `data/README.md`)
 

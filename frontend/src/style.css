@@ -164,3 +164,6 @@ main { flex: 1; display: flex; min-height: 0; }
   #map { min-height: 60vh; }
   .side-panel, .site-panel { width: auto; overflow-y: visible; }
 }
+
+/* Rodapé com o aviso obrigatório (projeto independente, sem aval da NASA). */
+.site-footer { padding: 0.35rem 1rem; font-size: 0.75rem; color: var(--muted); border-top: 1px solid #2a3344; text-align: center; }

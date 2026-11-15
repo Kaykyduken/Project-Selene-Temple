@@ -119,6 +119,7 @@ export class SitePanel {
 
     nodes.push(el('h2', '', data.site.name));
     nodes.push(el('p', 'coords', formatLatLon(data.site.lat_deg, data.site.lon_deg)));
+    nodes.push(el('p', 'muted', 'Not a mission certification: results are for exploration and education.'));
     if (data.site.custom && this.favorites) {
       // Botão de favorito: só os pontos livres precisam, porque só eles são descartados.
       const fav = this.favorites;

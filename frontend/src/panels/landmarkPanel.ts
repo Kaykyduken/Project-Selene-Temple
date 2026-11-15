@@ -10,6 +10,7 @@
 // não responder, a janela mostra "no images" e o texto continua funcionando.
 
 import { formatLatLon } from './sitePanel';
+import { t } from '../i18n';
 
 export interface Landmark {
   id: string;
@@ -83,7 +84,7 @@ export function fetchPhotos(query: string): Promise<Photo[]> {
 /** Galeria: uma foto por vez, com botões anterior/próxima e contador. */
 function gallery(landmark: Landmark): HTMLElement {
   const box = el('div', 'gallery');
-  const status = el('p', 'muted', 'Loading images from the NASA Image and Video Library…');
+  const status = el('p', 'muted', t('Loading images from the NASA Image and Video Library…'));
   box.append(status);
 
   fetchPhotos(landmark.image_query)
@@ -95,11 +96,11 @@ function gallery(landmark: Landmark): HTMLElement {
       const prev = el('button', 'gallery-nav', '‹');
       const next = el('button', 'gallery-nav', '›');
       prev.type = next.type = 'button';
-      prev.setAttribute('aria-label', 'Previous image');
-      next.setAttribute('aria-label', 'Next image');
+      prev.setAttribute('aria-label', t('Previous image'));
+      next.setAttribute('aria-label', t('Next image'));
       const counter = el('span', 'gallery-counter');
       const caption = el('p', 'gallery-caption');
-      const link = el('a', 'muted', 'Open on images.nasa.gov');
+      const link = el('a', 'muted', t('Open on images.nasa.gov'));
       link.target = '_blank';
       link.rel = 'noopener';
 
@@ -122,14 +123,14 @@ function gallery(landmark: Landmark): HTMLElement {
       frame.append(image);
       const controls = el('div', 'gallery-controls');
       controls.append(prev, counter, next);
-      const credit = el('p', 'muted', 'Images: NASA Image and Video Library, loaded live. ');
+      const credit = el('p', 'muted', t('Images: NASA Image and Video Library, loaded live. '));
       credit.append(link);
       box.replaceChildren(frame, controls, caption, credit);
       show();
     })
     .catch(() => {
-      status.textContent = 'No images: the NASA Image and Video Library could not be reached. ';
-      const link = el('a', '', 'Search it directly');
+      status.textContent = t('No images: the NASA Image and Video Library could not be reached. ');
+      const link = el('a', '', t('Search it directly'));
       link.href = `https://images.nasa.gov/search?q=${encodeURIComponent(landmark.image_query)}&media=image`;
       link.target = '_blank';
       link.rel = 'noopener';
@@ -141,24 +142,24 @@ function gallery(landmark: Landmark): HTMLElement {
 /** Desenha a janela do marco histórico dentro do painel da direita. */
 export function showLandmark(container: HTMLElement, landmark: Landmark, catalog: LandmarkCatalog): void {
   const nodes: HTMLElement[] = [];
-  nodes.push(el('p', 'landmark-tag', 'Historic landmark'));
+  nodes.push(el('p', 'landmark-tag', t('Historic landmark')));
   nodes.push(el('h2', '', `${landmark.name}: ${landmark.place}`));
   nodes.push(el('p', 'coords', formatLatLon(landmark.lat_deg, landmark.lon_deg)));
-  nodes.push(el('p', 'muted', `${landmark.lander}. Touchdown: ${landmark.touchdown_utc.replace('T', ' ').replace('Z', ' UTC')}.`));
-  nodes.push(el('p', 'muted', `Crew: ${landmark.crew}.`));
+  nodes.push(el('p', 'muted', t('{lander}. Touchdown: {when}.', { lander: landmark.lander, when: landmark.touchdown_utc.replace('T', ' ').replace('Z', ' UTC') })));
+  nodes.push(el('p', 'muted', t('Crew: {crew}.', { crew: landmark.crew })));
 
-  nodes.push(el('h3', '', 'Images of the event'));
+  nodes.push(el('h3', '', t('Images of the event')));
   nodes.push(gallery(landmark));
 
-  nodes.push(el('h3', '', 'History'));
+  nodes.push(el('h3', '', t('History')));
   for (const paragraph of landmark.history) nodes.push(el('p', 'edu-text', paragraph));
 
-  nodes.push(el('h3', '', 'Questions for study'));
+  nodes.push(el('h3', '', t('Questions for study')));
   const list = el('ul', 'study-list');
   for (const question of landmark.study_questions) list.append(el('li', '', question));
   nodes.push(list);
 
-  nodes.push(el('p', 'muted', `Coordinates: ${catalog.source}. ${catalog.note} No Sun/Earth horizon analysis here: the terrain model covers only 80°S to the pole.`));
+  nodes.push(el('p', 'muted', t('Coordinates: {source}. {note} No Sun/Earth horizon analysis here: the terrain model covers only 80°S to the pole.', { source: catalog.source, note: catalog.note })));
   container.replaceChildren(...nodes);
   container.scrollTop = 0;
 }

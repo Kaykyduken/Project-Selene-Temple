@@ -133,4 +133,6 @@ python prepare_globe_texture.py ../data/raw/moonkit/lroc_color_2k.jpg   # 4k tex
 
 API keys (for example the api.nasa.gov key) go in a local `.env` file, which is never committed. See `.env.example`.
 
+**Languages.** The site opens in English (the language required by the event) and has an **EN | PT** switch at the top for Brazilian Portuguese. The Portuguese texts live in `frontend/src/locales/pt.ts` (interface) and `frontend/public/data/landmarks.pt.json` (historic landmarks); `?lang=pt` in the address opens the site directly in Portuguese. Region names, data-source names and downloaded files stay in English.
+
 Code comments are written in Portuguese so the whole team can follow the logic; identifiers and user-facing text are in English.

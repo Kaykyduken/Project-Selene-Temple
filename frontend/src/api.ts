@@ -7,6 +7,7 @@
 // pré-calculados), então toda chamada aqui tem que tolerar falha.
 
 import type { SiteData } from './data/contract';
+import { t } from './i18n';
 
 const API_BASE = '/api';
 
@@ -35,7 +36,7 @@ export async function analyzePoint(lat: number, lon: number): Promise<SiteData> 
     try {
       const body = (await response.json()) as { detail?: unknown };
       if (typeof body.detail === 'string') detail = body.detail;
-      else if (response.status === 422) detail = 'The point must be between 80°S and the pole.';
+      else if (response.status === 422) detail = t('The point must be between 80°S and the pole.');
     } catch {
       /* resposta sem JSON: fica só o código HTTP */
     }

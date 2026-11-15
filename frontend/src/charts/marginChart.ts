@@ -8,6 +8,7 @@
 
 import type { SiteData } from '../data/contract';
 import { COLOR, Tooltip, legend, margins, scale, svg, ticks } from './svg';
+import { t } from '../i18n';
 
 const W = 380; // largura lógica do desenho (o SVG estica para caber no painel)
 const H = 230;
@@ -30,7 +31,7 @@ export function marginChart(data: SiteData): HTMLElement {
   const clamp = (v: number) => Math.max(yMin, Math.min(yMax, v));
 
   const root = svg('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img' });
-  root.setAttribute('aria-label', 'Margin of the Sun and the Earth above the terrain horizon over time');
+  root.setAttribute('aria-label', t('Margin of the Sun and the Earth above the terrain horizon over time'));
 
   // Grade horizontal e rótulos do eixo Y
   for (const t of ticks(yMin, yMax)) {
@@ -39,7 +40,7 @@ export function marginChart(data: SiteData): HTMLElement {
   }
   // Nome da linha do zero, dentro do gráfico (à esquerda) para não bater nos nomes das séries.
   // (contorno da cor do fundo, para o texto continuar legível quando uma linha passa por trás)
-  root.append(svg('text', { x: LEFT + 3, y: y(0) - 4, class: 'chart-text chart-text-halo' }, 'terrain horizon'));
+  root.append(svg('text', { x: LEFT + 3, y: y(0) - 4, class: 'chart-text chart-text-halo' }, t('terrain horizon')));
 
   // Rótulos do eixo X: 4 datas ao longo do período
   for (let k = 0; k <= 3; k++) {
@@ -63,8 +64,8 @@ export function marginChart(data: SiteData): HTMLElement {
     const mid = (ySun + yEarth) / 2;
     [ySun, yEarth] = ySun <= yEarth ? [mid - 6, mid + 6] : [mid + 6, mid - 6];
   }
-  root.append(svg('text', { x: W - RIGHT + 4, y: ySun + 3.5, class: 'chart-text chart-text-strong' }, 'Sun'));
-  root.append(svg('text', { x: W - RIGHT + 4, y: yEarth + 3.5, class: 'chart-text chart-text-strong' }, 'Earth'));
+  root.append(svg('text', { x: W - RIGHT + 4, y: ySun + 3.5, class: 'chart-text chart-text-strong' }, t('Sun')));
+  root.append(svg('text', { x: W - RIGHT + 4, y: yEarth + 3.5, class: 'chart-text chart-text-strong' }, t('Earth')));
 
   // Faixas de visibilidade: um retângulo para cada período seguido "à vista"
   const strip = (flags: boolean[], color: string, top: number, name: string) => {
@@ -80,14 +81,14 @@ export function marginChart(data: SiteData): HTMLElement {
       }
     }
   };
-  strip(data.series.map((p) => p.sun.visible), COLOR.sun, PLOT_BOTTOM + 22, 'Sun');
-  strip(data.series.map((p) => p.earth.visible), COLOR.earth, PLOT_BOTTOM + 38, 'Earth');
+  strip(data.series.map((p) => p.sun.visible), COLOR.sun, PLOT_BOTTOM + 22, t('Sun'));
+  strip(data.series.map((p) => p.earth.visible), COLOR.earth, PLOT_BOTTOM + 38, t('Earth'));
 
   // Camada de interação: linha vertical que segue o mouse + caixinha com os valores
   const cross = svg('line', { y1: TOP, y2: PLOT_BOTTOM + 38 + STRIP_H, stroke: COLOR.zero, 'stroke-width': 1, visibility: 'hidden' });
   const hit = svg('rect', { x: LEFT, y: TOP, width: W - RIGHT - LEFT, height: H - TOP - 14, fill: 'transparent' });
   root.append(cross, hit);
-  host.append(legend([[COLOR.sun, 'Sun'], [COLOR.earth, 'Earth']]), root);
+  host.append(legend([[COLOR.sun, t('Sun')], [COLOR.earth, t('Earth')]]), root);
   const tip = new Tooltip(host);
 
   hit.addEventListener('pointermove', (e) => {
@@ -97,10 +98,10 @@ export function marginChart(data: SiteData): HTMLElement {
     cross.setAttribute('x1', String(x(times[i])));
     cross.setAttribute('x2', String(x(times[i])));
     cross.setAttribute('visibility', 'visible');
-    const fmt = (v: number, seen: boolean) => `${v >= 0 ? '+' : ''}${v.toFixed(2)}° ${seen ? '(in view)' : '(hidden)'}`;
+    const fmt = (v: number, seen: boolean) => `${v >= 0 ? '+' : ''}${v.toFixed(2)}° ${seen ? t('(in view)') : t('(hidden)')}`;
     tip.show((x(times[i]) / W) * box.width, data.series[i].t_utc.replace('T', ' ').slice(0, 16) + ' UTC', [
-      [COLOR.sun, 'Sun', fmt(m.sun[i], data.series[i].sun.visible)],
-      [COLOR.earth, 'Earth', fmt(m.earth[i], data.series[i].earth.visible)],
+      [COLOR.sun, t('Sun'), fmt(m.sun[i], data.series[i].sun.visible)],
+      [COLOR.earth, t('Earth'), fmt(m.earth[i], data.series[i].earth.visible)],
     ]);
   });
   hit.addEventListener('pointerleave', () => {

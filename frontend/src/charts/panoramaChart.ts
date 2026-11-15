@@ -8,6 +8,7 @@
 
 import type { BodyPosition, SiteData } from '../data/contract';
 import { COLOR, Tooltip, legend, scale, svg, ticks } from './svg';
+import { t } from '../i18n';
 
 const W = 380, H = 190;
 const LEFT = 34, RIGHT = 10, TOP = 10, BOTTOM = 168;
@@ -39,7 +40,7 @@ export function panoramaChart(data: SiteData): HTMLElement {
   const clamp = (v: number) => Math.max(yMin, Math.min(yMax, v));
 
   const root = svg('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img' });
-  root.setAttribute('aria-label', 'Terrain horizon around the site with the paths of the Sun and the Earth');
+  root.setAttribute('aria-label', t('Terrain horizon around the site with the paths of the Sun and the Earth'));
 
   for (const t of ticks(yMin, yMax)) {
     root.append(svg('line', { x1: LEFT, x2: W - RIGHT, y1: y(t), y2: y(t), stroke: t === 0 ? COLOR.zero : COLOR.grid, 'stroke-width': 1 }));
@@ -89,7 +90,7 @@ export function panoramaChart(data: SiteData): HTMLElement {
   const cross = svg('line', { y1: TOP, y2: BOTTOM, stroke: COLOR.zero, 'stroke-width': 1, visibility: 'hidden' });
   const hit = svg('rect', { x: LEFT, y: TOP, width: W - RIGHT - LEFT, height: BOTTOM - TOP, fill: 'transparent' });
   root.append(cross, hit);
-  host.append(legend([[COLOR.sun, 'Sun path'], [COLOR.earth, 'Earth path'], [COLOR.terrain, 'Terrain']]), root);
+  host.append(legend([[COLOR.sun, t('Sun path')], [COLOR.earth, t('Earth path')], [COLOR.terrain, t('Terrain')]]), root);
   const tip = new Tooltip(host);
   const far = data.horizon.blocker_distance_km;
 
@@ -101,9 +102,9 @@ export function panoramaChart(data: SiteData): HTMLElement {
     cross.setAttribute('x1', String(xs(k * step)));
     cross.setAttribute('x2', String(xs(k * step)));
     cross.setAttribute('visibility', 'visible');
-    const rows: [string | null, string, string][] = [[COLOR.terrain, 'terrain height', `${terrain[i].toFixed(2)}°`]];
-    if (far) rows.push([null, 'distance of that terrain', `${far[i]} km`]);
-    tip.show((xs(k * step) / W) * box.width, `Azimuth ${Math.round(i * step)}°`, rows);
+    const rows: [string | null, string, string][] = [[COLOR.terrain, t('terrain height'), `${terrain[i].toFixed(2)}°`]];
+    if (far) rows.push([null, t('distance of that terrain'), `${far[i]} km`]);
+    tip.show((xs(k * step) / W) * box.width, t('Azimuth {az}°', { az: Math.round(i * step) }), rows);
   });
   hit.addEventListener('pointerleave', () => {
     cross.setAttribute('visibility', 'hidden');

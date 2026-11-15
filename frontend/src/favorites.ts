@@ -13,6 +13,7 @@
 //   - Sem a API (site publicado): no próprio navegador (localStorage), como reserva.
 
 import type { SiteData } from './data/contract';
+import { t } from './i18n';
 
 const STORAGE_KEY = 'llsn.favorites.v1';
 const API_URL = '/api/favorites';
@@ -54,7 +55,7 @@ export class Favorites {
 
   /** Onde os favoritos estão sendo guardados (para mostrar na tela). */
   where(): string {
-    return this.useFile ? 'Saved in data/favorites.json on this computer.' : 'Saved in this browser only (project API not running).';
+    return this.useFile ? t('Saved in data/favorites.json on this computer.') : t('Saved in this browser only (project API not running).');
   }
 
   list(): SiteData[] {
@@ -90,7 +91,7 @@ export class Favorites {
         });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
       } catch {
-        this.onError('Could not save Favorites to the file. Is the project API still running?');
+        this.onError(t('Could not save Favorites to the file. Is the project API still running?'));
       }
       return;
     }
@@ -98,7 +99,7 @@ export class Favorites {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(this.items));
     } catch {
-      this.onError('Could not save Favorites in this browser.');
+      this.onError(t('Could not save Favorites in this browser.'));
     }
   }
 

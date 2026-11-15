@@ -10,6 +10,7 @@
 // para o site continuar abrindo rápido.
 
 import type { SiteSummary } from '../data/contract';
+import { t } from '../i18n';
 
 /** Ponto extra na Lua 3D (marco histórico): só precisa de id, nome e posição. */
 export interface GlobePoint {
@@ -23,7 +24,7 @@ type Three = typeof import('three');
 type OrbitControlsClass = typeof import('three/examples/jsm/controls/OrbitControls.js').OrbitControls;
 
 const TEXTURE_URL = `${import.meta.env.BASE_URL}data/globe/moon_globe_4k.jpg`;
-const CREDIT = "Moon color map: NASA's Scientific Visualization Studio (CGI Moon Kit, LRO/LROC data). South polar detail: LROC WAC mosaic, NASA/GSFC/Arizona State University";
+const CREDIT = t("Moon color map: NASA's Scientific Visualization Studio (CGI Moon Kit, LRO/LROC data). South polar detail: LROC WAC mosaic, NASA/GSFC/Arizona State University");
 const MARKER_COLOR = 0xf0a030; // laranja, igual aos marcadores do mapa
 const SELECTED_COLOR = 0xffffff;
 const LANDMARK_COLOR = 0x3fd0c9; // verde-água: marcos históricos (pousos Apollo)
@@ -135,7 +136,17 @@ export class MoonGlobe {
     // Textos sobre a vista: instrução, crédito da imagem e etiqueta ao passar o mouse.
     const hint = document.createElement('div');
     hint.className = 'globe-hint';
-    hint.innerHTML = 'Drag to rotate · scroll to zoom · click a marker<br><span class="globe-landmark">◆ Apollo landing sites (historic landmarks)</span><br><span class="globe-ring">Red ring: 80°S. Custom points can be analysed only inside it.</span>';
+    const hintLine = (className: string, text: string): HTMLElement => {
+      const line = document.createElement('div');
+      line.className = className;
+      line.textContent = text;
+      return line;
+    };
+    hint.append(
+      hintLine('', t('Drag to rotate · scroll to zoom · click a marker')),
+      hintLine('globe-landmark', t('◆ Apollo landing sites (historic landmarks)')),
+      hintLine('globe-ring', t('Red ring: 80°S. Custom points can be analysed only inside it.')),
+    );
     const credit = document.createElement('div');
     credit.className = 'globe-credit';
     credit.textContent = CREDIT;

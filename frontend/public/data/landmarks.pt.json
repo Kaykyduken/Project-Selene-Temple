@@ -1,0 +1,127 @@
+{
+ "source": "NASA NSSDCA, Apollo Landing Site Coordinates (lunar_sites.html), lido em 15/11/2026",
+ "touchdown_source": "NASA NSSDCA, Apollo Lunar Landings (apolloland.html), conforme compilado pela equipe; não reconferido",
+ "note": "Textos de história: rascunho feito com apoio de IA, a ser revisado pela equipe. As imagens são carregadas ao vivo do acervo NASA Image and Video Library.",
+ "landmarks": [
+  {
+   "id": "apollo-11",
+   "name": "Apollo 11",
+   "lander": "Módulo Lunar Eagle",
+   "place": "Mare Tranquillitatis (Mar da Tranquilidade)",
+   "lat_deg": 0.67416,
+   "lon_deg": 23.47314,
+   "touchdown_utc": "1969-07-20T20:17:40Z",
+   "crew": "Neil Armstrong e Buzz Aldrin na superfície; Michael Collins em órbita lunar",
+   "image_query": "Apollo 11 lunar surface",
+   "history": [
+    "A Apollo 11 foi o primeiro pouso tripulado na Lua. Ela cumpriu a meta que os Estados Unidos fixaram em 1961, em plena corrida espacial com a União Soviética durante a Guerra Fria: levar pessoas à Lua e trazê-las de volta em segurança antes do fim da década.",
+    "O local foi escolhido pela segurança, não pela ciência: uma planície de mar lunar, plana e lisa, perto do equador, o que simplificava a aproximação e a volta à órbita. A tripulação fez uma única caminhada, de cerca de duas horas e meia, e ficou menos de um dia na superfície.",
+    "Eles trouxeram cerca de 21 kg de rochas e solo. As amostras mostraram que os mares escuros são basalto vulcânico antigo, com mais de três bilhões de anos, e não revelaram água nem vida. Um refletor de laser deixado no local é usado até hoje para medir a distância entre a Terra e a Lua."
+   ],
+   "study_questions": [
+    "Por que uma planície no equador foi a preferida para o primeiro pouso?",
+    "O que as primeiras amostras mudaram nas teorias sobre a origem da Lua?"
+   ]
+  },
+  {
+   "id": "apollo-12",
+   "name": "Apollo 12",
+   "lander": "Módulo Lunar Intrepid",
+   "place": "Oceanus Procellarum (Oceano das Tempestades)",
+   "lat_deg": -3.0128,
+   "lon_deg": -23.4219,
+   "touchdown_utc": "1969-11-19T06:54:35Z",
+   "crew": "Pete Conrad e Alan Bean na superfície; Richard Gordon em órbita lunar",
+   "image_query": "Apollo 12 lunar surface",
+   "history": [
+    "A Apollo 12 provou que uma tripulação conseguia pousar em um ponto escolhido. O Módulo Lunar desceu a uma curta caminhada da Surveyor 3, uma sonda robótica que havia pousado ali em 1967. O pouso de precisão era uma exigência para as missões seguintes, em terrenos mais acidentados.",
+    "Em duas caminhadas, a tripulação montou a primeira estação científica ALSEP completa, com instrumentos que enviaram dados por anos, e foi até a Surveyor 3 retirar peças para trazer de volta. Essas peças permitiram aos engenheiros estudar como os materiais envelhecem depois de dois anos e meio na Lua.",
+    "A missão trouxe cerca de 34 kg de amostras: basaltos mais jovens que os da Apollo 11, o que mostrou que o vulcanismo dos mares lunares durou muito tempo. O lançamento também ficou famoso porque o foguete foi atingido por raios e o voo continuou."
+   ],
+   "study_questions": [
+    "Por que o pouso de precisão era importante para as missões seguintes?",
+    "O que equipamentos deixados na Lua ensinam sobre construir sistemas de superfície que durem muito?"
+   ]
+  },
+  {
+   "id": "apollo-14",
+   "name": "Apollo 14",
+   "lander": "Módulo Lunar Antares",
+   "place": "Terras altas de Fra Mauro",
+   "lat_deg": -3.64589,
+   "lon_deg": -17.47194,
+   "touchdown_utc": "1971-02-05T09:18:11Z",
+   "crew": "Alan Shepard e Edgar Mitchell na superfície; Stuart Roosa em órbita lunar",
+   "image_query": "Apollo 14 lunar surface",
+   "history": [
+    "A Apollo 14 pousou em Fra Mauro, o destino da Apollo 13, que precisou ser abortada. A área é coberta por material lançado pelo impacto gigante que formou a bacia Imbrium. Coletar ali significava coletar rochas arrancadas das profundezas da crosta lunar e datar esse impacto.",
+    "A tripulação fez duas caminhadas puxando um carrinho de mão com ferramentas e amostras. Na segunda, subiu em direção à borda da cratera Cone; o terreno ondulado dificultou a navegação, e eles voltaram perto da borda, sem chegar a ver o interior da cratera.",
+    "Voltaram cerca de 42 kg de amostras, em sua maioria brechas: rochas feitas de fragmentos soldados por impactos. Elas ajudaram a situar o impacto de Imbrium em cerca de 3,9 bilhões de anos atrás, uma data-chave na história da Lua."
+   ],
+   "study_questions": [
+    "Por que os geólogos coletam o material lançado por uma grande cratera em vez de perfurar fundo?",
+    "O que a dificuldade perto da cratera Cone mostra sobre navegar sem pontos de referência?"
+   ]
+  },
+  {
+   "id": "apollo-15",
+   "name": "Apollo 15",
+   "lander": "Módulo Lunar Falcon",
+   "place": "Hadley Rille, ao pé dos Montes Apeninos",
+   "lat_deg": 26.13239,
+   "lon_deg": 3.6333,
+   "touchdown_utc": "1971-07-30T22:16:29Z",
+   "crew": "David Scott e James Irwin na superfície; Alfred Worden em órbita lunar",
+   "image_query": "Apollo 15 lunar surface",
+   "history": [
+    "A Apollo 15 abriu a fase das missões científicas estendidas. Levou o primeiro jipe lunar (Lunar Roving Vehicle), que permitiu à tripulação dirigir por quilômetros a partir do módulo, e a permanência na superfície subiu para quase três dias, com três caminhadas.",
+    "O local reunia três tipos de terreno: uma planície de mar lunar, a frente das montanhas dos Apeninos e a Hadley Rille, um longo canal sinuoso escavado por lava. A tripulação tinha recebido um treinamento extenso em geologia e descreveu, da beira do canal, as camadas da parede.",
+    "A missão trouxe cerca de 77 kg de amostras, entre elas o anortosito conhecido como Genesis Rock, um pedaço da crosta primitiva da Lua com cerca de quatro bilhões de anos. No fim, um martelo e uma pena foram soltos juntos para mostrar que, sem ar, os dois caem na mesma velocidade."
+   ],
+   "study_questions": [
+    "Como o jipe lunar mudou o que podia ser estudado em uma única missão?",
+    "Por que um pedaço da crosta original vale tanto para entender como a Lua se formou?"
+   ]
+  },
+  {
+   "id": "apollo-16",
+   "name": "Apollo 16",
+   "lander": "Módulo Lunar Orion",
+   "place": "Terras altas de Descartes",
+   "lat_deg": -8.9734,
+   "lon_deg": 15.5011,
+   "touchdown_utc": "1972-04-21T02:23:35Z",
+   "crew": "John Young e Charles Duke na superfície; Ken Mattingly em órbita lunar",
+   "image_query": "Apollo 16 lunar surface",
+   "history": [
+    "A Apollo 16 foi o único pouso Apollo nas terras altas centrais da Lua, o terreno claro e cheio de crateras que cobre a maior parte dela. Antes do voo, esperava-se que a região de Descartes fosse feita de rocha vulcânica.",
+    "Em três caminhadas com o jipe, a tripulação quase não achou rocha vulcânica. Praticamente tudo era brecha produzida por impactos. A previsão, baseada em fotos tiradas da órbita, estava errada, e o resultado mudou a forma de interpretar as terras altas.",
+    "Voltaram cerca de 95 kg de amostras, e a tripulação operou o primeiro telescópio astronômico usado na superfície de outro mundo, uma câmera de ultravioleta. A missão é um exemplo clássico de trabalho de campo derrubando uma hipótese."
+   ],
+   "study_questions": [
+    "Quais são os limites de interpretar a geologia só com imagens de órbita?",
+    "Por que as terras altas são importantes para conhecer a idade da crosta lunar?"
+   ]
+  },
+  {
+   "id": "apollo-17",
+   "name": "Apollo 17",
+   "lander": "Módulo Lunar Challenger",
+   "place": "Vale Taurus-Littrow",
+   "lat_deg": 20.1911,
+   "lon_deg": 30.7723,
+   "touchdown_utc": "1972-12-11T19:54:57Z",
+   "crew": "Eugene Cernan e Harrison Schmitt na superfície; Ronald Evans em órbita lunar",
+   "image_query": "Apollo 17 lunar surface",
+   "history": [
+    "A Apollo 17 foi o último pouso tripulado do programa Apollo. Harrison Schmitt era geólogo profissional, o único cientista a caminhar na Lua até hoje. A tripulação passou cerca de três dias no vale Taurus-Littrow, na borda do Mare Serenitatis.",
+    "O vale é cercado por maciços de cerca de dois quilômetros de altura, de modo que um só local deu acesso a rochas antigas das montanhas e a material vulcânico mais jovem do fundo do vale. É também o tipo de lugar em que o relevo ao redor tapa parte do céu, o efeito que este projeto mede no polo sul.",
+    "Em três caminhadas, a tripulação dirigiu o jipe por dezenas de quilômetros e coletou cerca de 110 kg de amostras, a maior quantidade do programa. Na cratera Shorty, encontrou solo alaranjado: minúsculas contas de vidro vulcânico, vindas de antigas fontes de lava."
+   ],
+   "study_questions": [
+    "Por que enviar um geólogo em vez de treinar um piloto em geologia?",
+    "Como montanhas altas ao redor de um local afetam a luz do Sol e a linha de visada para a Terra?"
+   ]
+  }
+ ]
+}

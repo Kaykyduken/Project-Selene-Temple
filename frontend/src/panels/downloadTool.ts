@@ -11,6 +11,7 @@
 
 import type { SiteData } from '../data/contract';
 import { margins } from '../charts/svg';
+import { t } from '../i18n';
 
 interface DataType {
   key: 'sun' | 'earth' | 'horizon' | 'visibility' | 'summary';
@@ -19,11 +20,11 @@ interface DataType {
 }
 
 const TYPES: DataType[] = [
-  { key: 'sun', label: 'Sun position (azimuth, elevation)', source: 'JPL Horizons API' },
-  { key: 'earth', label: 'Earth position (azimuth, elevation)', source: 'JPL Horizons API' },
-  { key: 'horizon', label: 'Terrain horizon profile (360°)', source: 'LOLA terrain model, NASA PDS' },
-  { key: 'visibility', label: 'Visibility and margin over the terrain', source: 'derived from Horizons + LOLA' },
-  { key: 'summary', label: 'Metrics, parameters and Horizons queries', source: 'derived; includes the exact API queries' },
+  { key: 'sun', label: t('Sun position (azimuth, elevation)'), source: t('JPL Horizons API') },
+  { key: 'earth', label: t('Earth position (azimuth, elevation)'), source: t('JPL Horizons API') },
+  { key: 'horizon', label: t('Terrain horizon profile (360°)'), source: t('LOLA terrain model, NASA PDS') },
+  { key: 'visibility', label: t('Visibility and margin over the terrain'), source: t('derived from Horizons + LOLA') },
+  { key: 'summary', label: t('Metrics, parameters and Horizons queries'), source: t('derived; includes the exact API queries') },
 ];
 
 /** Faz o navegador baixar um texto como arquivo. */
@@ -123,12 +124,12 @@ export function downloadTool(data: SiteData): HTMLElement {
   const row = document.createElement('div');
   row.className = 'actions';
   const format = document.createElement('select');
-  format.setAttribute('aria-label', 'File format');
-  format.append(new Option('CSV (tables)', 'csv'), new Option('JSON', 'json'));
+  format.setAttribute('aria-label', t('File format'));
+  format.append(new Option(t('CSV (tables)'), 'csv'), new Option('JSON', 'json'));
   format.className = 'compare-select';
   const button = document.createElement('button');
   button.type = 'submit';
-  button.textContent = 'Download';
+  button.textContent = t('Download');
   const status = document.createElement('p');
   status.className = 'muted';
   status.setAttribute('aria-live', 'polite');
@@ -138,13 +139,13 @@ export function downloadTool(data: SiteData): HTMLElement {
   button.addEventListener('click', () => {
     const pick = new Set([...checks].filter(([, input]) => input.checked).map(([key]) => key));
     if (pick.size === 0) {
-      status.textContent = 'Choose at least one type of data.';
+      status.textContent = t('Choose at least one type of data.');
       return;
     }
     const base = data.site.id;
     if (format.value === 'json') {
       save(`${base}.json`, toJson(data, pick), 'application/json');
-      status.textContent = 'Downloaded 1 file.';
+      status.textContent = t('Downloaded 1 file.');
       return;
     }
     // CSV: a série temporal e o horizonte são tabelas diferentes, então saem em arquivos separados.
@@ -155,7 +156,7 @@ export function downloadTool(data: SiteData): HTMLElement {
     for (const [name, text] of files) save(name, text, 'text/csv');
     if (pick.has('summary')) save(`${base}_summary.json`, toJson(data, new Set(['summary'])), 'application/json');
     const count = files.length + (pick.has('summary') ? 1 : 0);
-    status.textContent = `Downloaded ${count} file${count === 1 ? '' : 's'}.`;
+    status.textContent = count === 1 ? t('Downloaded 1 file.') : t('Downloaded {count} files.', { count });
   });
 
   return box;

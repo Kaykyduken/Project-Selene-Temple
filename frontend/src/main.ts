@@ -31,6 +31,17 @@ import type { SiteData } from './data/contract';
 import type { MoonGlobe } from './globe/moonGlobe';
 import { fetchPhotos, showLandmark } from './panels/landmarkPanel';
 import type { Landmark, LandmarkCatalog } from './panels/landmarkPanel';
+import { LANG, setLang, t, translatePage } from './i18n';
+import type { Lang } from './i18n';
+
+// Idioma: traduz os textos fixos da página e liga os botões EN | PT.
+translatePage();
+for (const button of document.querySelectorAll<HTMLButtonElement>('.lang-toggle button')) {
+  button.setAttribute('aria-pressed', String(button.dataset.lang === LANG));
+  button.addEventListener('click', () => {
+    if (button.dataset.lang !== LANG) setLang(button.dataset.lang as Lang);
+  });
+}
 
 // Pergunta uma vez se a API está no ar; a resposta é reaproveitada no clique do mapa.
 const apiOnline = checkApiHealth();
@@ -58,7 +69,7 @@ async function start(): Promise<void> {
   const panel = new SitePanel(panelElement, catalog.sites, loadSiteData);
 
   // Marcos históricos (pousos Apollo). Se o arquivo faltar, o site segue sem eles.
-  const landmarkCatalog: LandmarkCatalog | null = await fetch(`${import.meta.env.BASE_URL}data/landmarks.json`)
+  const landmarkCatalog: LandmarkCatalog | null = await fetch(`${import.meta.env.BASE_URL}data/${LANG === 'pt' ? 'landmarks.pt.json' : 'landmarks.json'}`)
     .then((r) => (r.ok ? r.json() : null))
     .catch(() => null);
   const landmarks: Landmark[] = landmarkCatalog?.landmarks ?? [];
@@ -72,7 +83,7 @@ async function start(): Promise<void> {
       const collapsed = target.classList.toggle('collapsed');
       button.textContent = collapsed ? closed : open;
       button.setAttribute('aria-expanded', String(!collapsed));
-      button.setAttribute('aria-label', collapsed ? 'Expand this panel' : 'Collapse this panel');
+      button.setAttribute('aria-label', collapsed ? t('Expand this panel') : t('Collapse this panel'));
       map.invalidateSize(); // o mapa ganhou ou perdeu largura
     });
   }
@@ -122,7 +133,7 @@ async function start(): Promise<void> {
     mapElement.classList.add('is-hidden');
     globeElement.classList.remove('is-hidden');
     if (!globe && !globeFailed) {
-      globeElement.textContent = 'Loading the 3D Moon…';
+      globeElement.textContent = t('Loading the 3D Moon…');
       try {
         // Import dinâmico: o Three.js só é baixado agora.
         const { MoonGlobe: Globe } = await import('./globe/moonGlobe');
@@ -135,7 +146,7 @@ async function start(): Promise<void> {
         mapElement.classList.remove('is-hidden');
         map.invalidateSize();
         for (const b of viewButtons) b.setAttribute('aria-pressed', String(b.dataset.view === 'map'));
-        basemapStatus.textContent = 'The 3D Moon needs WebGL, which is not available in this browser. Showing the map instead.';
+        basemapStatus.textContent = t('The 3D Moon needs WebGL, which is not available in this browser. Showing the map instead.');
         return;
       }
     }
@@ -172,7 +183,7 @@ async function start(): Promise<void> {
   }
   const landmarkBox = document.getElementById('landmark-list')!;
   if (landmarks.length === 0) {
-    landmarkBox.textContent = 'No data.';
+    landmarkBox.textContent = t('No data.');
   } else {
     const list = document.createElement('ul');
     list.className = 'landmark-list';
@@ -218,7 +229,7 @@ async function start(): Promise<void> {
     if (favorites.list().length === 0) {
       const empty = document.createElement('p');
       empty.className = 'muted';
-      empty.textContent = 'No favorite points yet. Analyse a point on the map and add it here to keep it.';
+      empty.textContent = t('No favorite points yet. Analyse a point on the map and add it here to keep it.');
       favoriteBox.replaceChildren(empty, where);
       return;
     }
@@ -240,7 +251,7 @@ async function start(): Promise<void> {
       const remove = document.createElement('button');
       remove.type = 'button';
       remove.textContent = '✕';
-      remove.setAttribute('aria-label', `Remove ${data.site.name} from Favorites`);
+      remove.setAttribute('aria-label', t('Remove {name} from Favorites', { name: data.site.name }));
       remove.addEventListener('click', () => favorites.remove(data.site.id));
       item.append(open, remove);
       list.append(item);
@@ -263,7 +274,7 @@ async function start(): Promise<void> {
         favorites.remove(data.site.id);
         return null;
       }
-      return favorites.add(data) ? null : `Favorites is full (${MAX_FAVORITES} points). Remove one first.`;
+      return favorites.add(data) ? null : t('Favorites is full ({max} points). Remove one first.', { max: MAX_FAVORITES });
     },
   };
 
@@ -320,36 +331,36 @@ async function start(): Promise<void> {
 
     // Fora da borda vermelha não há modelo de relevo: a resposta é a mesma com ou sem API.
     if (lat > ANALYSIS_LIMIT_LAT_DEG) {
-      panel.showCustomPoint(lat, lng, `No data: the terrain model covers only ${Math.abs(ANALYSIS_LIMIT_LAT_DEG)}°S to the pole (inside the red border).`);
+      panel.showCustomPoint(lat, lng, t('No data: the terrain model covers only {lat}°S to the pole (inside the red border).', { lat: Math.abs(ANALYSIS_LIMIT_LAT_DEG) }));
       return;
     }
     if (!(await apiOnline)) {
-      if (request === lastRequest) panel.showCustomPoint(lat, lng, 'No data: live analysis of custom points needs the project API, which is not running here.');
+      if (request === lastRequest) panel.showCustomPoint(lat, lng, t('No data: live analysis of custom points needs the project API, which is not running here.'));
       return;
     }
-    panel.showCustomPoint(lat, lng, 'Computing the horizon and the visibility… this takes a few seconds.');
+    panel.showCustomPoint(lat, lng, t('Computing the horizon and the visibility… this takes a few seconds.'));
     try {
       const data = await analyzePoint(lat, lng);
       // Identifica o ponto pelas coordenadas, para os Favoritos e para o nome dos arquivos baixados.
       data.site.id = `point_${Math.abs(lat).toFixed(4)}S_${(((lng % 360) + 360) % 360).toFixed(4)}E`;
-      data.site.name = `Point ${formatLatLon(lat, lng)}`;
+      data.site.name = t('Point {where}', { where: formatLatLon(lat, lng) });
       // Se o usuário clicou em outro lugar enquanto calculava, descartamos este resultado.
       // O resultado NÃO é guardado em lugar nenhum: fica só no painel. Ao clicar em
       // outro ponto ele é substituído e se perde, a menos que esteja nos Favoritos.
       if (request === lastRequest) panel.showSite(data);
     } catch (err) {
-      if (request === lastRequest) panel.showCustomPoint(lat, lng, `No data: ${(err as Error).message}`, true);
+      if (request === lastRequest) panel.showCustomPoint(lat, lng, t('No data: {message}', { message: (err as Error).message }), true);
     }
   });
 }
 
 start().catch(() => {
-  document.getElementById('site-list')!.textContent = 'Could not load the list of regions.';
+  document.getElementById('site-list')!.textContent = t('Could not load the list of regions.');
 });
 
 // Selo "API: online/offline" no topo da página.
 const apiBadge = document.getElementById('api-status')!;
 apiOnline.then((ok) => {
-  apiBadge.textContent = ok ? 'API: online' : 'API: offline (static mode)';
+  apiBadge.textContent = ok ? t('API: online') : t('API: offline (static mode)');
   apiBadge.className = `badge ${ok ? 'badge-ok' : 'badge-off'}`;
 });

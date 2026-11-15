@@ -7,6 +7,7 @@
 // São botões de verdade (<button>), então funcionam com teclado (Tab e Enter).
 
 import type { SiteSummary, Summary, SummaryRow } from '../data/contract';
+import { t } from '../i18n';
 
 type SortKey = 'name' | 'sun' | 'earth';
 
@@ -47,13 +48,13 @@ export class SiteList {
     // Cabeçalho: três botões de ordenação
     const head = document.createElement('div');
     head.className = 'site-row site-head';
-    const headers: [SortKey, string][] = [['name', 'Region'], ['sun', 'Sun %'], ['earth', 'Earth %']];
+    const headers: [SortKey, string][] = [['name', t('Region')], ['sun', t('Sun %')], ['earth', t('Earth %')]];
     for (const [key, label] of hasNumbers ? headers : headers.slice(0, 1)) {
       const b = document.createElement('button');
       b.type = 'button';
       b.textContent = label + (this.sortKey === key && key !== 'name' ? ' ▾' : '');
       b.setAttribute('aria-pressed', String(this.sortKey === key));
-      b.title = key === 'name' ? 'Default order' : `Sort by ${label}, highest first`;
+      b.title = key === 'name' ? t('Default order') : t('Sort by {label}, highest first', { label });
       b.addEventListener('click', () => this.sortBy(key));
       head.append(b);
     }

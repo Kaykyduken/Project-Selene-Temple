@@ -10,9 +10,10 @@
 
 import type { SiteData } from '../data/contract';
 import { COLOR } from './svg';
+import { LANG, t } from '../i18n';
 
 type Body = 'sun' | 'earth';
-const NAME: Record<Body, string> = { sun: 'Sun', earth: 'Earth' };
+const NAME: Record<Body, string> = { sun: t('Sun'), earth: t('Earth') };
 
 function el<K extends keyof HTMLElementTagNameMap>(tag: K, className = '', text = ''): HTMLElementTagNameMap[K] {
   const node = document.createElement(tag);
@@ -33,9 +34,9 @@ function dotsRow(body: Body, pct: number | null): HTMLElement {
     dots.append(dot);
   }
   row.append(dots);
-  row.append(el('span', 'dots-text', pct === null ? 'no data' : `about ${filled} of every 10 hours`));
+  row.append(el('span', 'dots-text', pct === null ? t('no data') : t('about {n} of every 10 hours', { n: filled })));
   row.setAttribute('role', 'img');
-  row.setAttribute('aria-label', pct === null ? `${NAME[body]}: no data` : `${NAME[body]} in view about ${filled} of every 10 hours`);
+  row.setAttribute('aria-label', pct === null ? t('{body}: no data', { body: NAME[body] }) : t('{body} in view about {n} of every 10 hours', { body: NAME[body], n: filled }));
   return row;
 }
 
@@ -61,7 +62,7 @@ function groupByDay(data: SiteData): Day[] {
     let day = days.get(key);
     if (!day) {
       const date = new Date(`${key}T00:00:00Z`);
-      day = { label: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }), hours: 0, sun: 0, earth: 0 };
+      day = { label: date.toLocaleDateString(LANG === 'pt' ? 'pt-BR' : 'en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }), hours: 0, sun: 0, earth: 0 };
       days.set(key, day);
     }
     day.hours += stepHours;
@@ -76,10 +77,10 @@ export function dayCalendar(data: SiteData): HTMLElement {
   const box = el('div', 'simple-chart');
   const days = groupByDay(data);
   if (days.length === 0) {
-    box.append(el('p', 'muted', 'No data.'));
+    box.append(el('p', 'muted', t('No data.')));
     return box;
   }
-  const info = el('p', 'calendar-info', 'Point at a square (or tap it) to see that day.');
+  const info = el('p', 'calendar-info', t('Point at a square (or tap it) to see that day.'));
   info.setAttribute('aria-live', 'polite');
 
   for (const body of ['sun', 'earth'] as Body[]) {
@@ -95,7 +96,7 @@ export function dayCalendar(data: SiteData): HTMLElement {
       fill.style.height = `${(day[body] / day.hours) * 100}%`;
       fill.style.background = COLOR[body];
       cell.append(fill);
-      const text = `Day ${index + 1} (${day.label}): ${NAME[body]} in view for ${hours} of ${total} hours`;
+      const text = t('Day {n} ({date}): {body} in view for {hours} of {total} hours', { n: index + 1, date: day.label, body: NAME[body], hours, total });
       cell.setAttribute('aria-label', text);
       const tell = (): void => {
         info.textContent = text;
@@ -111,7 +112,7 @@ export function dayCalendar(data: SiteData): HTMLElement {
 
   // Régua dos dias: primeiro, a cada 5 e o último.
   const ruler = el('div', 'calendar-row');
-  ruler.append(el('span', 'dots-name', 'Day'));
+  ruler.append(el('span', 'dots-name', t('Day')));
   const numbers = el('div', 'calendar-cells calendar-numbers');
   days.forEach((_, index) => {
     const n = index + 1;
@@ -127,7 +128,7 @@ export function dayCalendar(data: SiteData): HTMLElement {
   fullFill.style.background = COLOR.sun;
   full.append(fullFill);
   const empty = el('span', 'calendar-cell calendar-sample');
-  key.append(full, ' full square = in view all day ', empty, ' empty square = hidden all day');
+  key.append(full, t(' full square = in view all day '), empty, t(' empty square = hidden all day'));
   box.append(key, info);
   return box;
 }

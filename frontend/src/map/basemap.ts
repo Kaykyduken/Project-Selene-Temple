@@ -11,6 +11,7 @@
 import L from 'leaflet';
 import 'proj4leaflet';
 import { BASEMAP_JSON_URL } from '../config';
+import { t } from '../i18n';
 
 /** Formato do JSON gerado pelo pipeline. */
 interface BasemapInfo {
@@ -30,7 +31,7 @@ export async function loadBasemap(map: L.Map): Promise<string> {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     info = (await response.json()) as BasemapInfo;
   } catch {
-    return 'Base map not generated yet (run pipeline/prepare_basemap.py). Showing the coordinate grid only.';
+    return t('Base map not generated yet (run pipeline/prepare_basemap.py). Showing the coordinate grid only.');
   }
 
   const [xmin, ymin, xmax, ymax] = info.bounds_m;
@@ -48,5 +49,5 @@ export async function loadBasemap(map: L.Map): Promise<string> {
     attribution: info.source,
   }).addTo(map);
 
-  return info.fictitious ? 'FICTITIOUS DATA: placeholder base map.' : '';
+  return info.fictitious ? t('FICTITIOUS DATA: placeholder base map.') : '';
 }

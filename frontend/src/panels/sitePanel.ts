@@ -45,12 +45,19 @@ function show(metric: Metric, unit: string): string {
 }
 
 /** periodHours: se dado e a unidade for %, mostra também as horas equivalentes ("34,4 % / 248 h"). */
+function periodHoursOf(data: SiteData): number {
+  return Math.round((Date.parse(data.period.end_utc) - Date.parse(data.period.start_utc)) / 3_600_000);
+}
+
+/** "37,6 % / 271 h": porcentagem do período e as horas equivalentes. */
+function showPctHours(metric: Metric, periodHours: number): string {
+  return metric.value === null ? t('no data') : `${show(metric, '%')} / ${num(Math.round((metric.value * periodHours) / 100))} h`;
+}
+
 function metricRow(label: string, metric: Metric, unit: string, periodHours?: number): HTMLElement {
   const row = el('div', 'metric');
   row.append(el('span', 'metric-label', label));
-  const text = periodHours && unit === '%' && metric.value !== null
-    ? `${show(metric, unit)} / ${num(Math.round((metric.value * periodHours) / 100))} h`
-    : show(metric, unit);
+  const text = periodHours && unit === '%' ? showPctHours(metric, periodHours) : show(metric, unit);
   row.append(el('span', 'metric-value', text));
   row.append(el('span', `provenance provenance-${metric.class}`, CLASS_LABEL[metric.class]));
   return row;
@@ -60,6 +67,8 @@ export class SitePanel {
   private mode: Mode = 'educational';
   private current: SiteData | null = null;
   private other: SiteData | null = null; // região escolhida para comparar
+  private compareCharts = false; // mostrar os gráficos das duas regiões juntos?
+  private readonly openBlocks = new Set<string>(); // blocos do modo Expert que o usuário abriu (começam fechados)
   /** Ligação com os Favoritos (preenchida pelo main.ts). */
   favorites: { has: (id: string) => boolean; toggle: (data: SiteData) => string | null } | null = null;
 
@@ -112,6 +121,18 @@ export class SitePanel {
     this.render();
   }
 
+  /** Bloco retrátil do modo Expert. Começa fechado; lembra se o usuário abriu ao redesenhar. */
+  private block(title: string, children: HTMLElement[]): HTMLElement {
+    const details = el('details', 'section block');
+    details.open = this.openBlocks.has(title);
+    details.append(el('summary', '', t(title)), ...children);
+    details.addEventListener('toggle', () => {
+      if (details.open) this.openBlocks.add(title);
+      else this.openBlocks.delete(title);
+    });
+    return details;
+  }
+
   private render(): void {
     const data = this.current!;
     const nodes: HTMLElement[] = [];
@@ -151,12 +172,16 @@ export class SitePanel {
     }
 
     nodes.push(...(this.mode === 'educational' ? this.educational(data) : this.expert(data)));
-    nodes.push(...this.comparison(data));
-
-    nodes.push(el('h3', '', t('Sources')));
     const sources = el('ul', 'sources');
     for (const source of data.sources) sources.append(el('li', '', t(source.name)));
-    nodes.push(sources);
+    const comparison = this.comparison(data);
+    if (this.mode === 'expert') {
+      if (comparison.length > 0) nodes.push(this.block('Compare with another region', comparison));
+      nodes.push(this.block('Sources', [sources]));
+    } else {
+      if (comparison.length > 0) nodes.push(el('h3', '', t('Compare with another region')), ...comparison);
+      nodes.push(el('h3', '', t('Sources')), sources);
+    }
     nodes.push(el('p', 'disclaimer', t('Geometric visibility only, for one point and one period. Not a certification for space missions.')));
 
     this.container.replaceChildren(...nodes);
@@ -218,28 +243,37 @@ export class SitePanel {
     return nodes;
   }
 
-  /** Modo Especialista: números com origem, parâmetros, consultas e downloads. */
+  /** Gráficos de uma região, no formato do modo atual (usado na comparação de gráficos). */
+  private chartsOf(data: SiteData): HTMLElement[] {
+    if (this.mode === 'expert') {
+      return [el('p', 'muted', t('Margin above the terrain horizon')), marginChart(data), el('p', 'muted', t('Horizon mask')), panoramaChart(data)];
+    }
+    return [el('p', 'muted', t('Out of every 10 hours…')), tenHoursChart(data), el('p', 'muted', t('Day by day')), dayCalendar(data)];
+  }
+
+  /** Modo Especialista: números com origem, parâmetros, consultas e downloads (cada bloco é retrátil). */
   private expert(data: SiteData): HTMLElement[] {
     const nodes: HTMLElement[] = [];
-    const hours = Math.round((Date.parse(data.period.end_utc) - Date.parse(data.period.start_utc)) / 3_600_000);
+    const hours = periodHoursOf(data);
     const days = Math.round(hours / 24);
     nodes.push(el('p', 'period-note', t('Forecast for one month: {days} days ({hours} h), from {start} to {end} (UTC). Percentages are shares of this period; the hours are the equivalent time (percentage × {hours} h).',
       { days, hours, start: data.period.start_utc, end: data.period.end_utc })));
-    nodes.push(el('h3', '', t('Visibility over the local horizon')));
-    nodes.push(metricRow(t('Time with Sun in view'), data.metrics.sun_time_pct, '%', hours));
-    nodes.push(metricRow(t('Time with Earth in view'), data.metrics.earth_time_pct, '%', hours));
-    nodes.push(metricRow(t('Longest period without Sun'), data.metrics.longest_no_sun_h, 'h'));
-    nodes.push(metricRow(t('Mean slope'), data.metrics.mean_slope_deg, '°'));
-
-    nodes.push(el('h3', '', t('Margin above the terrain horizon')));
-    nodes.push(el('p', 'muted', t('Body elevation minus terrain elevation at the same azimuth, in degrees. Bars: periods with positive margin.')));
-    nodes.push(marginChart(data));
-    nodes.push(el('h3', '', t('Horizon mask')));
-    nodes.push(el('p', 'muted', t('Terrain elevation angle by azimuth (lunar curvature included), with the Sun and Earth tracks for the period.')));
-    nodes.push(panoramaChart(data));
+    nodes.push(this.block('Visibility over the local horizon', [
+      metricRow(t('Time with Sun in view'), data.metrics.sun_time_pct, '%', hours),
+      metricRow(t('Time with Earth in view'), data.metrics.earth_time_pct, '%', hours),
+      metricRow(t('Longest period without Sun'), data.metrics.longest_no_sun_h, 'h'),
+      metricRow(t('Mean slope'), data.metrics.mean_slope_deg, '°'),
+    ]));
+    nodes.push(this.block('Margin above the terrain horizon', [
+      el('p', 'muted', t('Body elevation minus terrain elevation at the same azimuth, in degrees. Bars: periods with positive margin.')),
+      marginChart(data),
+    ]));
+    nodes.push(this.block('Horizon mask', [
+      el('p', 'muted', t('Terrain elevation angle by azimuth (lunar curvature included), with the Sun and Earth tracks for the period.')),
+      panoramaChart(data),
+    ]));
 
     // Parâmetros do cálculo: tudo que alguém precisa para reproduzir o resultado.
-    nodes.push(el('h3', '', t('Parameters')));
     const h = data.horizon;
     const params: [string, string][] = [
       [t('Period (UTC)'), t('{start} to {end}', { start: data.period.start_utc, end: data.period.end_utc })],
@@ -253,10 +287,9 @@ export class SitePanel {
     ];
     const table = el('dl', 'params');
     for (const [name, value] of params) table.append(el('dt', '', name), el('dd', '', value));
-    nodes.push(table);
+    nodes.push(this.block('Parameters', [table]));
 
     if (data.queries) {
-      nodes.push(el('h3', '', t('JPL Horizons queries')));
       const list = el('ul', 'sources');
       for (const [name, url] of [[t('Sun'), data.queries.sun], [t('Earth'), data.queries.earth]]) {
         const item = el('li');
@@ -267,12 +300,13 @@ export class SitePanel {
         item.append(link);
         list.append(item);
       }
-      nodes.push(list);
+      nodes.push(this.block('JPL Horizons queries', [list]));
     }
 
-    nodes.push(el('h3', '', t('Download data')));
-    nodes.push(el('p', 'muted', t('Choose which data of this site to download. Each item shows its origin.')));
-    nodes.push(downloadTool(data));
+    nodes.push(this.block('Download data', [
+      el('p', 'muted', t('Choose which data of this site to download. Each item shows its origin.')),
+      downloadTool(data),
+    ]));
     return nodes;
   }
 
@@ -280,7 +314,7 @@ export class SitePanel {
   private comparison(data: SiteData): HTMLElement[] {
     const others = this.sites.filter((s) => s.id !== data.site.id);
     if (others.length === 0) return [];
-    const nodes: HTMLElement[] = [el('h3', '', t('Compare with another region'))];
+    const nodes: HTMLElement[] = [];
 
     const select = el('select', 'compare-select');
     select.setAttribute('aria-label', t('Region to compare with'));
@@ -311,10 +345,25 @@ export class SitePanel {
       ];
       for (const [label, ma, mb, unit] of rows) {
         const tr = el('tr');
-        tr.append(el('th', '', label), el('td', '', show(ma, unit)), el('td', '', show(mb, unit)));
+        const cell = (m: Metric, d: SiteData): string => (unit === '%' ? showPctHours(m, periodHoursOf(d)) : show(m, unit));
+        tr.append(el('th', '', label), el('td', '', cell(ma, data)), el('td', '', cell(mb, b)));
         table.append(tr);
       }
       nodes.push(table);
+      // Opção de comparar os gráficos das duas regiões, um sobre o outro.
+      const toggle = el('label', 'compare-charts');
+      const box = el('input');
+      box.type = 'checkbox';
+      box.checked = this.compareCharts;
+      box.addEventListener('change', () => {
+        this.compareCharts = box.checked;
+        if (this.current === data) this.render();
+      });
+      toggle.append(box, document.createTextNode(` ${t('Compare the charts')}`));
+      nodes.push(toggle);
+      if (this.compareCharts) {
+        nodes.push(el('h4', 'compare-name', data.site.name), ...this.chartsOf(data), el('h4', 'compare-name', b.site.name), ...this.chartsOf(b));
+      }
       // Comparar períodos diferentes seria enganoso: avisamos se não forem iguais.
       if (b.period.start_utc !== data.period.start_utc || b.period.end_utc !== data.period.end_utc) {
         nodes.push(el('p', 'warning', t('⚠ The two regions were computed for different periods.')));

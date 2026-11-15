@@ -328,3 +328,8 @@ body[data-mode='educational'] .tour-btn:hover { background: #2a5599; }
 body[data-mode='educational'] .topbar .badge { background: #ffffff; color: #2f5187; border-color: #2f5187; font-weight: 700; }
 
 .period-note { margin: 0 0 0.75rem; padding: 0.5rem 0.75rem; border-left: 3px solid var(--ok); background: rgba(255, 255, 255, 0.06); font-size: 0.85rem; }
+
+/* Blocos retráteis do modo Expert e comparação de gráficos */
+.block > summary { font-size: 0.95rem; }
+.compare-charts { display: block; margin: 0.6rem 0; cursor: pointer; }
+.compare-name { margin: 1rem 0 0.25rem; color: var(--ok); }

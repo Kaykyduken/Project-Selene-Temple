@@ -79,3 +79,13 @@ sixth decimal place** in azimuth and elevation (maximum difference 0.000000°).
 Result: **accepted** for the Sun. Pending: the same web query for the Earth (399), and running
 `python3 horizons.py --site malapert-massif --start 2026-11-15 --stop 2026-12-15 --step-min 1440`
 to confirm that the script prints the same rows.
+
+### Script run (2026-11-15, Kayky's machine, Linux)
+
+`python3 horizons.py --site malapert-massif --start 2026-11-15 --stop 2026-12-15 --step-min 1440` printed 31 rows.
+Checked rows: 2026-11-15 Sun 114.714 / -0.120; 2026-11-24 Sun 5.301 / 5.520; 2026-12-09 Sun 182.860 / -2.571;
+2026-12-15 Sun 109.796 / 0.013. All match the web output (Sun) and the API values above.
+The same run also prints the Earth (e.g. 2026-11-24: az 356.593, el 10.260); the finer 144-minute run is consistent
+with the daily one at 00:00 UTC.
+
+Result: **Sun: script confirmed.** **Earth: still unconfirmed independently** (needs Felipe's web output for 399).

@@ -85,8 +85,8 @@ made by the team.
 
 - **Claude (Anthropic)** helped with planning documents, first drafts of code, code review, explanations and test
   scripts. Every source file with AI-generated code carries the header "AI-assisted: first draft written by Claude
-  (Anthropic), reviewed by the team." and the README lists them. The calculations were specified and reviewed by
-  team members and checked against JPL Horizons output.
+  (Anthropic), reviewed by the team." and the README lists them. The calculations were checked against JPL Horizons output.
+  [Add "and reviewed by <name>" only if the review really happens; otherwise leave as is.]
 - **Google Stitch** was used to turn the team's paper sketches into interface mockups that guided the layout and
   visual style. The mockups are design references only; values shown in them were placeholders and are not data.
 - No AI-generated images or videos are used. [Confirm before submitting.]
@@ -113,5 +113,5 @@ made by the team.
 - [ ] Fill the demo and final project links and open both in a private window.
 - [ ] Educational texts are drafts until Raphaela reviews them; confirm they are in English and say what the data shows.
 - [ ] Confirm the Moon Kit line and the "no AI-generated images" line.
-- [ ] Confirm the period, the 150 km radius and the 2 m observer height with Alisson.
+- [ ] Confirm the period, the 150 km radius and the 2 m observer height with Alisson, or state them as the team's choices.
 - [ ] Add 2 or 3 screenshots (map with the region list, a margin chart, the Expert panel); no people in the images.

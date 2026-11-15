@@ -1,0 +1,23 @@
+1
+00:00:00,000 --> 00:00:04,000
+The lunar south pole: nine Artemis III candidate regions.
+
+2
+00:00:04,000 --> 00:00:09,000
+Where are the Sun and the Earth compared with each site's real horizon?
+
+3
+00:00:09,000 --> 00:00:15,000
+Malapert Massif: 38% of the time in sunlight, 46% with the Earth in view.
+
+4
+00:00:15,000 --> 00:00:20,000
+Educational mode explains why hills decide power and radio contact.
+
+5
+00:00:20,000 --> 00:00:25,000
+Expert mode: same numbers, with parameters and the exact JPL Horizons query.
+
+6
+00:00:25,000 --> 00:00:30,000
+Built with NASA LOLA and JPL Horizons data. Not an official NASA product.

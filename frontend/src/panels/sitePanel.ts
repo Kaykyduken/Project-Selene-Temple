@@ -44,10 +44,14 @@ function show(metric: Metric, unit: string): string {
   return metric.value === null ? t('no data') : `${num(metric.value)} ${unit}`;
 }
 
-function metricRow(label: string, metric: Metric, unit: string): HTMLElement {
+/** periodHours: se dado e a unidade for %, mostra também as horas equivalentes ("34,4 % / 248 h"). */
+function metricRow(label: string, metric: Metric, unit: string, periodHours?: number): HTMLElement {
   const row = el('div', 'metric');
   row.append(el('span', 'metric-label', label));
-  row.append(el('span', 'metric-value', show(metric, unit)));
+  const text = periodHours && unit === '%' && metric.value !== null
+    ? `${show(metric, unit)} / ${num(Math.round((metric.value * periodHours) / 100))} h`
+    : show(metric, unit);
+  row.append(el('span', 'metric-value', text));
   row.append(el('span', `provenance provenance-${metric.class}`, CLASS_LABEL[metric.class]));
   return row;
 }
@@ -217,9 +221,13 @@ export class SitePanel {
   /** Modo Especialista: números com origem, parâmetros, consultas e downloads. */
   private expert(data: SiteData): HTMLElement[] {
     const nodes: HTMLElement[] = [];
+    const hours = Math.round((Date.parse(data.period.end_utc) - Date.parse(data.period.start_utc)) / 3_600_000);
+    const days = Math.round(hours / 24);
+    nodes.push(el('p', 'period-note', t('Forecast for one month: {days} days ({hours} h), from {start} to {end} (UTC). Percentages are shares of this period; the hours are the equivalent time (percentage × {hours} h).',
+      { days, hours, start: data.period.start_utc, end: data.period.end_utc })));
     nodes.push(el('h3', '', t('Visibility over the local horizon')));
-    nodes.push(metricRow(t('Time with Sun in view'), data.metrics.sun_time_pct, '%'));
-    nodes.push(metricRow(t('Time with Earth in view'), data.metrics.earth_time_pct, '%'));
+    nodes.push(metricRow(t('Time with Sun in view'), data.metrics.sun_time_pct, '%', hours));
+    nodes.push(metricRow(t('Time with Earth in view'), data.metrics.earth_time_pct, '%', hours));
     nodes.push(metricRow(t('Longest period without Sun'), data.metrics.longest_no_sun_h, 'h'));
     nodes.push(metricRow(t('Mean slope'), data.metrics.mean_slope_deg, '°'));
 

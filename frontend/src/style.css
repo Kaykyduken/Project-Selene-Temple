@@ -326,3 +326,5 @@ body[data-mode='educational'] .mode-toggle button:focus-visible { outline-color:
 body[data-mode='educational'] .tour-btn { background: #3f66a3; color: #ffffff; border-color: #2f5187; font-weight: 700; }
 body[data-mode='educational'] .tour-btn:hover { background: #2a5599; }
 body[data-mode='educational'] .topbar .badge { background: #ffffff; color: #2f5187; border-color: #2f5187; font-weight: 700; }
+
+.period-note { margin: 0 0 0.75rem; padding: 0.5rem 0.75rem; border-left: 3px solid var(--ok); background: rgba(255, 255, 255, 0.06); font-size: 0.85rem; }

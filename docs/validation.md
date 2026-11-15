@@ -62,3 +62,20 @@ be confirmed. Pending: Felipe re-runs the queries in the Horizons web interface 
 
 Command to reproduce the API values with the project script:
 `python3 horizons.py --lat 0.78740 --lon 21.51055 --start '1969-07-20 20:17:40' --stop '1969-07-20 20:18:40' --step-min 1`
+
+## V1, third check: raw output of the Horizons web interface (2026-11-15)
+
+Felipe ran the query in the Horizons web application and sent the raw text output, kept in
+[`validation/horizons_web_sun_malapert_2026-11-15.txt`](validation/horizons_web_sun_malapert_2026-11-15.txt).
+
+- Target: Sun (10). Centre: Moon (301), user-defined site 359.7632°E, -85.9872°, altitude 0 km
+  (Malapert Massif region centre). Frame MEAN_ME, ephemeris DE441, airless.
+- Period: 2026-11-15 to 2026-12-15, one row per day (31 rows).
+
+Compared with the Horizons API using the query format of `pipeline/horizons.py`
+(`CENTER='coord@301'`, `SITE_COORD='359.7632,-85.9872,0'`, quantity 4): **all 31 rows are identical to the
+sixth decimal place** in azimuth and elevation (maximum difference 0.000000°).
+
+Result: **accepted** for the Sun. Pending: the same web query for the Earth (399), and running
+`python3 horizons.py --site malapert-massif --start 2026-11-15 --stop 2026-12-15 --step-min 1440`
+to confirm that the script prints the same rows.
